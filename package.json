@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "dependencies": {
+    "moment": "^2.24.0",
     "react": "^16.8.6"
   },
   "devDependencies": {
