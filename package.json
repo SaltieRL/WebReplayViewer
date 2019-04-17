@@ -23,5 +23,11 @@
   "bugs": {
     "url": "https://github.com/SaltieRL/WebReplayViewer/issues"
   },
-  "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme"
+  "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
+  "dependencies": {
+    "react": "^16.8.6"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.13"
+  }
 }
