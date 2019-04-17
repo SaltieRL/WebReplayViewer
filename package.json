@@ -1,0 +1,27 @@
+{
+  "name": "replay-viewer",
+  "version": "0.0.1",
+  "description": "Rocket League replay viewer React component and tooling",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaltieRL/WebReplayViewer.git"
+  },
+  "keywords": [
+    "Rocket",
+    "League",
+    "Replay",
+    "React",
+    "Three",
+    "WebGL"
+  ],
+  "author": "SaltieRL",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/SaltieRL/WebReplayViewer/issues"
+  },
+  "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme"
+}
