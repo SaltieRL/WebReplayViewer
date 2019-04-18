@@ -4,7 +4,7 @@
   "description": "Examples for the web replay viewer",
   "main": "app/index.ts",
   "scripts": {
-    "start": "react-scripts start"
+    "start": "PORT=3001 react-scripts start"
   },
   "keywords": [
     "Examples",
@@ -21,5 +21,11 @@
   "devDependencies": {
     "@types/react-dom": "^16.8.4",
     "react-scripts": "^2.1.8"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
