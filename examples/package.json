@@ -1,0 +1,24 @@
+{
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Examples for the web replay viewer",
+  "main": "app/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Examples",
+    "Replay",
+    "Viewer",
+    "React"
+  ],
+  "author": "Saltie",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "@types/react-dom": "^16.8.4"
+  }
+}
