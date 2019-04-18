@@ -9,14 +9,13 @@
     "lib": ["es6", "dom"],
     "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
+    "noEmit": false,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "noUnusedLocals": true,
     "outDir": "dist",
     "resolveJsonModule": true,
-    "rootDir": "src",
     "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
@@ -26,5 +25,5 @@
     "typeRoots": ["./types", "./node_modules/@types"]
   },
   "exclude": ["node_modules", "dist"],
-  "include": ["src", "types", "lib", "examples"]
+  "include": ["src", "types", "lib"]
 }
