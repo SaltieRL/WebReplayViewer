@@ -19,6 +19,7 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
-    "@types/react-dom": "^16.8.4"
+    "@types/react-dom": "^16.8.4",
+    "react-scripts": "^2.1.8"
   }
 }
