@@ -4,7 +4,7 @@
   "description": "Rocket League replay viewer React component and tooling",
   "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "link": "npm link && cd examples && npm link replay-viewer && cd .."
   },
   "repository": {
     "type": "git",
