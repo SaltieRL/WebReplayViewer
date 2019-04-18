@@ -16,3 +16,5 @@ type RotX = number
 type RotY = number
 type RotZ = number
 type Boost = boolean
+
+export { ReplayData }

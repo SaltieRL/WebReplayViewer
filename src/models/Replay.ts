@@ -1,3 +1,6 @@
+import { GameMode, GameScore } from "./Game"
+import { ReplayPlayer } from "./ReplayPlayer"
+
 interface Replay {
   id: string
   name: string
@@ -13,3 +16,5 @@ interface Tag {
   name: string
   ownerId: string
 }
+
+export { Replay }

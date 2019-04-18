@@ -1,3 +1,5 @@
+import { ReplayData } from "../models/ReplayData"
+
 /**
  * This clock provides a simple callback system that keeps track of elapsed and delta time
  * transformations. This makes it extremely easy to parse the deltas of a replay by their frame

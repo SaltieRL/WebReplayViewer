@@ -4,3 +4,5 @@ interface GameScore {
   team0Score: number
   team1Score: number
 }
+
+export { GameMode, GameScore }

@@ -24,3 +24,5 @@ interface CameraSettings {
 interface Loadout {
   car: string
 }
+
+export { ReplayPlayer }

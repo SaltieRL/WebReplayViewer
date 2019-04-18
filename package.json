@@ -5,8 +5,8 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "npm run build:js && npm run build:defs",
-    "build:js": "tsc --allowJs --isolatedModules",
-    "build:defs": "tsc --declaration --outDir dist --emitDeclarationOnly",
+    "build:js": "tsc --allowJs",
+    "build:defs": "tsc --declaration --emitDeclarationOnly",
     "link": "npm link && cd examples && npm link replay-viewer && cd .."
   },
   "repository": {
