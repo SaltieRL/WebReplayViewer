@@ -4,7 +4,7 @@ interface ReplayData {
   frames: number[][]
   names: string[]
   id: string
-  players: PlayerFrame[][]
+  players: PlayerFrame[][] // Each frame contains a PlayerFrame for each player
 }
 
 type BallFrame = [PosX, PosZ, PosY, RotX, RotZ, RotY]
