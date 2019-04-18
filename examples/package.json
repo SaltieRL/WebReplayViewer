@@ -4,7 +4,7 @@
   "description": "Examples for the web replay viewer",
   "main": "app/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "react-scripts start"
   },
   "keywords": [
     "Examples",
