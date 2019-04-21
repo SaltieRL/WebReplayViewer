@@ -27,6 +27,7 @@
   "bugs": {
     "url": "https://github.com/SaltieRL/WebReplayViewer/issues"
   },
+  "types": "./lib/index.d.ts",
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "dependencies": {
     "moment": "^2.24.0",

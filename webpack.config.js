@@ -2,10 +2,10 @@ module.exports = {
   entry: "./src/index.ts",
   output: {
     filename: "bundle.js",
-    path: `${__dirname}/dist`,
+    path: `${__dirname}/lib`,
   },
   devServer: {
-    contentBase: "./dist",
+    contentBase: "./lib",
   },
 
   devtool: "source-map",
