@@ -1,5 +1,4 @@
 import React from "react"
-console.log("fukt")
 import { ReplayViewer } from "replay-viewer"
 console.log(ReplayViewer)
 

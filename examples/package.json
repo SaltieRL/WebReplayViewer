@@ -4,7 +4,7 @@
   "description": "Examples for the web replay viewer",
   "main": "app/index.ts",
   "scripts": {
-    "start": "PORT=3001 react-scripts start"
+    "start": "BROWSER=none PORT=3001 react-scripts start"
   },
   "keywords": [
     "Examples",
