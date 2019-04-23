@@ -1,2 +1,7 @@
+# NPM
 node_modules/
-dist/
+
+# Build files
+lib/
+lib-esm/
+_bundles/

@@ -1,8 +1,14 @@
+const path = require("path")
+const UglifyJsPlugin = require("uglifyjs-webpack-plugin")
+
 module.exports = {
   entry: "./src/index.ts",
   output: {
-    filename: "bundle.js",
-    path: `${__dirname}/lib`,
+    path: path.resolve(__dirname, "_bundles"),
+    filename: "[name].js",
+    libraryTarget: "umd",
+    library: "",
+    umdNamedDefine: true,
   },
   devServer: {
     contentBase: "./lib",
@@ -19,14 +25,24 @@ module.exports = {
       {
         test: /\.tsx?$/,
         loader: ["babel-loader", "awesome-typescript-loader"],
+        exclude: /node_modules/,
+        query: {
+          declaration: false,
+        },
       },
-
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
     ],
   },
 
   externals: {
     react: "React",
     "react-dom": "ReactDOM",
+  },
+
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        test: /\.tsx?$/,
+      }),
+    ],
   },
 }
