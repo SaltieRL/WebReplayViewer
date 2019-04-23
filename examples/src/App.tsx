@@ -1,6 +1,5 @@
 import React from "react"
 import { ReplayViewer } from "replay-viewer"
-console.log(ReplayViewer)
 
 function App() {
   return (
