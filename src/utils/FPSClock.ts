@@ -50,7 +50,7 @@ export default class FPSClock {
   private readonly frameToDuration: number[]
 
   private paused: boolean
-  private animation?: number
+  private animation?: NodeJS.Timeout | number
   private callbacks: FPSClockSubscriber[]
 
   constructor(frameToDuration: number[]) {
@@ -157,7 +157,7 @@ export default class FPSClock {
     if (enable) {
       this.animation = setInterval(this.update, 1000 / 60)
     } else if (this.animation) {
-      clearInterval(this.animation)
+      clearInterval(this.animation as any)
     }
   }
 }

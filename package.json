@@ -5,10 +5,11 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "build": "node_modules/.bin/webpack --mode development --config webpack.config.js",
-    "build:tsc": "tsc && tsc -m es6 --outDir lib-esm",
+    "clean": "rimraf _bundles lib",
+    "build": "npm run build:tsc && rollup -c rollup.config.ts",
+    "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
     "link": "npm link && cd examples && npm link replay-viewer && cd ..",
-    "gen-types": "tsc -m es6 --outDir lib-esm"
+    "prepublish": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git",
@@ -28,22 +29,27 @@
     "url": "https://github.com/SaltieRL/WebReplayViewer/issues"
   },
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
+  "peerDependencies": {
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
   "dependencies": {
-    "moment": "^2.24.0",
-    "react": "^16.8.6"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
-    "@babel/preset-env": "^7.4.3",
-    "@babel/preset-react": "^7.0.0",
     "@types/react": "^16.8.13",
-    "@types/uglifyjs-webpack-plugin": "^1.1.0",
-    "awesome-typescript-loader": "^5.2.1",
-    "babel-loader": "^8.0.5",
-    "source-map-loader": "^0.2.4",
-    "typescript": "^3.4.3",
-    "uglifyjs-webpack-plugin": "^2.1.2",
-    "webpack": "4.28.3",
-    "webpack-cli": "^3.3.0"
+    "lodash.camelcase": "^4.3.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "rimraf": "^2.6.3",
+    "rollup": "^1.10.1",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.2.3",
+    "rollup-plugin-sourcemaps": "^0.4.2",
+    "rollup-plugin-typescript2": "^0.20.1",
+    "rollup-plugin-uglify": "^6.0.2",
+    "typescript": "^3.4.3"
   }
 }
