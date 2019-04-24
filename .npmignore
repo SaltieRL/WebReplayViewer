@@ -3,3 +3,6 @@
 **/webpack.config.js
 node_modules
 src
+examples
+types
+rollup.config.ts
