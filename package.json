@@ -12,7 +12,8 @@
     "build:bundle": "rollup -c rollup.config.ts",
     "build:copy": "node copy.js",
     "link": "npm link && cd examples && npm link replay-viewer && cd ..",
-    "prepublish": "npm run clean && npm run build"
+    "test": "cd lib",
+    "prepublish": "echo 'Do not publish from root. Publish from lib'; exit 1"
   },
   "repository": {
     "type": "git",
