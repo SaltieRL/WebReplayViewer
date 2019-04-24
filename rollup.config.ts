@@ -36,6 +36,7 @@ export default [
     input,
     external,
     output: {
+      name: pkg.name,
       file: pkg.main,
       format: "cjs",
       sourcemap: true,
@@ -44,6 +45,7 @@ export default [
       nodeResolve({ extensions }),
       typescriptPlugin({ typescript, tsconfig }),
       babel(babelOptions),
+      uglify(),
     ],
   },
 
@@ -59,7 +61,6 @@ export default [
       nodeResolve({ extensions }),
       typescriptPlugin({ typescript, tsconfig }),
       babel(babelOptions),
-      uglify(),
     ],
   },
 ]
