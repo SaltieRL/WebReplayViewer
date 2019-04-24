@@ -43,7 +43,11 @@ export default [
     },
     plugins: [
       nodeResolve({ extensions }),
-      typescriptPlugin({ typescript, tsconfig }),
+      typescriptPlugin({
+        typescript,
+        tsconfig,
+        objectHashIgnoreUnknownHack: true,
+      }),
       babel(babelOptions),
       uglify(),
     ],
