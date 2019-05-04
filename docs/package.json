@@ -4,7 +4,6 @@
   "description": "Examples for the web replay viewer",
   "main": "app/index.ts",
   "scripts": {
-    "start:scripts": "BROWSER=none PORT=3001 react-scripts start",
     "start": "npx parcel-bundler ./src/index.html"
   },
   "keywords": [
