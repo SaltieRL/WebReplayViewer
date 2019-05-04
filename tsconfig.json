@@ -6,7 +6,7 @@
     "forceConsistentCasingInFileNames": true,
     "jsx": "react",
     "lib": ["es6", "dom"],
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "noEmit": false,
     "noImplicitAny": true,
