@@ -1,6 +1,6 @@
 import ModelLoader from "./ModelLoader"
 // @ts-ignore
-import ball from "../assets/models/Ball.glb"
+// import ball from "../assets/models/Ball.glb"
 
 export default class ModelStorage {
   public static getInstance() {
@@ -14,7 +14,8 @@ export default class ModelStorage {
   private constructor() {}
 
   async loadBall() {
-    // let ball = await import("../assets/models/Ball.glb")
+    // @ts-ignore
+    const { default: ball } = await import("../assets/models/Ball.glb")
     return ModelLoader.loadObject(ball)
   }
 }
