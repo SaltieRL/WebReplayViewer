@@ -8,7 +8,7 @@
     "clean": "rimraf _bundles lib",
     "build": "npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
-    "build:bundle": "npx parcel-bundler build ./src/index.ts --out-dir lib",
+    "build:bundle": "npx parcel-bundler build ./src/index.ts --out-dir lib --global replay-viewer",
     "build:copy": "node copy.js",
     "test": "cd lib",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
@@ -44,12 +44,14 @@
     "@babel/preset-react": "^7.0.0",
     "@types/react": "^16.8.13",
     "@types/three": "^0.103.2",
+    "awesome-typescript-loader": "^5.2.1",
     "fs-extra": "^7.0.1",
     "lodash.camelcase": "^4.3.0",
-    "parcel-bundler": "^1.12.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rimraf": "^2.6.3",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.3",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }
