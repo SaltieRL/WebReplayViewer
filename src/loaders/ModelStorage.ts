@@ -1,8 +1,8 @@
 import ModelLoader from "./ModelLoader"
-// @ts-ignore
-// import ball from "../assets/models/Ball.glb"
+import { Object3D, LoadingManager } from "three"
 
 export default class ModelStorage {
+  private static instance?: ModelStorage
   public static getInstance() {
     if (!ModelStorage.instance) {
       ModelStorage.instance = new ModelStorage()
@@ -10,12 +10,51 @@ export default class ModelStorage {
     return ModelStorage.instance
   }
 
-  private static instance?: ModelStorage
-  private constructor() {}
+  private storage: { [key: string]: Object3D }
+  private constructor() {
+    this.storage = {}
+  }
 
-  async loadBall() {
+  async loadBall(loadingManager?: LoadingManager) {
+    const BALL = "ball"
+    if (this.storage[BALL]) {
+      return this.storage[BALL]
+    }
     // @ts-ignore
-    const { default: ball } = await import("../assets/models/Ball.glb")
-    return ModelLoader.loadObject(ball)
+    const { default: glb } = await import("../assets/models/Ball.glb")
+    const ballGLTF = await ModelLoader.loadObject(glb, loadingManager)
+    const ball = ballGLTF.scene.children[2]
+    this.storage[BALL] = ball
+    return ball
+  }
+
+  async loadField(loadingManager?: LoadingManager) {
+    const FIELD = "field"
+    if (this.storage[FIELD]) {
+      return this.storage[FIELD]
+    }
+
+    // @ts-ignore
+    const { default: glb } = await import("../assets/models/Ball.glb")
+    const fieldGLTF = await ModelLoader.loadObject(glb, loadingManager)
+    // TODO: Determine the child number for the field
+    const field = fieldGLTF.scene.children[2]
+    this.storage[FIELD] = field
+    return field
+  }
+
+  async loadCar(loadingManager?: LoadingManager) {
+    const CAR = "car"
+    if (this.storage[CAR]) {
+      return this.storage[CAR]
+    }
+
+    // @ts-ignore
+    const { default: glb } = await import("../assets/models/Ball.glb")
+    const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
+    // TODO: Determine the child number for the car
+    const car = carGLTF.scene.children[2]
+    this.storage[CAR] = car
+    return car
   }
 }

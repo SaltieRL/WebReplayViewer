@@ -9,7 +9,7 @@ import {
   VectorKeyframeTrack,
 } from "three"
 
-import { ReplayDataResponse } from "../models/ReplayDataResponse"
+import { ReplayData } from "../models/ReplayData"
 import {
   getActionClipName,
   getPositionName,
@@ -45,9 +45,9 @@ export const CAR_SUFFIX = "-car"
  */
 export class AnimationBuilder {
   public animator: Animator
-  private readonly replayData: ReplayDataResponse
+  private readonly replayData: ReplayData
 
-  constructor(replayData: ReplayDataResponse) {
+  constructor(replayData: ReplayData) {
     this.replayData = replayData
     this.animator = {
       playerActions: [],

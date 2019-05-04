@@ -1,7 +1,16 @@
-import { PerspectiveCamera, Scene, Object3D, WebGLRenderer } from "three"
+import {
+  LoadingManager,
+  Object3D,
+  PerspectiveCamera,
+  Scene,
+  WebGLRenderer,
+} from "three"
+
+import SceneBuilder from "../builders/SceneBuilder"
+import { ReplayData } from "../models/ReplayData"
 import { PlayerManager } from "./PlayerManager"
 
-interface FieldScene {
+export interface FieldScene {
   scene: Scene
   camera: PerspectiveCamera
   ball: Object3D
@@ -10,31 +19,54 @@ interface FieldScene {
 }
 
 export class GameManager {
-  private readonly threeField: FieldScene
-  private readonly renderer: WebGLRenderer
-
   private static instance?: GameManager
-
+  public static async init(
+    replayData: ReplayData,
+    width?: number,
+    height?: number,
+    loadingManager?: LoadingManager
+  ) {
+    const gm = new GameManager()
+    const { names, colors } = replayData
+    const playerInfo = []
+    for (let index = 0; index < names.length; index++) {
+      playerInfo.push({ name: names[index], orangeTeam: colors[index] })
+    }
+    const field = await SceneBuilder.initializeField(
+      playerInfo,
+      width,
+      height,
+      loadingManager
+    )
+    gm.threeField = field
+    GameManager.instance = gm
+    return gm
+  }
   public static getInstance() {
     if (!GameManager.instance) {
-      GameManager.instance = new GameManager()
+      throw new Error("Game manager must be built with call to `init` first")
     }
-    return GameManager
+    return GameManager.instance
   }
+
+  private threeField: FieldScene
+  private readonly renderer: WebGLRenderer
 
   private constructor() {
     this.threeField = {} as any
     this.renderer = new WebGLRenderer({ antialias: true })
   }
 
-  async initialize() {}
+  getDOMNode() {
+    return this.renderer.domElement
+  }
 
   updateSize(width: number = 640, height: number = 480) {
     const { camera } = this.threeField
     camera.aspect = width / height
     camera.updateProjectionMatrix()
-    // this.renderer.setSize(width, height)
-    // this.renderScene()
+    this.renderer.setSize(width, height)
+    this.render()
   }
 
   render() {

@@ -1,18 +1,53 @@
-import React from "react"
-import { ReplayViewer } from "../../src/index"
+import React, { Component } from "react"
+import { ReplayViewer, FPSClock } from "../../src/index"
+import { ReplayData } from "../../src/models/ReplayData"
 
-function App() {
-  return (
-    <div>
+interface State {
+  replayData?: ReplayData
+  clock?: FPSClock
+}
+
+class App extends Component<any, State> {
+  constructor(props: any) {
+    super(props)
+    this.state = {}
+  }
+
+  componentDidMount() {
+    fetch(
+      "https://calculated.gg/api/replay/6D1439F611E9616B1AFCCBA2D6D201EF/positions",
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then(response => response.json())
+      .then(replayData => {
+        this.setState({
+          replayData,
+          clock: FPSClock.convertReplayToClock(replayData),
+        })
+      })
+  }
+
+  render() {
+    const { clock, replayData } = this.state
+    return (
       <div>
-        <h2>Welcome to React</h2>
+        <div>
+          <h2>Welcome to React</h2>
+        </div>
+        {replayData && clock ? (
+          <ReplayViewer replayData={replayData} clock={clock} />
+        ) : (
+          "Loading..."
+        )}
       </div>
-      <p>
-        To get started, edit <code>app/App.tsx</code> and save to reload.
-      </p>
-      <ReplayViewer />
-    </div>
-  )
+    )
+  }
 }
 
 export default App

@@ -9,6 +9,7 @@ import {
   SpriteMaterial,
   Texture,
   Vector3,
+  Object3D,
 } from "three"
 
 import { CAR_SUFFIX } from "../builders/AnimationBuilder"
@@ -23,7 +24,7 @@ export class PlayerManager {
   private readonly playerName: string
   private readonly orangeTeam: boolean
 
-  constructor(playerName: string, orangeTeam: boolean, carObject: Group) {
+  constructor(playerName: string, orangeTeam: boolean, carObject: Object3D) {
     this.playerName = playerName
     this.orangeTeam = orangeTeam
     this.nameTag = this.generateSprite()
@@ -88,7 +89,7 @@ export class PlayerManager {
     this.camera = null
   }
 
-  private generateCarObject(carObject: Group) {
+  private generateCarObject(carObject: Object3D) {
     this.setMaterial(carObject)
 
     const player = new Group()
@@ -103,7 +104,7 @@ export class PlayerManager {
     return player
   }
 
-  private setMaterial(playerMesh: Group) {
+  private setMaterial(playerMesh: Object3D) {
     playerMesh.name = `${this.playerName}${CAR_SUFFIX}`
     // Grab the existing car mesh
     const mesh = playerMesh.children[0] as Mesh
