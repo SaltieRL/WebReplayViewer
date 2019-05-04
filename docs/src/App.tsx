@@ -1,5 +1,5 @@
 import React from "react"
-import { ReplayViewer } from "replay-viewer"
+import { ReplayViewer } from "../../src/index"
 
 function App() {
   return (

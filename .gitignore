@@ -1,5 +1,5 @@
 # Editor
-.idea
+.*
 
 # NPM
 node_modules/
@@ -7,5 +7,5 @@ node_modules/
 # Build files
 lib/
 lib-esm/
+dist/
 _bundles/
-.rpt2_cache/

@@ -1,10 +1,11 @@
 {
-  "name": "examples",
+  "name": "docs",
   "version": "1.0.0",
   "description": "Examples for the web replay viewer",
   "main": "app/index.ts",
   "scripts": {
-    "start": "BROWSER=none PORT=3001 react-scripts start"
+    "start:scripts": "BROWSER=none PORT=3001 react-scripts start",
+    "start": "npx parcel-bundler ./src/index.html"
   },
   "keywords": [
     "Examples",
@@ -21,7 +22,7 @@
   },
   "devDependencies": {
     "@types/react-dom": "^16.8.4",
-    "react-scripts": "^2.1.8"
+    "parcel-bundler": "^1.12.3"
   },
   "browserslist": [
     ">0.2%",
