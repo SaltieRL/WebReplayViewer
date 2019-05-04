@@ -6,15 +6,12 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "clean": "rimraf _bundles lib",
-    "start": "rollup -c rollup.config.js --watch & npx tsc --watch",
     "build": "npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
-    "build:bundle": "rollup -c rollup.config.ts",
-    "build:test": "npx parcel-bundler ./src/index.ts",
+    "build:bundle": "npx parcel-bundler build ./src/index.ts --out-dir lib",
     "build:copy": "node copy.js",
-    "link": "npm link && cd examples && npm link replay-viewer && cd ..",
     "test": "cd lib",
-    "prepublish": "echo 'Do not publish from root. Publish from lib'; exit 1"
+    "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
   },
   "repository": {
     "type": "git",
@@ -47,21 +44,12 @@
     "@babel/preset-react": "^7.0.0",
     "@types/react": "^16.8.13",
     "@types/three": "^0.103.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "fs-extra": "^7.0.1",
     "lodash.camelcase": "^4.3.0",
     "parcel-bundler": "^1.12.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rimraf": "^2.6.3",
-    "rollup": "^1.10.1",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-copy": "^1.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.2.3",
-    "rollup-plugin-sourcemaps": "^0.4.2",
-    "rollup-plugin-typescript2": "^0.20.1",
-    "rollup-plugin-uglify": "^6.0.2",
     "typescript": "^3.4.3"
   }
 }

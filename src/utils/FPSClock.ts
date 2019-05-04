@@ -50,7 +50,7 @@ export default class FPSClock {
   private readonly frameToDuration: number[]
 
   private paused: boolean
-  private animation?: NodeJS.Timeout | number
+  private animation?: number
   private callbacks: FPSClockSubscriber[]
 
   constructor(frameToDuration: number[]) {
