@@ -33,11 +33,11 @@
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "peerDependencies": {
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "three": "^0.104.0"
   },
   "dependencies": {
-    "moment": "^2.24.0",
-    "three": "^0.104.0"
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
@@ -52,6 +52,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rimraf": "^2.6.3",
+    "three": "^0.104.0",
     "typescript": "^3.4.3",
     "webpack": "^4.30.0",
     "webpack-cli": "^3.3.1"
