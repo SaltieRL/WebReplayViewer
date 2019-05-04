@@ -38,11 +38,13 @@
     "react-dom": "^16.8.6"
   },
   "dependencies": {
-    "moment": "^2.24.0"
+    "moment": "^2.24.0",
+    "three": "^0.104.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.3",
     "@types/react": "^16.8.13",
+    "@types/three": "^0.103.2",
     "fs-extra": "^7.0.1",
     "lodash.camelcase": "^4.3.0",
     "react": "^16.8.6",
