@@ -9,7 +9,7 @@ import {
   VectorKeyframeTrack,
 } from "three"
 
-import { ReplayDataResponse } from "../../models/ReplayDataResponse"
+import { ReplayDataResponse } from "../models/ReplayDataResponse"
 import {
   getActionClipName,
   getPositionName,

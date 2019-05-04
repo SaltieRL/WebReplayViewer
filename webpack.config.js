@@ -33,6 +33,15 @@ module.exports = {
           declaration: false,
         },
       },
+      {
+        test: /\.(glb|png|jpe?g|gif)$/,
+        use: [
+          {
+            loader: "file-loader",
+            options: {},
+          },
+        ],
+      },
     ],
   },
 }

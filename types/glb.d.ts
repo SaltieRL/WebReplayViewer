@@ -1,4 +1,4 @@
 declare module "*.glb" {
-  const value: any
+  const value: string
   export default value
 }
