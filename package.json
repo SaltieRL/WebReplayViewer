@@ -6,9 +6,9 @@
   "types": "./lib/index.d.ts",
   "scripts": {
     "clean": "rimraf _bundles lib",
-    "build": "npm run build:tsc && npm run build:bundle && npm run build:copy",
+    "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
-    "build:bundle": "npx parcel-bundler build ./src/index.ts --out-dir lib --global replay-viewer",
+    "build:bundle": "npx webpack",
     "build:copy": "node copy.js",
     "test": "cd lib",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
