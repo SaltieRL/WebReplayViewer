@@ -30,18 +30,17 @@ class ReplayViewer extends PureComponent<Props> {
 
     GameManager.init({
       replayData: this.props.replayData,
-      width,
-      height,
       loadingManager: this.loadingManager,
     }).then(gm => {
       this.gameManager = gm
       this.mount.current!.appendChild(gm.getDOMNode())
+      gm.updateSize(width, height)
       gm.render()
     })
   }
 
   render() {
-    return <div ref={this.mount}>Hello There Obi Wan</div>
+    return <div ref={this.mount} style={{ width: 640, height: 480 }} />
   }
 }
 

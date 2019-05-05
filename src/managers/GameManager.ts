@@ -20,8 +20,6 @@ export interface FieldScene {
 
 interface GameManagerOptions {
   replayData: ReplayData
-  width?: number
-  height?: number
   loadingManager?: LoadingManager
 }
 
@@ -34,12 +32,7 @@ export class GameManager {
     for (let index = 0; index < names.length; index++) {
       playerInfo.push({ name: names[index], orangeTeam: colors[index] })
     }
-    const field = await SceneBuilder(
-      playerInfo,
-      options.width,
-      options.height,
-      options.loadingManager
-    )
+    const field = await SceneBuilder(playerInfo, options.loadingManager)
     gm.threeField = field
     GameManager.instance = gm
     return gm

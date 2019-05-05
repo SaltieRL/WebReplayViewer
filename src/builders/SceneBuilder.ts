@@ -29,12 +29,10 @@ interface BuildOption {
  */
 const defaultSceneBuilder = async (
   playerInfo: Player[],
-  width: number = 640,
-  height: number = 480,
   loadingManager?: LoadingManager
 ): Promise<FieldScene> => {
   const scene = new Scene()
-  const camera = new PerspectiveCamera(80, width / height, 0.1, 20000)
+  const camera = new PerspectiveCamera(80, 2, 0.1, 20000)
 
   const buildOption = { scene, loadingManager }
   const [ball, ground, players] = await Promise.all([
