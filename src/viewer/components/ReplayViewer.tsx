@@ -23,16 +23,17 @@ class ReplayViewer extends PureComponent<Props> {
   }
 
   componentDidMount() {
-    const { clientWidth, clientHeight } = this.mount.current || {
+    const { clientWidth: width, clientHeight: height } = this.mount.current || {
       clientWidth: 640,
       clientHeight: 480,
     }
-    GameManager.init(
-      this.props.replayData,
-      clientWidth,
-      clientHeight,
-      this.loadingManager
-    ).then(gm => {
+
+    GameManager.init({
+      replayData: this.props.replayData,
+      width,
+      height,
+      loadingManager: this.loadingManager,
+    }).then(gm => {
       this.gameManager = gm
       this.mount.current!.appendChild(gm.getDOMNode())
       gm.render()

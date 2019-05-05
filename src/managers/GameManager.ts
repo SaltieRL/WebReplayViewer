@@ -18,25 +18,27 @@ export interface FieldScene {
   players: PlayerManager[]
 }
 
+interface GameManagerOptions {
+  replayData: ReplayData
+  width?: number
+  height?: number
+  loadingManager?: LoadingManager
+}
+
 export class GameManager {
   private static instance?: GameManager
-  public static async init(
-    replayData: ReplayData,
-    width?: number,
-    height?: number,
-    loadingManager?: LoadingManager
-  ) {
+  public static async init(options: GameManagerOptions) {
     const gm = new GameManager()
-    const { names, colors } = replayData
+    const { names, colors } = options.replayData
     const playerInfo = []
     for (let index = 0; index < names.length; index++) {
       playerInfo.push({ name: names[index], orangeTeam: colors[index] })
     }
-    const field = await SceneBuilder.initializeField(
+    const field = await SceneBuilder(
       playerInfo,
-      width,
-      height,
-      loadingManager
+      options.width,
+      options.height,
+      options.loadingManager
     )
     gm.threeField = field
     GameManager.instance = gm
