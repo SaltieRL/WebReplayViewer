@@ -35,6 +35,7 @@ class ReplayViewer extends PureComponent<Props> {
     ).then(gm => {
       this.gameManager = gm
       this.mount.current!.appendChild(gm.getDOMNode())
+      gm.render()
     })
   }
 

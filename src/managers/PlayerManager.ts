@@ -107,7 +107,9 @@ export class PlayerManager {
   private setMaterial(playerMesh: Object3D) {
     playerMesh.name = `${this.playerName}${CAR_SUFFIX}`
     // Grab the existing car mesh
-    const mesh = playerMesh.children[0] as Mesh
+    console.log(playerMesh)
+    // const mesh = playerMesh.children[0] as Mesh
+    const mesh = playerMesh as Mesh
     // Clone all materials
     const materials = Array.isArray(mesh.material)
       ? mesh.material
