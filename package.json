@@ -5,12 +5,15 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "postinstall": "npm run submodule:init",
     "clean": "rimraf _bundles lib",
     "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
     "build:bundle": "npx webpack",
     "build:copy": "node copy.js",
     "test": "cd lib",
+    "submodule": "git submodule update --remote",
+    "submodule:init": "git submodule update --init --remote",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
   },
   "repository": {
