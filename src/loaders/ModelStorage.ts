@@ -35,7 +35,7 @@ export default class ModelStorage {
     }
 
     // @ts-ignore
-    const { default: glb } = await import("../assets/models/Ball.glb")
+    const { default: glb } = await import("../assets/models/Field.glb")
     const fieldGLTF = await ModelLoader.loadObject(glb, loadingManager)
     // TODO: Determine the child number for the field
     const field = fieldGLTF.scene.children[2]
@@ -50,7 +50,8 @@ export default class ModelStorage {
     }
 
     // @ts-ignore
-    const { default: glb } = await import("../assets/models/Ball.glb")
+    const { default: glb } = await import("../assets/models/Octane.glb")
+    // TODO: Load car wheels
     const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
     // TODO: Determine the child number for the car
     const car = carGLTF.scene.children[2]
