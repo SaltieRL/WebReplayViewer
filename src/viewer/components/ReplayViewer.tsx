@@ -4,6 +4,7 @@ import { LoadingManager } from "three"
 import { GameManager } from "../../managers/GameManager"
 import { ReplayData } from "../../models/ReplayData"
 import FPSClock from "../../utils/FPSClock"
+import defaultGameBuilder from "../../builders/GameBuilder"
 
 interface Props {
   replayData: ReplayData
@@ -28,15 +29,14 @@ class ReplayViewer extends PureComponent<Props> {
       clientHeight: 480,
     }
 
-    GameManager.init({
-      replayData: this.props.replayData,
-      loadingManager: this.loadingManager,
-    }).then(gm => {
-      this.gameManager = gm
-      this.mount.current!.appendChild(gm.getDOMNode())
-      gm.updateSize(width, height)
-      gm.render()
-    })
+    defaultGameBuilder(this.props.replayData, this.loadingManager).then(
+      gameManager => {
+        this.gameManager = gameManager
+        this.mount.current!.appendChild(gameManager.getDOMNode())
+        gameManager.updateSize(width, height)
+        gameManager.render()
+      }
+    )
   }
 
   render() {

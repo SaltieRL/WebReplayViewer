@@ -1,55 +1,22 @@
-import {
-  LoadingManager,
-  Object3D,
-  PerspectiveCamera,
-  Scene,
-  WebGLRenderer,
-} from "three"
+import { WebGLRenderer } from "three"
 
-import SceneBuilder from "../builders/SceneBuilder"
-import { ReplayData } from "../models/ReplayData"
-import { PlayerManager } from "./PlayerManager"
-
-export interface FieldScene {
-  scene: Scene
-  camera: PerspectiveCamera
-  ball: Object3D
-  ground: Object3D
-  players: PlayerManager[]
-}
+import AnimationManager from "./AnimationManager"
+import SceneManager from "./SceneManager"
 
 interface GameManagerOptions {
-  replayData: ReplayData
-  loadingManager?: LoadingManager
+  animationManager: AnimationManager
+  sceneManager: SceneManager
 }
 
 export class GameManager {
-  private static instance?: GameManager
-  public static async init(options: GameManagerOptions) {
-    const gm = new GameManager()
-    const { names, colors } = options.replayData
-    const playerInfo = []
-    for (let index = 0; index < names.length; index++) {
-      playerInfo.push({ name: names[index], orangeTeam: colors[index] })
-    }
-    const field = await SceneBuilder(playerInfo, options.loadingManager)
-    gm.threeField = field
-    GameManager.instance = gm
-    return gm
-  }
-  public static getInstance() {
-    if (!GameManager.instance) {
-      throw new Error("Game manager must be built with call to `init` first")
-    }
-    return GameManager.instance
-  }
-
-  private threeField: FieldScene
+  private animationManager: AnimationManager
+  private sceneManager: SceneManager
   private readonly renderer: WebGLRenderer
 
-  private constructor() {
-    this.threeField = {} as any
+  private constructor({ animationManager, sceneManager }: GameManagerOptions) {
     this.renderer = new WebGLRenderer({ antialias: true })
+    this.animationManager = animationManager
+    this.sceneManager = sceneManager
   }
 
   getDOMNode() {
@@ -57,14 +24,29 @@ export class GameManager {
   }
 
   updateSize(width: number = 640, height: number = 480) {
-    const { camera } = this.threeField
-    camera.aspect = width / height
-    camera.updateProjectionMatrix()
+    this.sceneManager.updateSize(width, height)
     this.renderer.setSize(width, height)
     this.render()
   }
 
   render() {
-    this.renderer.render(this.threeField.scene, this.threeField.camera)
+    this.renderer.render(this.sceneManager.scene, this.sceneManager.camera)
+  }
+
+  /**
+   * ========================================
+   * Managers are singletons
+   * ========================================
+   */
+  private static instance?: GameManager
+  static getInstance() {
+    if (!GameManager.instance) {
+      throw new Error("GameManager not initialized with call to `init`")
+    }
+    return GameManager.instance
+  }
+  static init(options: GameManagerOptions) {
+    GameManager.instance = new GameManager(options)
+    return GameManager.instance
   }
 }

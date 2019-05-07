@@ -1,7 +1,7 @@
-import { CAR_SUFFIX } from "../AnimationBuilder"
+import PlayerModel from "../../loaders/glb-models/PlayerModel"
 
 const getName = (objectName: string, suffix: string, isCar: boolean) => {
-  return `${objectName}${isCar ? CAR_SUFFIX : ""}${suffix}`
+  return `${objectName}${isCar ? PlayerModel.CAR_SUFFIX : ""}${suffix}`
 }
 
 export const getActionClipName = (objectName: string, isCar: boolean) => {

@@ -1,16 +1,18 @@
 import {
-  LoadingManager,
-  Scene,
-  PlaneBufferGeometry,
-  MeshPhongMaterial,
   DoubleSide,
+  Group,
+  LoadingManager,
   Mesh,
-  PerspectiveCamera,
-  AxesHelper,
+  MeshPhongMaterial,
+  PlaneBufferGeometry,
+  Scene,
 } from "three"
+
+import ArenaModel from "../loaders/glb-models/ArenaModel"
+import BallModel from "../loaders/glb-models/BallModel"
 import ModelStorage from "../loaders/ModelStorage"
-import { FieldScene } from "../managers/GameManager"
 import { PlayerManager } from "../managers/PlayerManager"
+import SceneManager from "../managers/SceneManager"
 
 interface Player {
   name: string
@@ -30,9 +32,8 @@ interface BuildOption {
 const defaultSceneBuilder = async (
   playerInfo: Player[],
   loadingManager?: LoadingManager
-): Promise<FieldScene> => {
+): Promise<SceneManager> => {
   const scene = new Scene()
-  const camera = new PerspectiveCamera(80, 2, 0.1, 20000)
 
   const buildOption = { scene, loadingManager }
   const [ball, ground, players] = await Promise.all([
@@ -40,13 +41,13 @@ const defaultSceneBuilder = async (
     buildPlayfield(buildOption),
     buildPlayers(playerInfo, buildOption),
   ])
-  return {
+
+  return SceneManager.init({
     scene,
     ball,
-    ground,
-    camera,
+    arena: ground,
     players,
-  }
+  })
 }
 export default defaultSceneBuilder
 
@@ -74,13 +75,13 @@ const buildPlayfield = async ({ scene, loadingManager }: BuildOption) => {
 
   const field = await ModelStorage.getInstance().loadField(loadingManager)
   scene.add(field)
-  return field
+  return new ArenaModel(field)
 }
 
 const buildBall = async ({ scene, loadingManager }: BuildOption) => {
-  const ball = await ModelStorage.getInstance().loadBall(loadingManager)
-  ball.scale.setScalar(92.75)
-  scene.add(ball)
+  const ballModel = await ModelStorage.getInstance().loadBall(loadingManager)
+  const ball = new BallModel({ model: ballModel })
+  scene.add(ball.getThreeObject())
   return ball
 }
 
@@ -92,13 +93,9 @@ const buildPlayers = async (
   const car = await ModelStorage.getInstance().loadCar(loadingManager)
   for (const player of players) {
     const { name, orangeTeam } = player
-    const playerMesh = car.clone(true)
+    const playerMesh = car.clone() as Group
     const manager = new PlayerManager(name, orangeTeam, playerMesh)
-
-    // Debugging
-    manager.carObject.add(new AxesHelper(5))
-
-    scene.add(manager.carObject)
+    scene.add(manager.getThreeObject())
     managers.push(manager)
   }
   return managers
