@@ -1,17 +1,15 @@
-import PlayerModel from "../../loaders/glb-models/PlayerModel"
-
-const getName = (objectName: string, suffix: string, isCar: boolean) => {
-  return `${objectName}${isCar ? PlayerModel.CAR_SUFFIX : ""}${suffix}`
+const getName = (objectName: string, suffix: string) => {
+  return `${objectName}${suffix}`
 }
 
-export const getActionClipName = (objectName: string, isCar: boolean) => {
-  return getName(objectName, "Action", isCar)
+export const getActionClipName = (objectName: string) => {
+  return getName(objectName, "AnimationClip")
 }
 
-export const getPositionName = (objectName: string, isCar: boolean) => {
-  return getName(objectName, ".position", isCar)
+export const getPositionName = (objectName: string) => {
+  return getName(objectName, ".position")
 }
 
-export const getRotationName = (objectName: string, isCar: boolean) => {
-  return getName(objectName, ".quaternion", isCar)
+export const getRotationName = (objectName: string) => {
+  return getName(objectName, ".quaternion")
 }

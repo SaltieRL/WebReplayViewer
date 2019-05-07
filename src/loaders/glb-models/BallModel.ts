@@ -22,7 +22,7 @@ export default class BallModel implements _Model {
   }
 
   private initialize() {
-    this.model.scale.setScalar(92.75)
+    this.model.scale.setScalar(150)
     this.model.name = BallModel.BALL_NAME
   }
 

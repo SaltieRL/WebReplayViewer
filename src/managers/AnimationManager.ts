@@ -27,27 +27,24 @@ export default class AnimationManager {
     ballClip,
     ballMixer,
   }: AnimationManagerOptions) {
-    this.actions = {
-      playerActions: [],
-    } as any
+    this.actions = {} as any
 
     this.mixers = {
       players: playerMixers,
       ball: ballMixer,
     }
 
-    console.log(playerMixers, ballMixer)
-
     // Build the player actions
     this.actions.players = []
     for (let player = 0; player < playerClips.length; player++) {
       const clip = playerClips[player]
-      const mixer = playerMixers[player]
+      const mixer = this.mixers.players[player]
       const action = mixer.clipAction(clip)
+      console.log(clip, mixer, action)
       this.actions.players[player] = action
     }
     // Build the ball action
-    const ballAction = ballMixer.clipAction(ballClip)
+    const ballAction = this.mixers.ball.clipAction(ballClip)
     this.actions.ball = ballAction
   }
 

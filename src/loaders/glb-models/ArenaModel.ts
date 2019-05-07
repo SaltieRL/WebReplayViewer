@@ -7,9 +7,14 @@ export default class ArenaModel implements _Model {
 
   constructor(arena: Object3D) {
     this.arena = arena
+    this.initialize()
   }
 
   getThreeObject() {
     return this.arena
+  }
+
+  private initialize() {
+    this.arena.scale.setScalar(25)
   }
 }

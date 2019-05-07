@@ -61,10 +61,9 @@ export default class FPSClock {
     this.elapsedTime = 0
     this.currentFrame = 0
     this.lastDelta = 0
+    console.log(frameToDuration)
+    this.update = this.update.bind(this)
     this.timeout()
-
-    this.getElapsedFrames = this.getElapsedFrames.bind(this)
-    this.doCallbacks = this.doCallbacks.bind(this)
   }
 
   public subscribe(callback: FPSClockSubscriber) {

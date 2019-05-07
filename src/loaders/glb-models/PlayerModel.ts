@@ -44,7 +44,7 @@ export default class PlayerModel implements _Model {
   }
 
   getMixer() {
-    return new AnimationMixer(this.getCarGroup())
+    return new AnimationMixer(this.group)
   }
 
   getCarGroup() {
@@ -149,6 +149,6 @@ export default class PlayerModel implements _Model {
   }
 
   private static SPRITE_NAME = "SPRITE"
-  private static GROUP_SUFFIX = "-group"
+  static GROUP_SUFFIX = "-group"
   static CAR_SUFFIX = "-car"
 }

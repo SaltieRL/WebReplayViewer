@@ -6,6 +6,8 @@ import {
   MeshPhongMaterial,
   PlaneBufferGeometry,
   Scene,
+  AmbientLight,
+  HemisphereLight,
 } from "three"
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
@@ -72,6 +74,12 @@ const buildPlayfield = async ({ scene, loadingManager }: BuildOption) => {
   orangeGoal.position.z = 5120
   orangeGoal.rotation.y = Math.PI
   scene.add(orangeGoal)
+
+  // Ambient light
+  scene.add(new AmbientLight(0x444444))
+
+  // Hemisphere light
+  scene.add(new HemisphereLight(0xffffbb, 0x080820, 1))
 
   const field = await ModelStorage.getInstance().loadField(loadingManager)
   scene.add(field)

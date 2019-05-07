@@ -135,18 +135,18 @@ const defaultAnimationBuilder = (
     // Note that Three.JS requires this .position/.quaternion naming convention, and that
     // the object we wish to modify must have this associated name.
     const playerPosKeyframes = new VectorKeyframeTrack(
-      getPositionName(playerName, true),
+      getPositionName(`${playerName}${PlayerModel.GROUP_SUFFIX}`),
       playerKeyframeData.positionTimes,
       playerKeyframeData.positionValues
     )
     const playerRotKeyframes = new QuaternionKeyframeTrack(
-      getRotationName(playerName, true),
+      getRotationName(`${playerName}${PlayerModel.CAR_SUFFIX}`),
       playerKeyframeData.rotationTimes,
       playerKeyframeData.rotationValues
     )
 
     const playerClip = new AnimationClip(
-      getActionClipName(playerName, true),
+      getActionClipName(playerName),
       playerKeyframeData.duration,
       [playerPosKeyframes, playerRotKeyframes]
     )
@@ -157,17 +157,17 @@ const defaultAnimationBuilder = (
   const ballKeyframeData = generateKeyframeData(ballData)
 
   const ballPosKeyframes = new VectorKeyframeTrack(
-    getPositionName(BallModel.BALL_NAME, false),
+    getPositionName(BallModel.BALL_NAME),
     ballKeyframeData.positionTimes,
     ballKeyframeData.positionValues
   )
   const ballRotKeyframes = new QuaternionKeyframeTrack(
-    getRotationName(BallModel.BALL_NAME, false),
+    getRotationName(BallModel.BALL_NAME),
     ballKeyframeData.rotationTimes,
     ballKeyframeData.rotationValues
   )
   const ballClip = new AnimationClip(
-    getActionClipName(BallModel.BALL_NAME, false),
+    getActionClipName(BallModel.BALL_NAME),
     ballKeyframeData.duration,
     [ballPosKeyframes, ballRotKeyframes]
   )

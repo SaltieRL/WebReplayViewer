@@ -4,11 +4,19 @@ import { ReplayData } from "../models/ReplayData"
 import defaultSceneBuilder from "./SceneBuilder"
 import defaultAnimationBuilder from "./AnimationBuilder"
 import { GameManager } from "../managers/GameManager"
+import FPSClock from "../utils/FPSClock"
 
-const defaultGameBuilder = async (
-  replayData: ReplayData,
+interface GameBuilderOptions {
+  replayData: ReplayData
+  clock: FPSClock
   loadingManager?: LoadingManager
-) => {
+}
+
+const defaultGameBuilder = async ({
+  clock,
+  replayData,
+  loadingManager,
+}: GameBuilderOptions) => {
   const { names, colors } = replayData
   const playerInfo = []
   for (let index = 0; index < names.length; index++) {
@@ -21,6 +29,7 @@ const defaultGameBuilder = async (
     sceneManager.ball
   )
   return GameManager.init({
+    clock: clock,
     sceneManager,
     animationManager,
   })

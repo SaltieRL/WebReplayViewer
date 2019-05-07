@@ -20,7 +20,6 @@ class ReplayViewer extends PureComponent<Props> {
     super(props)
     this.mount = createRef()
     this.loadingManager = new LoadingManager()
-    props.clock.pause()
   }
 
   componentDidMount() {
@@ -29,14 +28,18 @@ class ReplayViewer extends PureComponent<Props> {
       clientHeight: 480,
     }
 
-    defaultGameBuilder(this.props.replayData, this.loadingManager).then(
-      gameManager => {
-        this.gameManager = gameManager
-        this.mount.current!.appendChild(gameManager.getDOMNode())
-        gameManager.updateSize(width, height)
-        gameManager.render()
-      }
-    )
+    const { replayData, clock } = this.props
+    defaultGameBuilder({
+      replayData,
+      clock,
+      loadingManager: this.loadingManager,
+    }).then(gameManager => {
+      this.gameManager = gameManager
+      this.mount.current!.appendChild(gameManager.getDOMNode())
+      gameManager.updateSize(width, height)
+      gameManager.render()
+      clock.play()
+    })
   }
 
   render() {
