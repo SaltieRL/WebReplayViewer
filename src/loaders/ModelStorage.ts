@@ -1,5 +1,13 @@
 import ModelLoader from "./ModelLoader"
-import { Object3D, LoadingManager } from "three"
+import { Object3D, LoadingManager, Group } from "three"
+import { GLTF } from "three/examples/jsm/loaders/GLTFLoader"
+
+class MissingAssetError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "MissingAssetError"
+  }
+}
 
 export default class ModelStorage {
   private static instance?: ModelStorage
@@ -15,6 +23,9 @@ export default class ModelStorage {
     this.storage = {}
   }
 
+  private getChildByName = (asset: GLTF, name: string) =>
+    asset.scene.children.find(object => object.name === name)
+
   async loadBall(loadingManager?: LoadingManager) {
     const BALL = "ball"
     if (this.storage[BALL]) {
@@ -23,7 +34,10 @@ export default class ModelStorage {
     // @ts-ignore
     const { default: glb } = await import("../assets/models/Ball.glb")
     const ballGLTF = await ModelLoader.loadObject(glb, loadingManager)
-    const ball = ballGLTF.scene.children[2]
+    const ball = this.getChildByName(ballGLTF, "Ball")
+    if (!ball) {
+      throw new MissingAssetError("Unable to load Ball model")
+    }
     this.storage[BALL] = ball
     return ball
   }
@@ -37,8 +51,9 @@ export default class ModelStorage {
     // @ts-ignore
     const { default: glb } = await import("../assets/models/Field.glb")
     const fieldGLTF = await ModelLoader.loadObject(glb, loadingManager)
-    // TODO: Determine the child number for the field
-    const field = fieldGLTF.scene.children[2]
+    const field = new Group()
+    field.name = "Field"
+    field.add(...fieldGLTF.scene.children)
     this.storage[FIELD] = field
     return field
   }
@@ -53,8 +68,10 @@ export default class ModelStorage {
     const { default: glb } = await import("../assets/models/Octane.glb")
     // TODO: Load car wheels
     const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
-    // TODO: Determine the child number for the car
-    const car = carGLTF.scene.children[2]
+    const car = this.getChildByName(carGLTF, "Octane")
+    if (!car) {
+      throw new MissingAssetError("Unable to load Octane model")
+    }
     this.storage[CAR] = car
     return car
   }
