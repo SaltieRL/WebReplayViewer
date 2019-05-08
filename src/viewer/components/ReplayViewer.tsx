@@ -7,9 +7,11 @@ import { ReplayData } from "../../models/ReplayData"
 import FPSClock from "../../utils/FPSClock"
 import defaultGameBuilder from "../../builders/GameBuilder"
 import Scoreboard from "./ScoreBoard"
+import { ReplayMetadata } from "../../models/ReplayMetadata"
 
 interface Props {
   replayData: ReplayData
+  replayMetadata: ReplayMetadata
   clock: FPSClock
 }
 
@@ -35,10 +37,11 @@ class ReplayViewer extends PureComponent<Props, State> {
       clientHeight: 480,
     }
 
-    const { replayData, clock } = this.props
-    console.log(replayData.frames)
+    const { replayData, replayMetadata, clock } = this.props
+
     defaultGameBuilder({
       replayData,
+      replayMetadata,
       clock,
       loadingManager: this.state.loadingManager,
     }).then(gameManager => {

@@ -54,7 +54,7 @@ export class GameManager {
   }
 
   getData() {
-    return this.dataManager.getData()
+    return { data: this.dataManager.data, metadata: this.dataManager.metadata }
   }
 
   getDOMNode() {

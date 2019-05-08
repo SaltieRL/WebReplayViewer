@@ -1,14 +1,18 @@
 import { ReplayData } from "../models/ReplayData"
+import { ReplayMetadata } from "../models/ReplayMetadata"
 
 interface DataManagerOptions {
   replayData: ReplayData
+  replayMetadata: ReplayMetadata
 }
 
 export default class DataManager {
-  private data: ReplayData
+  data: ReplayData
+  metadata: ReplayMetadata
 
-  private constructor({ replayData }: DataManagerOptions) {
+  private constructor({ replayData, replayMetadata }: DataManagerOptions) {
     this.data = replayData
+    this.metadata = replayMetadata
   }
 
   public getData() {

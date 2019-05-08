@@ -2,6 +2,8 @@ import React, { PureComponent } from "react"
 import styled from "styled-components"
 import { GameManager } from "../../managers/GameManager"
 import { getGameTime } from "../../operators/frameGetters"
+import { Goal } from "../../models/ReplayMetadata"
+import { getPlayerById } from "../../operators/metadataGetters"
 
 interface Props {
   gameManager: GameManager
@@ -31,10 +33,12 @@ export default class Scoreboard extends PureComponent<Props, State> {
   }
 
   onFrame(frameNumber: number) {
-    const gameTime = getGameTime(this.props.gameManager.getData(), frameNumber)
+    const { data } = this.props.gameManager.getData()
+    const gameTime = getGameTime(data, frameNumber)
     if (gameTime !== this.state.gameTime) {
       this.setState({ gameTime })
     }
+    this.updateGameScore(frameNumber)
   }
 
   getDateTimeString() {
@@ -61,6 +65,31 @@ export default class Scoreboard extends PureComponent<Props, State> {
         </OrangeScoreCard>
       </ScoreContainer>
     )
+  }
+
+  private updateGameScore(frameNumber: number) {
+    const { metadata } = this.props.gameManager.getData()
+
+    let team0Score = 0
+    let team1Score = 0
+    metadata.gameMetadata.goals.forEach((goal: Goal) => {
+      if (goal.frameNumber <= frameNumber) {
+        const player = getPlayerById(metadata, goal.playerId.id)
+        if (player) {
+          if (player.isOrange) {
+            team1Score++
+          } else {
+            team0Score++
+          }
+        }
+      }
+    })
+    if (
+      team0Score !== this.state.team0Score ||
+      team1Score !== this.state.team1Score
+    ) {
+      this.setState({ team0Score, team1Score })
+    }
   }
 }
 
