@@ -15,7 +15,7 @@ class App extends Component<any, State> {
 
   componentDidMount() {
     fetch(
-      "https://calculated.gg/api/replay/6D1439F611E9616B1AFCCBA2D6D201EF/positions",
+      "https://calculated.gg/api/replay/BDC240CE11E96C735CEBCE8190E3C53A/positions",
       {
         method: "GET",
         headers: {

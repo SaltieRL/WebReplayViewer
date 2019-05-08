@@ -8,6 +8,7 @@ import {
   Sprite,
   SpriteMaterial,
   Texture,
+  AxesHelper,
 } from "three"
 
 import { _Model } from "./_Model"
@@ -67,6 +68,9 @@ export default class PlayerModel implements _Model {
     bodyMaterial[0].color.setHex(carColor)
     carGroup.add(body, chassis)
     this.group.add(carGroup)
+
+    // Debug
+    carGroup.add(new AxesHelper(200))
   }
 
   private generateSprite() {

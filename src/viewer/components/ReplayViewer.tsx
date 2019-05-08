@@ -1,25 +1,32 @@
 import React, { createRef, PureComponent, RefObject } from "react"
 import { LoadingManager } from "three"
+import styled from "styled-components"
 
 import { GameManager } from "../../managers/GameManager"
 import { ReplayData } from "../../models/ReplayData"
 import FPSClock from "../../utils/FPSClock"
 import defaultGameBuilder from "../../builders/GameBuilder"
+import Scoreboard from "./ScoreBoard"
 
 interface Props {
   replayData: ReplayData
   clock: FPSClock
 }
 
-class ReplayViewer extends PureComponent<Props> {
+interface State {
+  loadingManager: LoadingManager
+  gameManager?: GameManager
+}
+
+class ReplayViewer extends PureComponent<Props, State> {
   private mount: RefObject<HTMLDivElement>
-  private loadingManager: LoadingManager
-  private gameManager?: GameManager
 
   constructor(props: Props) {
     super(props)
     this.mount = createRef()
-    this.loadingManager = new LoadingManager()
+    this.state = {
+      loadingManager: new LoadingManager(),
+    }
   }
 
   componentDidMount() {
@@ -29,22 +36,43 @@ class ReplayViewer extends PureComponent<Props> {
     }
 
     const { replayData, clock } = this.props
+    console.log(replayData.frames)
     defaultGameBuilder({
       replayData,
       clock,
-      loadingManager: this.loadingManager,
+      loadingManager: this.state.loadingManager,
     }).then(gameManager => {
-      this.gameManager = gameManager
       this.mount.current!.appendChild(gameManager.getDOMNode())
       gameManager.updateSize(width, height)
       gameManager.render()
+
+      this.setState({
+        gameManager,
+      })
       clock.play()
     })
   }
 
   render() {
-    return <div ref={this.mount} style={{ width: 640, height: 480 }} />
+    const { gameManager } = this.state
+    return (
+      <ViewerContainer>
+        <Viewer ref={this.mount} />
+        {gameManager && <Scoreboard gameManager={gameManager} />}
+      </ViewerContainer>
+    )
   }
 }
+
+const ViewerContainer = styled.div`
+  width: 640px;
+  height: 480px;
+  position: relative;
+`
+
+const Viewer = styled.div`
+  width: 100%;
+  height: 100%;
+`
 
 export default ReplayViewer

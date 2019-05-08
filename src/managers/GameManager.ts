@@ -4,26 +4,31 @@ import AnimationManager from "./AnimationManager"
 import SceneManager from "./SceneManager"
 import FPSClock from "../utils/FPSClock"
 import { addToWindow } from "../utils/addToWindow"
+import DataManager from "./DataManager"
 
 interface GameManagerOptions {
   clock: FPSClock
   animationManager: AnimationManager
+  dataManager: DataManager
   sceneManager: SceneManager
 }
 
 export class GameManager {
-  private clock: FPSClock
+  clock: FPSClock
   private animationManager: AnimationManager
+  private dataManager: DataManager
   private sceneManager: SceneManager
   private readonly renderer: WebGLRenderer
 
   private constructor({
     clock,
     animationManager,
+    dataManager,
     sceneManager,
   }: GameManagerOptions) {
     this.renderer = new WebGLRenderer({ antialias: true })
     this.animationManager = animationManager
+    this.dataManager = dataManager
     this.sceneManager = sceneManager
 
     this.animate = this.animate.bind(this)
@@ -46,6 +51,10 @@ export class GameManager {
       this.animationManager.updateAnimationClips(delta)
       this.render()
     }
+  }
+
+  getData() {
+    return this.dataManager.getData()
   }
 
   getDOMNode() {
