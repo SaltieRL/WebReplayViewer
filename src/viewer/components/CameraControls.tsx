@@ -22,7 +22,11 @@ export default class PlayerControls extends PureComponent<Props> {
       <div>
         {gameManager.getPlayers().map(player => {
           const name = player.getName()
-          return <button onClick={this.onPlayerClick(name)}>{name}</button>
+          return (
+            <button key={name} onClick={this.onPlayerClick(name)}>
+              {name}
+            </button>
+          )
         })}
       </div>
     )
