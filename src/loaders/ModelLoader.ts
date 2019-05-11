@@ -1,19 +1,23 @@
-import { LoadingManager, Material, MaterialLoader } from "three"
+import { LoadingManager } from "three"
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import {
+  MTLLoader,
+  MaterialCreator,
+} from "three/examples/jsm/loaders/MTLLoader"
 
 export default class ModelLoader {
   // static async loadObject()
   static async loadMaterial(path: string, loadingManager?: LoadingManager) {
     return new Promise(
       (
-        resolve: (material: Material) => void,
+        resolve: (material: MaterialCreator) => void,
         reject: (err: Error | ErrorEvent) => void
       ) => {
-        const mtlLoader = new MaterialLoader(loadingManager)
+        const mtlLoader = new MTLLoader(loadingManager)
         mtlLoader.load(
           path,
-          (material: Material) => {
-            resolve(material)
+          (materialCreator: MaterialCreator) => {
+            resolve(materialCreator)
           },
           undefined,
           (error: Error | ErrorEvent) => {

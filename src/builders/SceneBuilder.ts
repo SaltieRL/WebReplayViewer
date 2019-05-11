@@ -12,7 +12,12 @@ import {
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
 import BallModel from "../loaders/glb-models/BallModel"
-import { loadField, loadBall, loadCar } from "../loaders/ModelStorage"
+import {
+  loadField,
+  loadBall,
+  loadOrangeCar,
+  loadBlueCar,
+} from "../loaders/ModelStorage"
 import { PlayerManager } from "../managers/PlayerManager"
 import SceneManager from "../managers/SceneManager"
 
@@ -98,9 +103,11 @@ const buildPlayers = async (
   { scene, loadingManager }: BuildOption
 ) => {
   const managers = []
-  const car = await loadCar(loadingManager)
   for (const player of players) {
     const { name, orangeTeam } = player
+    const car = orangeTeam
+      ? await loadOrangeCar(loadingManager)
+      : await loadBlueCar(loadingManager)
     const playerMesh = car.clone() as Group
     const manager = new PlayerManager(name, orangeTeam, playerMesh)
     scene.add(manager.getThreeObject())
