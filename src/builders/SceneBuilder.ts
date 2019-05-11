@@ -12,7 +12,7 @@ import {
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
 import BallModel from "../loaders/glb-models/BallModel"
-import ModelStorage from "../loaders/ModelStorage"
+import { loadField, loadBall, loadCar } from "../loaders/ModelStorage"
 import { PlayerManager } from "../managers/PlayerManager"
 import SceneManager from "../managers/SceneManager"
 
@@ -81,13 +81,13 @@ const buildPlayfield = async ({ scene, loadingManager }: BuildOption) => {
   // Hemisphere light
   scene.add(new HemisphereLight(0xffffbb, 0x080820, 1))
 
-  const field = await ModelStorage.getInstance().loadField(loadingManager)
+  const field = await loadField(loadingManager)
   scene.add(field)
   return new ArenaModel(field)
 }
 
 const buildBall = async ({ scene, loadingManager }: BuildOption) => {
-  const ballModel = await ModelStorage.getInstance().loadBall(loadingManager)
+  const ballModel = await loadBall(loadingManager)
   const ball = new BallModel({ model: ballModel })
   scene.add(ball.getThreeObject())
   return ball
@@ -98,7 +98,7 @@ const buildPlayers = async (
   { scene, loadingManager }: BuildOption
 ) => {
   const managers = []
-  const car = await ModelStorage.getInstance().loadCar(loadingManager)
+  const car = await loadCar(loadingManager)
   for (const player of players) {
     const { name, orangeTeam } = player
     const playerMesh = car.clone() as Group

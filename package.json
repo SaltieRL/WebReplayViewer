@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "moment": "^2.24.0",
+    "reselect": "^4.0.0",
     "styled-components": "^4.2.0"
   },
   "devDependencies": {
