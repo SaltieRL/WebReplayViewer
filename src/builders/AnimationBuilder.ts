@@ -56,7 +56,7 @@ const defaultAnimationBuilder = (
   const dataToQuaternion = (data: any[]) => {
     const q = new Quaternion()
     const x = -data[3]
-    const y = -data[5] - Math.PI / 2
+    const y = -data[5]
     const z = -data[4]
     q.setFromEuler(new Euler(y, z, x, "YZX"))
     return q
