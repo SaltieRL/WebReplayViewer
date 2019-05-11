@@ -1,24 +1,9 @@
 import React, { Component } from "react"
-import {
-  ReplayViewer,
-  FPSClock,
-  ReplayData,
-  ReplayMetadata,
-  GameManager,
-} from "../../src"
+import { ReplayViewer, GameManager, loadBuilderFromReplay } from "../../src"
 
 interface State {
   gameManager?: GameManager
 }
-
-const fetchByURL = (url: string) =>
-  fetch(url, {
-    method: "GET",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-  }).then(response => response.json())
 
 class App extends Component<any, State> {
   constructor(props: any) {
@@ -29,20 +14,9 @@ class App extends Component<any, State> {
   componentDidMount() {
     const REPLAY_ID = "BDC240CE11E96C735CEBCE8190E3C53A"
 
-    Promise.all([
-      fetchByURL(`https://calculated.gg/api/replay/${REPLAY_ID}/positions`),
-      fetchByURL(`https://calculated.gg/api/v1/replay/${REPLAY_ID}?key=1`),
-    ])
-      .then(([replayData, replayMetadata]: [ReplayData, ReplayMetadata]) => {
-        return GameManager.builder({
-          replayData,
-          replayMetadata,
-          clock: FPSClock.convertReplayToClock(replayData),
-        })
-      })
-      .then(gameManager => {
-        this.setState({ gameManager })
-      })
+    loadBuilderFromReplay(REPLAY_ID).then(gameManager => {
+      this.setState({ gameManager })
+    })
   }
 
   render() {
