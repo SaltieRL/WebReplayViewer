@@ -16,9 +16,9 @@ interface GameManagerOptions {
 
 export class GameManager {
   clock: FPSClock
+  sceneManager: SceneManager
   private animationManager: AnimationManager
   private dataManager: DataManager
-  private sceneManager: SceneManager
   private readonly renderer: WebGLRenderer
 
   private constructor({
@@ -60,6 +60,10 @@ export class GameManager {
 
   getDOMNode() {
     return this.renderer.domElement
+  }
+
+  getPlayers() {
+    return this.sceneManager.players
   }
 
   updateSize(width: number = 640, height: number = 480) {

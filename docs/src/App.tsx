@@ -1,5 +1,11 @@
 import React, { Component } from "react"
-import { ReplayViewer, GameManager, loadBuilderFromReplay } from "../../src"
+import {
+  ReplayViewer,
+  GameManager,
+  loadBuilderFromReplay,
+  PlayControls,
+  CameraControls,
+} from "../../src"
 
 interface State {
   gameManager?: GameManager
@@ -27,7 +33,11 @@ class App extends Component<any, State> {
           <h2>Welcome to React</h2>
         </div>
         {gameManager ? (
-          <ReplayViewer gameManager={gameManager} />
+          <>
+            <ReplayViewer gameManager={gameManager} />
+            <PlayControls gameManager={gameManager} />
+            <CameraControls gameManager={gameManager} />
+          </>
         ) : (
           "Loading..."
         )}

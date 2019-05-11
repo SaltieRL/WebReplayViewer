@@ -86,6 +86,10 @@ export default class FPSClock {
     this.doCallbacks()
   }
 
+  public isPaused() {
+    return this.paused
+  }
+
   public play() {
     if (this.paused) {
       this.lastDelta = performance.now()

@@ -3,7 +3,6 @@ import {
   Group,
   LinearMipMapLinearFilter,
   Mesh,
-  MeshStandardMaterial,
   NearestFilter,
   Sprite,
   SpriteMaterial,

@@ -1,4 +1,6 @@
 export { default as ReplayViewer } from "./viewer/components/ReplayViewer"
+export { default as PlayControls } from "./viewer/components/PlayControls"
+export { default as CameraControls } from "./viewer/components/CameraControls"
 export { default as FPSClock } from "./utils/FPSClock"
 export { ReplayData } from "./models/ReplayData"
 export { ReplayMetadata } from "./models/ReplayMetadata"
