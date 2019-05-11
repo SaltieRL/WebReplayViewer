@@ -1,10 +1,14 @@
 import React, { Component } from "react"
-import { ReplayViewer, FPSClock, ReplayData, ReplayMetadata } from "../../src"
+import {
+  ReplayViewer,
+  FPSClock,
+  ReplayData,
+  ReplayMetadata,
+  GameManager,
+} from "../../src"
 
 interface State {
-  replayData?: ReplayData
-  replayMetadata?: ReplayMetadata
-  clock?: FPSClock
+  gameManager?: GameManager
 }
 
 const fetchByURL = (url: string) =>
@@ -28,28 +32,28 @@ class App extends Component<any, State> {
     Promise.all([
       fetchByURL(`https://calculated.gg/api/replay/${REPLAY_ID}/positions`),
       fetchByURL(`https://calculated.gg/api/v1/replay/${REPLAY_ID}?key=1`),
-    ]).then(([replayData, replayMetadata]: [ReplayData, ReplayMetadata]) => {
-      this.setState({
-        replayData,
-        replayMetadata,
-        clock: FPSClock.convertReplayToClock(replayData),
+    ])
+      .then(([replayData, replayMetadata]: [ReplayData, ReplayMetadata]) => {
+        return GameManager.builder({
+          replayData,
+          replayMetadata,
+          clock: FPSClock.convertReplayToClock(replayData),
+        })
       })
-    })
+      .then(gameManager => {
+        this.setState({ gameManager })
+      })
   }
 
   render() {
-    const { clock, replayData, replayMetadata } = this.state
+    const { gameManager } = this.state
     return (
       <div>
         <div>
           <h2>Welcome to React</h2>
         </div>
-        {replayData && clock && replayMetadata ? (
-          <ReplayViewer
-            replayData={replayData}
-            clock={clock}
-            replayMetadata={replayMetadata}
-          />
+        {gameManager ? (
+          <ReplayViewer gameManager={gameManager} />
         ) : (
           "Loading..."
         )}

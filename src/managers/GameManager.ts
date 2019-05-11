@@ -5,6 +5,7 @@ import SceneManager from "./SceneManager"
 import FPSClock from "../utils/FPSClock"
 import { addToWindow } from "../utils/addToWindow"
 import DataManager from "./DataManager"
+import defaultGameBuilder from "../builders/GameBuilder"
 
 interface GameManagerOptions {
   clock: FPSClock
@@ -70,6 +71,8 @@ export class GameManager {
   render() {
     this.renderer.render(this.sceneManager.scene, this.sceneManager.camera)
   }
+
+  static builder = defaultGameBuilder
 
   /**
    * ========================================

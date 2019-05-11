@@ -1,4 +1,5 @@
 import { ReplayData } from "../models/ReplayData"
+import { addToWindow } from "./addToWindow"
 
 /**
  * This clock provides a simple callback system that keeps track of elapsed and delta time
@@ -61,7 +62,8 @@ export default class FPSClock {
     this.elapsedTime = 0
     this.currentFrame = 0
     this.lastDelta = 0
-    console.log(frameToDuration)
+
+    addToWindow("camera", this)
     this.update = this.update.bind(this)
     this.timeout()
   }
@@ -107,6 +109,13 @@ export default class FPSClock {
    * @returns {number} seconds
    */
   public getDelta(): number {
+    // Only return delta if inside the frame dataset
+    if (
+      this.elapsedTime >= this.frameToDuration[this.frameToDuration.length - 1]
+    ) {
+      return 0
+    }
+
     const now = performance.now()
     // Initialize empty delta
     if (!this.lastDelta) {

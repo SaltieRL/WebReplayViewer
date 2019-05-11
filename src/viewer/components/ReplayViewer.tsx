@@ -1,24 +1,14 @@
 import React, { createRef, PureComponent, RefObject } from "react"
-import { LoadingManager } from "three"
 import styled from "styled-components"
 
 import { GameManager } from "../../managers/GameManager"
-import { ReplayData } from "../../models/ReplayData"
-import FPSClock from "../../utils/FPSClock"
-import defaultGameBuilder from "../../builders/GameBuilder"
 import Scoreboard from "./ScoreBoard"
-import { ReplayMetadata } from "../../models/ReplayMetadata"
+import { addToWindow } from "../../utils/addToWindow"
 
 interface Props {
-  replayData: ReplayData
-  replayMetadata: ReplayMetadata
-  clock: FPSClock
+  gameManager: GameManager
 }
-
-interface State {
-  loadingManager: LoadingManager
-  gameManager?: GameManager
-}
+interface State {}
 
 class ReplayViewer extends PureComponent<Props, State> {
   private mount: RefObject<HTMLDivElement>
@@ -26,9 +16,6 @@ class ReplayViewer extends PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.mount = createRef()
-    this.state = {
-      loadingManager: new LoadingManager(),
-    }
   }
 
   componentDidMount() {
@@ -36,32 +23,20 @@ class ReplayViewer extends PureComponent<Props, State> {
       clientWidth: 640,
       clientHeight: 480,
     }
-
-    const { replayData, replayMetadata, clock } = this.props
-
-    defaultGameBuilder({
-      replayData,
-      replayMetadata,
-      clock,
-      loadingManager: this.state.loadingManager,
-    }).then(gameManager => {
-      this.mount.current!.appendChild(gameManager.getDOMNode())
-      gameManager.updateSize(width, height)
-      gameManager.render()
-
-      this.setState({
-        gameManager,
-      })
-      clock.play()
-    })
+    const { gameManager } = this.props
+    this.mount.current!.appendChild(gameManager.getDOMNode())
+    gameManager.updateSize(width, height)
+    gameManager.render()
+    addToWindow("game", gameManager)
+    gameManager.clock.play()
   }
 
   render() {
-    const { gameManager } = this.state
+    const { gameManager } = this.props
     return (
       <ViewerContainer>
         <Viewer ref={this.mount} />
-        {gameManager && <Scoreboard gameManager={gameManager} />}
+        <Scoreboard gameManager={gameManager} />
       </ViewerContainer>
     )
   }

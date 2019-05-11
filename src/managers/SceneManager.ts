@@ -36,6 +36,27 @@ export default class SceneManager {
     this.camera.updateProjectionMatrix()
   }
 
+  setCameraLocation({ playerName, fieldLocation }: CameraLocationOptions) {
+    this.players.forEach(player => player.removeCamera())
+    if (playerName) {
+      const player = this.players.find(
+        player => player.getName() === playerName
+      )
+      if (player) {
+        player.makeActive(this.camera)
+      }
+    } else if (fieldLocation) {
+      switch (fieldLocation) {
+        case "orange":
+          this.camera.position.z = 5750
+        case "blue":
+          this.camera.position.z = -5750
+        case "center":
+          this.camera.position.z = 0
+      }
+    }
+  }
+
   /**
    * ========================================
    * Managers are singletons
@@ -52,4 +73,9 @@ export default class SceneManager {
     SceneManager.instance = new SceneManager(options)
     return SceneManager.instance
   }
+}
+
+type CameraLocationOptions = {
+  playerName?: string
+  fieldLocation?: "orange" | "blue" | "center"
 }

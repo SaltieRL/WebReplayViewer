@@ -8,7 +8,7 @@ import FPSClock from "../utils/FPSClock"
 import DataManager from "../managers/DataManager"
 import { ReplayMetadata } from "../models/ReplayMetadata"
 
-interface GameBuilderOptions {
+export interface GameBuilderOptions {
   replayData: ReplayData
   replayMetadata: ReplayMetadata
   clock: FPSClock
