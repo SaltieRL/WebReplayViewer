@@ -46,6 +46,12 @@ export class GameManager {
   animate(frameNumber: number) {
     const delta = this.clock.getDelta()
     if (delta) {
+      this.sceneManager.players.forEach(player =>
+        player.updateCamera(
+          this.sceneManager.ball.getThreeObject().position,
+          false
+        )
+      )
       this.sceneManager.camera.lookAt(
         this.sceneManager.ball.getThreeObject().position
       )
