@@ -15,6 +15,6 @@ export default class ArenaModel implements _Model {
   }
 
   private initialize() {
-    this.arena.scale.setScalar(25)
+    this.arena.scale.setScalar(24)
   }
 }

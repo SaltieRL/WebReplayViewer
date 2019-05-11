@@ -21,7 +21,7 @@ export default class SceneManager {
 
   private constructor({ scene, ball, arena, players }: SceneManagerOptions) {
     this.camera = new PerspectiveCamera(80, 2, 0.1, 20000)
-    this.camera.position.z = 5750
+    this.camera.position.z = 5000
     this.camera.position.y = 750
     this.scene = scene
     this.ball = ball

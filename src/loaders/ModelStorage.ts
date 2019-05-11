@@ -65,9 +65,10 @@ export default class ModelStorage {
     }
 
     // @ts-ignore
-    const { default: glb } = await import("../assets/models/Octane.glb")
+    const { default: glb } = await import("../assets/models/Octane ZXR.glb")
     // TODO: Load car wheels
     const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
+    console.log(carGLTF)
     const car = this.getChildByName(carGLTF, "Octane")
     if (!car) {
       throw new MissingAssetError("Unable to load Octane model")

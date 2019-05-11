@@ -56,17 +56,19 @@ export default class PlayerModel implements _Model {
 
   private generateGroup(model: Group) {
     const carGroup = new Group()
+    carGroup.scale.setScalar(0.02)
     carGroup.name = `${this.playerName}${PlayerModel.CAR_SUFFIX}`
-    const [body, chassis] = model.children as Mesh[]
-    body.name = `${this.playerName}-body`
-    chassis.name = `${this.playerName}-chassis`
+    console.log(model.children)
+    const children = model.children as Mesh[]
+    // body.name = `${this.playerName}-body`
+    // chassis.name = `${this.playerName}-chassis`
     // 0xff9800 is orange, 0x2196f3 is blue
-    const carColor = this.orangeTeam ? 0xff9800 : 0x2196f3
-    const bodyMaterial = (Array.isArray(body.material)
-      ? body.material
-      : [body.material]) as MeshStandardMaterial[]
-    bodyMaterial[0].color.setHex(carColor)
-    carGroup.add(body, chassis)
+    // const carColor = this.orangeTeam ? 0xff9800 : 0x2196f3
+    // const bodyMaterial = (Array.isArray(body.material)
+    //   ? body.material
+    //   : [body.material]) as MeshStandardMaterial[]
+    // bodyMaterial[0].color.setHex(carColor)
+    carGroup.add(...children)
     this.group.add(carGroup)
 
     // Debug
