@@ -5,12 +5,15 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "postinstall": "npm run submodule:init",
     "clean": "rimraf _bundles lib",
-    "build": "npm run build:tsc && npm run build:bundle && npm run build:copy",
+    "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc && tsc -m es6 --outDir lib/esm",
-    "build:bundle": "npx parcel-bundler build ./src/index.ts --out-dir lib",
+    "build:bundle": "npx webpack",
     "build:copy": "node copy.js",
     "test": "cd lib",
+    "submodule": "git submodule update --remote",
+    "submodule:init": "git submodule update --init --remote",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
   },
   "repository": {
@@ -33,23 +36,30 @@
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "peerDependencies": {
     "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react-dom": "^16.8.6",
+    "three": "^0.104.0"
   },
   "dependencies": {
     "moment": "^2.24.0",
-    "three": "^0.104.0"
+    "styled-components": "^4.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
     "@babel/preset-react": "^7.0.0",
+    "@types/node": "^12.0.0",
     "@types/react": "^16.8.13",
+    "@types/styled-components": "^4.1.14",
     "@types/three": "^0.103.2",
+    "awesome-typescript-loader": "^5.2.1",
+    "file-loader": "^3.0.1",
     "fs-extra": "^7.0.1",
     "lodash.camelcase": "^4.3.0",
-    "parcel-bundler": "^1.12.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rimraf": "^2.6.3",
-    "typescript": "^3.4.3"
+    "three": "^0.104.0",
+    "typescript": "^3.4.3",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }

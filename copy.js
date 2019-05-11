@@ -10,6 +10,15 @@ function copyReadme() {
     .then(() => console.log("Copied README.md"))
 }
 
+function copyAssets() {
+  return fse
+    .copy(
+      path.resolve(__dirname, "src", "assets"),
+      path.resolve(__dirname, "lib", "assets")
+    )
+    .then(() => console.log("Copied assets"))
+}
+
 function copyPackageJson() {
   return new Promise(resolve => {
     fse.readFile(
@@ -54,4 +63,5 @@ function copyPackageJson() {
 
 copyPackageJson()
   .then(copyReadme)
+  .then(copyAssets)
   .catch(console.error)
