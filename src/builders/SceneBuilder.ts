@@ -8,6 +8,7 @@ import {
   Scene,
   AmbientLight,
   HemisphereLight,
+  Vector3,
 } from "three"
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
@@ -17,6 +18,7 @@ import {
   loadBall,
   loadOrangeCar,
   loadBlueCar,
+  loadWheel,
 } from "../loaders/ModelStorage"
 import { PlayerManager } from "../managers/PlayerManager"
 import SceneManager from "../managers/SceneManager"
@@ -108,10 +110,36 @@ const buildPlayers = async (
     const car = orangeTeam
       ? await loadOrangeCar(loadingManager)
       : await loadBlueCar(loadingManager)
+    const wheels = await buildWheels(loadingManager)
     const playerMesh = car.clone() as Group
+    playerMesh.add(wheels)
     const manager = new PlayerManager(name, orangeTeam, playerMesh)
     scene.add(manager.getThreeObject())
     managers.push(manager)
   }
   return managers
+}
+
+const buildWheels = async (loadingManager?: LoadingManager) => {
+  const wheel = await loadWheel(loadingManager)
+
+  const LEFT_DISTANCE = 50
+  const FORWARD_DISTANCE = 80
+  const VERTICAL_DISTANCE = 20
+  const wheelGroup = new Group()
+  const frontLeft = wheel.clone()
+  frontLeft.name = "Front Left"
+  frontLeft.position.set(FORWARD_DISTANCE, -LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  const frontRight = wheel.clone()
+  frontRight.name = "Front Right"
+  frontRight.position.set(FORWARD_DISTANCE, LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  const backLeft = wheel.clone()
+  backLeft.name = "Back Left"
+  backLeft.position.set(-FORWARD_DISTANCE, -LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  const backRight = wheel.clone()
+  backRight.name = "Back Right"
+  backRight.position.set(-FORWARD_DISTANCE, LEFT_DISTANCE, -VERTICAL_DISTANCE)
+
+  wheelGroup.add(frontLeft, frontRight, backLeft, backRight)
+  return wheelGroup
 }
