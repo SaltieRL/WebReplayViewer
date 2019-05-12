@@ -38,18 +38,30 @@ export const loadField = defaultMemoize(
   }
 )
 
+export const loadWheel = defaultMemoize(
+  async (loadingManager?: LoadingManager) => {
+    const { default: glb } = await import(
+      // @ts-ignore
+      "../assets/models/Wheel.glb"
+    )
+    const wheelGLTF = await ModelLoader.loadObject(glb, loadingManager)
+    const wheel = new Group()
+    wheel.name = "Wheel"
+    wheel.add(...wheelGLTF.scene.children)
+    return wheel
+  }
+)
+
 export const loadOrangeCar = defaultMemoize(
   async (loadingManager?: LoadingManager) => {
-    // @ts-ignore
     const { default: glb } = await import(
       // @ts-ignore
       "../assets/models/Octane_ZXR_Orange.glb"
     )
-    // TODO: Load car wheels
     const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
     const car = getChildByName(carGLTF, "Octane")
     if (!car) {
-      throw new MissingAssetError("Unable to load Octane model")
+      throw new MissingAssetError("Unable to load orange Octane model")
     }
     return car
   }
@@ -61,11 +73,10 @@ export const loadBlueCar = defaultMemoize(
       // @ts-ignore
       "../assets/models/Octane_ZXR_Blue.glb"
     )
-    // TODO: Load car wheels
     const carGLTF = await ModelLoader.loadObject(glb, loadingManager)
     const car = getChildByName(carGLTF, "Octane")
     if (!car) {
-      throw new MissingAssetError("Unable to load Octane model")
+      throw new MissingAssetError("Unable to load blue Octane model")
     }
     return car
   }
