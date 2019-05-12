@@ -22,7 +22,7 @@ module.exports = {
         loader: "awesome-typescript-loader",
       },
       {
-        test: /\.(glb|png|jpe?g|gif)$/,
+        test: /\.(glb|mtl|png|jpe?g|gif)$/,
         use: [
           {
             loader: "file-loader",
