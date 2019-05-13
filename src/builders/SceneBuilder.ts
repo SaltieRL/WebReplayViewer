@@ -8,7 +8,6 @@ import {
   Scene,
   AmbientLight,
   HemisphereLight,
-  Vector3,
 } from "three"
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
@@ -123,22 +122,22 @@ const buildPlayers = async (
 const buildWheels = async (loadingManager?: LoadingManager) => {
   const wheel = await loadWheel(loadingManager)
 
-  const LEFT_DISTANCE = 50
+  const LEFT_DISTANCE = 55
   const FORWARD_DISTANCE = 80
-  const VERTICAL_DISTANCE = 20
+  const VERTICAL_DISTANCE = 35
   const wheelGroup = new Group()
   const frontLeft = wheel.clone()
   frontLeft.name = "Front Left"
-  frontLeft.position.set(FORWARD_DISTANCE, -LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  frontLeft.position.set(FORWARD_DISTANCE, -VERTICAL_DISTANCE, -LEFT_DISTANCE)
   const frontRight = wheel.clone()
   frontRight.name = "Front Right"
-  frontRight.position.set(FORWARD_DISTANCE, LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  frontRight.position.set(FORWARD_DISTANCE, -VERTICAL_DISTANCE, LEFT_DISTANCE)
   const backLeft = wheel.clone()
   backLeft.name = "Back Left"
-  backLeft.position.set(-FORWARD_DISTANCE, -LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  backLeft.position.set(-FORWARD_DISTANCE, -VERTICAL_DISTANCE, -LEFT_DISTANCE)
   const backRight = wheel.clone()
   backRight.name = "Back Right"
-  backRight.position.set(-FORWARD_DISTANCE, LEFT_DISTANCE, -VERTICAL_DISTANCE)
+  backRight.position.set(-FORWARD_DISTANCE, -VERTICAL_DISTANCE, LEFT_DISTANCE)
 
   wheelGroup.add(frontLeft, frontRight, backLeft, backRight)
   return wheelGroup
