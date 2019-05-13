@@ -124,7 +124,7 @@ const buildWheels = async (loadingManager?: LoadingManager) => {
 
   const LEFT_DISTANCE = 55
   const FORWARD_DISTANCE = 80
-  const VERTICAL_DISTANCE = 35
+  const VERTICAL_DISTANCE = 32
   const wheelGroup = new Group()
   const frontLeft = wheel.clone()
   frontLeft.name = "Front Left"
