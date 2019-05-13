@@ -12,7 +12,13 @@ import {
 
 import ArenaModel from "../loaders/glb-models/ArenaModel"
 import BallModel from "../loaders/glb-models/BallModel"
-import ModelStorage from "../loaders/ModelStorage"
+import {
+  loadField,
+  loadBall,
+  loadOrangeCar,
+  loadBlueCar,
+  loadWheel,
+} from "../loaders/ModelStorage"
 import { PlayerManager } from "../managers/PlayerManager"
 import SceneManager from "../managers/SceneManager"
 
@@ -81,13 +87,13 @@ const buildPlayfield = async ({ scene, loadingManager }: BuildOption) => {
   // Hemisphere light
   scene.add(new HemisphereLight(0xffffbb, 0x080820, 1))
 
-  const field = await ModelStorage.getInstance().loadField(loadingManager)
+  const field = await loadField(loadingManager)
   scene.add(field)
   return new ArenaModel(field)
 }
 
 const buildBall = async ({ scene, loadingManager }: BuildOption) => {
-  const ballModel = await ModelStorage.getInstance().loadBall(loadingManager)
+  const ballModel = await loadBall(loadingManager)
   const ball = new BallModel({ model: ballModel })
   scene.add(ball.getThreeObject())
   return ball
@@ -98,13 +104,41 @@ const buildPlayers = async (
   { scene, loadingManager }: BuildOption
 ) => {
   const managers = []
-  const car = await ModelStorage.getInstance().loadCar(loadingManager)
   for (const player of players) {
     const { name, orangeTeam } = player
+    const car = orangeTeam
+      ? await loadOrangeCar(loadingManager)
+      : await loadBlueCar(loadingManager)
+    const wheels = await buildWheels(loadingManager)
     const playerMesh = car.clone() as Group
+    playerMesh.add(wheels)
     const manager = new PlayerManager(name, orangeTeam, playerMesh)
     scene.add(manager.getThreeObject())
     managers.push(manager)
   }
   return managers
+}
+
+const buildWheels = async (loadingManager?: LoadingManager) => {
+  const wheel = await loadWheel(loadingManager)
+
+  const LEFT_DISTANCE = 55
+  const FORWARD_DISTANCE = 80
+  const VERTICAL_DISTANCE = 32
+  const wheelGroup = new Group()
+  const frontLeft = wheel.clone()
+  frontLeft.name = "Front Left"
+  frontLeft.position.set(FORWARD_DISTANCE, -VERTICAL_DISTANCE, -LEFT_DISTANCE)
+  const frontRight = wheel.clone()
+  frontRight.name = "Front Right"
+  frontRight.position.set(FORWARD_DISTANCE, -VERTICAL_DISTANCE, LEFT_DISTANCE)
+  const backLeft = wheel.clone()
+  backLeft.name = "Back Left"
+  backLeft.position.set(-FORWARD_DISTANCE, -VERTICAL_DISTANCE, -LEFT_DISTANCE)
+  const backRight = wheel.clone()
+  backRight.name = "Back Right"
+  backRight.position.set(-FORWARD_DISTANCE, -VERTICAL_DISTANCE, LEFT_DISTANCE)
+
+  wheelGroup.add(frontLeft, frontRight, backLeft, backRight)
+  return wheelGroup
 }

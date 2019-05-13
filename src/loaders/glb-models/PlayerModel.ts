@@ -55,7 +55,6 @@ export default class PlayerModel implements _Model {
 
   private generateGroup(model: Group) {
     const carGroup = new Group()
-    carGroup.scale.setScalar(0.02)
     carGroup.name = `${this.playerName}${PlayerModel.CAR_SUFFIX}`
     console.log(model.children)
     const children = model.children as Mesh[]
