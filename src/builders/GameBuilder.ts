@@ -1,5 +1,3 @@
-import { LoadingManager } from "three"
-
 import { ReplayData } from "../models/ReplayData"
 import defaultSceneBuilder from "./SceneBuilder"
 import defaultAnimationBuilder from "./AnimationBuilder"
@@ -12,33 +10,24 @@ export interface GameBuilderOptions {
   replayData: ReplayData
   replayMetadata: ReplayMetadata
   clock: FPSClock
-  loadingManager?: LoadingManager
 }
 
 const defaultGameBuilder = async ({
   clock,
   replayData,
   replayMetadata,
-  loadingManager,
 }: GameBuilderOptions) => {
-  const { names, colors } = replayData
-  const playerInfo = []
-  for (let index = 0; index < names.length; index++) {
-    playerInfo.push({ name: names[index], orangeTeam: colors[index] })
-  }
-  const sceneManager = await defaultSceneBuilder(playerInfo, loadingManager)
-  const animationManager = defaultAnimationBuilder(
-    replayData,
-    sceneManager.players.map(manager => manager.playerModel),
-    sceneManager.ball
-  )
-  const dataManager = DataManager.init({ replayData, replayMetadata })
+  const { names: playerNames, colors } = replayData
+  const players = playerNames.map((name, index) => {
+    const isOrangeTeam = colors[index]
+    return { name, isOrangeTeam }
+  })
+  const sceneManager = await defaultSceneBuilder(players)
+  defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
+  DataManager.init({ replayData, replayMetadata })
 
   return GameManager.init({
     clock: clock,
-    animationManager,
-    dataManager,
-    sceneManager,
   })
 }
 
