@@ -1,9 +1,7 @@
 import React, { Component } from "react"
 import { GameManager } from "../../managers/GameManager"
 
-interface Props {
-  gameManager: GameManager
-}
+interface Props {}
 
 interface State {
   paused: boolean
@@ -20,7 +18,7 @@ export default class PlayControls extends Component<Props, State> {
   }
 
   togglePlay() {
-    const { clock } = this.props.gameManager
+    const { clock } = GameManager.getInstance()
     const { paused } = this.state
     this.setState({
       paused: !paused,

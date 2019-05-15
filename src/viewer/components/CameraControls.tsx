@@ -1,9 +1,9 @@
 import React, { PureComponent } from "react"
-import { GameManager } from "../../managers/GameManager"
 
-interface Props {
-  gameManager: GameManager
-}
+import CameraManager from "../../managers/CameraManager"
+import SceneManager from "../../managers/SceneManager"
+
+interface Props {}
 
 export default class PlayerControls extends PureComponent<Props> {
   constructor(props: Props) {
@@ -12,16 +12,14 @@ export default class PlayerControls extends PureComponent<Props> {
   }
 
   onPlayerClick(playerName: string) {
-    return () =>
-      this.props.gameManager.sceneManager.setCameraLocation({ playerName })
+    return () => CameraManager.getInstance().setCameraLocation({ playerName })
   }
 
   render() {
-    const { gameManager } = this.props
     return (
       <div>
-        {gameManager.getPlayers().map(player => {
-          const name = player.getName()
+        {SceneManager.getInstance().players.map(player => {
+          const name = player.playerName
           return (
             <button key={name} onClick={this.onPlayerClick(name)}>
               {name}
