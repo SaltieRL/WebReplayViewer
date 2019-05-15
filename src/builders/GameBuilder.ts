@@ -5,6 +5,7 @@ import { GameManager } from "../managers/GameManager"
 import FPSClock from "../utils/FPSClock"
 import DataManager from "../managers/DataManager"
 import { ReplayMetadata } from "../models/ReplayMetadata"
+import CameraManager from "../managers/CameraManager"
 
 export interface GameBuilderOptions {
   replayData: ReplayData
@@ -25,6 +26,7 @@ const defaultGameBuilder = async ({
   const sceneManager = await defaultSceneBuilder(players)
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
+  CameraManager.init()
 
   return GameManager.init({
     clock: clock,

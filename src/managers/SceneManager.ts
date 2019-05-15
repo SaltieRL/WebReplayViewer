@@ -1,7 +1,6 @@
 import { Scene } from "three"
 
 import { addToWindow } from "../utils/addToWindow"
-import CameraManager from "./CameraManager"
 import BallManager from "./models/BallManager"
 import FieldManager from "./models/FieldManager"
 import PlayerManager from "./models/PlayerManager"
@@ -20,8 +19,6 @@ export default class SceneManager {
   readonly players: PlayerManager[]
 
   private constructor({ scene, ball, field, players }: SceneManagerOptions) {
-    CameraManager.init()
-    console.log(scene)
     this.scene = scene
     this.ball = ball
     this.field = field
