@@ -1,85 +1,55 @@
 import { WebGLRenderer } from "three"
 
-import AnimationManager from "./AnimationManager"
-import SceneManager from "./SceneManager"
-import FPSClock from "../utils/FPSClock"
-import { addToWindow } from "../utils/addToWindow"
-import DataManager from "./DataManager"
 import defaultGameBuilder from "../builders/GameBuilder"
+import FPSClock from "../utils/FPSClock"
+import AnimationManager from "./AnimationManager"
+import CameraManager from "./CameraManager"
+import SceneManager from "./SceneManager"
 
 interface GameManagerOptions {
   clock: FPSClock
-  animationManager: AnimationManager
-  dataManager: DataManager
-  sceneManager: SceneManager
 }
 
 export class GameManager {
   clock: FPSClock
-  sceneManager: SceneManager
-  private animationManager: AnimationManager
-  private dataManager: DataManager
   private readonly renderer: WebGLRenderer
 
-  private constructor({
-    clock,
-    animationManager,
-    dataManager,
-    sceneManager,
-  }: GameManagerOptions) {
+  private constructor({ clock }: GameManagerOptions) {
     this.renderer = new WebGLRenderer({ antialias: true })
-    this.animationManager = animationManager
-    this.dataManager = dataManager
-    this.sceneManager = sceneManager
-
     this.animate = this.animate.bind(this)
     this.render = this.render.bind(this)
     this.clock = clock
     clock.subscribe(this.animate)
 
-    this.animationManager.playAnimationClips()
-    addToWindow("render", this.render)
-    addToWindow("animation", this.animationManager)
-    addToWindow("scene", this.sceneManager)
+    AnimationManager.getInstance().playAnimationClips()
   }
 
   animate(frameNumber: number) {
     const delta = this.clock.getDelta()
+    CameraManager.getInstance().update()
+
     if (delta) {
-      this.sceneManager.players.forEach(player =>
-        player.updateCamera(
-          this.sceneManager.ball.getThreeObject().position,
-          false
-        )
-      )
-      this.sceneManager.camera.lookAt(
-        this.sceneManager.ball.getThreeObject().position
-      )
-      this.animationManager.updateAnimationClips(delta)
+      SceneManager.getInstance().update()
+      CameraManager.getInstance().update()
+      AnimationManager.getInstance().updateAnimationClips(delta)
       this.render()
     }
-  }
-
-  getData() {
-    return { data: this.dataManager.data, metadata: this.dataManager.metadata }
   }
 
   getDOMNode() {
     return this.renderer.domElement
   }
 
-  getPlayers() {
-    return this.sceneManager.players
-  }
-
   updateSize(width: number = 640, height: number = 480) {
-    this.sceneManager.updateSize(width, height)
+    CameraManager.getInstance().updateSize(width, height)
     this.renderer.setSize(width, height)
     this.render()
   }
 
   render() {
-    this.renderer.render(this.sceneManager.scene, this.sceneManager.camera)
+    const { scene } = SceneManager.getInstance()
+    const { activeCamera } = CameraManager.getInstance()
+    this.renderer.render(scene, activeCamera)
   }
 
   static builder = defaultGameBuilder
