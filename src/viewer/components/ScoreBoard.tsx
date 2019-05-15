@@ -27,10 +27,6 @@ export default class Scoreboard extends PureComponent<Props, State> {
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
-  componentDidMount() {
-    console.log("yeet")
-  }
-
   onFrame(frameNumber: number) {
     const { data } = DataManager.getInstance()
     const gameTime = getGameTime(data, frameNumber)

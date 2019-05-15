@@ -40,7 +40,6 @@ export default class AnimationManager {
       const clip = playerClips[player]
       const mixer = this.mixers.players[player]
       const action = mixer.clipAction(clip)
-      console.log(clip, mixer, action)
       this.actions.players[player] = action
     }
     // Build the ball action
