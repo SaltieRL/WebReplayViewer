@@ -32,11 +32,10 @@ class ReplayViewer extends PureComponent<Props, State> {
   }
 
   render() {
-    const { gameManager } = this.props
     return (
       <ViewerContainer>
         <Viewer ref={this.mount} />
-        <Scoreboard gameManager={gameManager} />
+        <Scoreboard />
       </ViewerContainer>
     )
   }

@@ -1,5 +1,6 @@
 import {
   AnimationClip,
+  AnimationMixer,
   Euler,
   Quaternion,
   QuaternionKeyframeTrack,
@@ -7,15 +8,17 @@ import {
   VectorKeyframeTrack,
 } from "three"
 
-import BallModel from "../loaders/glb-models/BallModel"
-import PlayerModel from "../loaders/glb-models/PlayerModel"
+import { BALL } from "../constants/gameObjectNames"
+import AnimationManager from "../managers/AnimationManager"
+import BallManager from "../managers/models/BallManager"
+import PlayerManager from "../managers/models/PlayerManager"
 import { ReplayData } from "../models/ReplayData"
 import {
   getActionClipName,
   getPositionName,
   getRotationName,
 } from "./utils/animationNameGetters"
-import AnimationManager from "../managers/AnimationManager"
+import { getCarName, getGroupName } from "./utils/playerNameGetters"
 
 interface KeyframeData {
   duration: number
@@ -33,8 +36,8 @@ interface KeyframeData {
  */
 const defaultAnimationBuilder = (
   replayData: ReplayData,
-  playerModels: PlayerModel[],
-  ballModel: BallModel
+  playerModels: PlayerManager[],
+  ballModel: BallManager
 ): AnimationManager => {
   /**
    * Replay data is of this form:
@@ -135,12 +138,12 @@ const defaultAnimationBuilder = (
     // Note that Three.JS requires this .position/.quaternion naming convention, and that
     // the object we wish to modify must have this associated name.
     const playerPosKeyframes = new VectorKeyframeTrack(
-      getPositionName(`${playerName}${PlayerModel.GROUP_SUFFIX}`),
+      getPositionName(getGroupName(playerName)),
       playerKeyframeData.positionTimes,
       playerKeyframeData.positionValues
     )
     const playerRotKeyframes = new QuaternionKeyframeTrack(
-      getRotationName(`${playerName}${PlayerModel.CAR_SUFFIX}`),
+      getRotationName(getCarName(playerName)),
       playerKeyframeData.rotationTimes,
       playerKeyframeData.rotationValues
     )
@@ -157,17 +160,17 @@ const defaultAnimationBuilder = (
   const ballKeyframeData = generateKeyframeData(ballData)
 
   const ballPosKeyframes = new VectorKeyframeTrack(
-    getPositionName(BallModel.BALL_NAME),
+    getPositionName(BALL),
     ballKeyframeData.positionTimes,
     ballKeyframeData.positionValues
   )
   const ballRotKeyframes = new QuaternionKeyframeTrack(
-    getRotationName(BallModel.BALL_NAME),
+    getRotationName(BALL),
     ballKeyframeData.rotationTimes,
     ballKeyframeData.rotationValues
   )
   const ballClip = new AnimationClip(
-    getActionClipName(BallModel.BALL_NAME),
+    getActionClipName(BALL),
     ballKeyframeData.duration,
     [ballPosKeyframes, ballRotKeyframes]
   )
@@ -175,8 +178,8 @@ const defaultAnimationBuilder = (
   return AnimationManager.init({
     playerClips,
     ballClip,
-    playerMixers: playerModels.map(model => model.getMixer()),
-    ballMixer: ballModel.getMixer(),
+    playerMixers: playerModels.map(model => new AnimationMixer(model.carGroup)),
+    ballMixer: new AnimationMixer(ballModel.ball),
   })
 }
 

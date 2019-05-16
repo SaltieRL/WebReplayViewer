@@ -35,8 +35,8 @@ class App extends Component<any, State> {
         {gameManager ? (
           <>
             <ReplayViewer gameManager={gameManager} />
-            <PlayControls gameManager={gameManager} />
-            <CameraControls gameManager={gameManager} />
+            <PlayControls />
+            <CameraControls />
           </>
         ) : (
           "Loading..."

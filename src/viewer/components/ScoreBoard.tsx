@@ -1,14 +1,13 @@
 import React, { PureComponent } from "react"
 import styled from "styled-components"
+
+import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"
-import { getGameTime } from "../../operators/frameGetters"
 import { Goal } from "../../models/ReplayMetadata"
+import { getGameTime } from "../../operators/frameGetters"
 import { getPlayerById } from "../../operators/metadataGetters"
 
-interface Props {
-  gameManager: GameManager
-}
-
+interface Props {}
 interface State {
   team0Score: number
   team1Score: number
@@ -25,15 +24,11 @@ export default class Scoreboard extends PureComponent<Props, State> {
     }
 
     this.onFrame = this.onFrame.bind(this)
-    props.gameManager.clock.subscribe(this.onFrame)
-  }
-
-  componentDidMount() {
-    console.log("yeet")
+    GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
   onFrame(frameNumber: number) {
-    const { data } = this.props.gameManager.getData()
+    const { data } = DataManager.getInstance()
     const gameTime = getGameTime(data, frameNumber)
     if (gameTime !== this.state.gameTime) {
       this.setState({ gameTime })
@@ -68,7 +63,7 @@ export default class Scoreboard extends PureComponent<Props, State> {
   }
 
   private updateGameScore(frameNumber: number) {
-    const { metadata } = this.props.gameManager.getData()
+    const { metadata } = DataManager.getInstance()
 
     let team0Score = 0
     let team1Score = 0
