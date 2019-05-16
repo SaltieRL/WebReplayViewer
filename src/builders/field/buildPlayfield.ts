@@ -38,7 +38,7 @@ export const buildPlayfield = (scene: Scene) => {
    */
 
   const { field } = GameFieldAssets.getAssets()
-  field.scale.setScalar(1350)
+  field.scale.setScalar(400)
   scene.add(field)
   return new FieldManager(field)
 }
