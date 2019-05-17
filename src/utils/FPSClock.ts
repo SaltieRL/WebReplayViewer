@@ -115,13 +115,6 @@ export default class FPSClock {
    * @returns {number} seconds
    */
   public getDelta(): number {
-    // Only return delta if inside the frame dataset
-    if (
-      this.elapsedTime >= this.frameToDuration[this.frameToDuration.length - 1]
-    ) {
-      return 0
-    }
-
     const now = performance.now()
     // Initialize empty delta
     if (!this.lastDelta) {
