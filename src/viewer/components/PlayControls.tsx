@@ -29,12 +29,20 @@ export default class PlayControls extends Component<Props, State> {
 
   render() {
     const { clock } = GameManager.getInstance()
-    const onClick = () => (clock.isPaused() ? clock.play() : clock.pause())
+    const onPlayPauseClick = () =>
+      clock.isPaused() ? clock.play() : clock.pause()
+    const onResetClick = () => clock.setFrame(0)
+
     return (
       <Grid container spacing={24}>
         <Grid item>
-          <Button variant="outlined" onClick={onClick}>
+          <Button variant="outlined" onClick={onPlayPauseClick}>
             {this.state.paused ? "Play" : "Pause"}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="outlined" onClick={onResetClick}>
+            Reset
           </Button>
         </Grid>
       </Grid>
