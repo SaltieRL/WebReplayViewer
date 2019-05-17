@@ -15,6 +15,7 @@
   "author": "Saltie",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^3.9.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "three": "^0.104.0"
