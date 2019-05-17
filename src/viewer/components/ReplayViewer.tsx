@@ -1,11 +1,11 @@
 import React, { createRef, PureComponent, RefObject } from "react"
-import styled from "styled-components"
+import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
 
 import { GameManager } from "../../managers/GameManager"
 import Scoreboard from "./ScoreBoard"
 import { addToWindow } from "../../utils/addToWindow"
 
-interface Props {
+interface Props extends WithStyles {
   gameManager: GameManager
 }
 interface State {}
@@ -32,24 +32,24 @@ class ReplayViewer extends PureComponent<Props, State> {
   }
 
   render() {
+    const { viewerContainer, viewer } = this.props.classes
     return (
-      <ViewerContainer>
-        <Viewer ref={this.mount} />
+      <div className={viewerContainer}>
+        <div className={viewer} ref={this.mount} />
         <Scoreboard />
-      </ViewerContainer>
+      </div>
     )
   }
 }
 
-const ViewerContainer = styled.div`
-  width: 640px;
-  height: 480px;
-  position: relative;
-`
-
-const Viewer = styled.div`
-  width: 100%;
-  height: 100%;
-`
-
-export default ReplayViewer
+export default withStyles({
+  viewerContainer: {
+    width: "100%",
+    height: 480,
+    position: "relative",
+  },
+  viewer: {
+    width: "100%",
+    height: "100%",
+  },
+})(ReplayViewer)
