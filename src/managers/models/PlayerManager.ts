@@ -7,12 +7,14 @@ const CAMERA_ABOVE_PLAYER = 200
 export default class PlayerManager {
   readonly carGroup: Group
   readonly playerName: string
+  readonly isOrangeTeam: boolean
 
   readonly camera: PerspectiveCamera
 
-  constructor(playerName: string, carGroup: Group) {
+  constructor(playerName: string, isOrangeTeam: boolean, carGroup: Group) {
     this.playerName = playerName
     this.carGroup = carGroup
+    this.isOrangeTeam = isOrangeTeam
     this.camera = new PerspectiveCamera(80, 2, 0.1, 20000)
     this.carGroup.add(this.camera)
   }

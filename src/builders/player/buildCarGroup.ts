@@ -28,5 +28,5 @@ export const buildCarGroup = (
   group.add(generateSprite(playerName, isOrangeTeam))
 
   scene.add(group)
-  return new PlayerManager(playerName, group)
+  return new PlayerManager(playerName, isOrangeTeam, group)
 }
