@@ -1,7 +1,7 @@
 import { WebGLRenderer } from "three"
 
 import defaultGameBuilder from "../builders/GameBuilder"
-import FPSClock from "../utils/FPSClock"
+import FPSClock, { FPSClockSubscriberOptions } from "../utils/FPSClock"
 import AnimationManager from "./AnimationManager"
 import CameraManager from "./CameraManager"
 import SceneManager from "./SceneManager"
@@ -24,7 +24,7 @@ export class GameManager {
     AnimationManager.getInstance().playAnimationClips()
   }
 
-  animate(frameNumber: number) {
+  animate({  }: FPSClockSubscriberOptions) {
     const delta = this.clock.getDelta()
     CameraManager.getInstance().update()
 

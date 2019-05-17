@@ -1,5 +1,8 @@
+import Button from "@material-ui/core/Button"
+import Grid from "@material-ui/core/Grid"
 import React, { Component } from "react"
 import { GameManager } from "../../managers/GameManager"
+import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 
@@ -14,29 +17,35 @@ export default class PlayControls extends Component<Props, State> {
       paused: false,
     }
 
-    this.togglePlay = this.togglePlay.bind(this)
+    this.onClockUpdate = this.onClockUpdate.bind(this)
+    GameManager.getInstance().clock.subscribe(this.onClockUpdate)
   }
 
-  togglePlay() {
-    const { clock } = GameManager.getInstance()
-    const { paused } = this.state
+  onClockUpdate({ paused }: FPSClockSubscriberOptions) {
     this.setState({
-      paused: !paused,
+      paused,
     })
-    if (paused) {
-      clock.play()
-    } else {
-      clock.pause()
-    }
   }
 
   render() {
+    const { clock } = GameManager.getInstance()
+    const onPlayPauseClick = () =>
+      clock.isPaused() ? clock.play() : clock.pause()
+    const onResetClick = () => clock.setFrame(0)
+
     return (
-      <div>
-        <button onClick={this.togglePlay}>
-          {this.state.paused ? "Play" : "Pause"}
-        </button>
-      </div>
+      <Grid container spacing={24}>
+        <Grid item>
+          <Button variant="outlined" onClick={onPlayPauseClick}>
+            {this.state.paused ? "Play" : "Pause"}
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="outlined" onClick={onResetClick}>
+            Reset
+          </Button>
+        </Grid>
+      </Grid>
     )
   }
 }

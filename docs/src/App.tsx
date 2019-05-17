@@ -5,6 +5,7 @@ import {
   loadBuilderFromReplay,
   PlayControls,
   CameraControls,
+  Slider,
 } from "../../src"
 
 interface State {
@@ -28,7 +29,7 @@ class App extends Component<any, State> {
   render() {
     const { gameManager } = this.state
     return (
-      <div>
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div>
           <h2>Welcome to React</h2>
         </div>
@@ -37,6 +38,7 @@ class App extends Component<any, State> {
             <ReplayViewer gameManager={gameManager} />
             <PlayControls />
             <CameraControls />
+            <Slider />
           </>
         ) : (
           "Loading..."
