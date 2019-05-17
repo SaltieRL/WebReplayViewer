@@ -1,13 +1,14 @@
 import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import { styled } from "@material-ui/styles"
 import React, { PureComponent } from "react"
 
 import CameraManager from "../../managers/CameraManager"
-import SceneManager from "../../managers/SceneManager"
 import PlayerManager from "../../managers/models/PlayerManager"
+import SceneManager from "../../managers/SceneManager"
 
-interface Props extends WithStyles {}
+1
+interface Props {}
 
 class PlayerControls extends PureComponent<Props> {
   constructor(props: Props) {
@@ -19,19 +20,17 @@ class PlayerControls extends PureComponent<Props> {
   }
 
   renderPlayerButtons() {
-    const { playerButton } = this.props.classes
     const { players } = SceneManager.getInstance()
     const renderTeam = (players: PlayerManager[]) =>
       players.map(({ playerName }) => {
         return (
-          <Button
+          <PlayerButton
             key={playerName}
-            className={playerButton}
             variant="outlined"
             onClick={this.onPlayerClick(playerName)}
           >
             {playerName}
-          </Button>
+          </PlayerButton>
         )
       })
     return (
@@ -51,8 +50,8 @@ class PlayerControls extends PureComponent<Props> {
   }
 }
 
-export default withStyles({
-  playerButton: {
-    margin: 6,
-  },
-})(PlayerControls)
+const PlayerButton = styled(Button)({
+  margin: 6,
+})
+
+export default PlayerControls
