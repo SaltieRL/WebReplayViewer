@@ -1,6 +1,9 @@
 import { ReplayData } from "../models/ReplayData"
 import { addToWindow } from "./addToWindow"
 
+export type FPSClockSubscriberOptions = { frame: number; paused: boolean }
+type FPSClockSubscriber = (options: FPSClockSubscriberOptions) => void
+
 /**
  * This clock provides a simple callback system that keeps track of elapsed and delta time
  * transformations. This makes it extremely easy to parse the deltas of a replay by their frame
@@ -19,8 +22,6 @@ import { addToWindow } from "./addToWindow"
  * 3: 1322.4628567695618
  * 4: 1809.6305429935455
  */
-type FPSClockSubscriber = (frame: number) => void
-
 export default class FPSClock {
   /**
    * Note that the final frame is ignored when considering the elapsed time per frame. If we
@@ -100,6 +101,7 @@ export default class FPSClock {
 
   public pause() {
     this.paused = true
+    this.doCallbacks()
     this.timeout(false)
   }
 
@@ -151,6 +153,9 @@ export default class FPSClock {
   }
 
   private getElapsedFrames() {
+    if (this.currentFrame >= this.frameToDuration.length - 1) {
+      this.pause()
+    }
     if (this.frameToDuration[this.currentFrame] >= this.elapsedTime) {
       this.currentFrame = 0
     }
@@ -161,7 +166,7 @@ export default class FPSClock {
 
   private doCallbacks() {
     for (const callback of this.callbacks) {
-      callback(this.currentFrame)
+      callback({ frame: this.currentFrame, paused: this.paused })
     }
   }
 

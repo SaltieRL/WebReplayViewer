@@ -6,6 +6,7 @@ import { GameManager } from "../../managers/GameManager"
 import { Goal } from "../../models/ReplayMetadata"
 import { getGameTime } from "../../operators/frameGetters"
 import { getPlayerById } from "../../operators/metadataGetters"
+import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 interface State {
@@ -27,13 +28,13 @@ export default class Scoreboard extends PureComponent<Props, State> {
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
-  onFrame(frameNumber: number) {
+  onFrame({ frame }: FPSClockSubscriberOptions) {
     const { data } = DataManager.getInstance()
-    const gameTime = getGameTime(data, frameNumber)
+    const gameTime = getGameTime(data, frame)
     if (gameTime !== this.state.gameTime) {
       this.setState({ gameTime })
     }
-    this.updateGameScore(frameNumber)
+    this.updateGameScore(frame)
   }
 
   getDateTimeString() {

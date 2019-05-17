@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import { GameManager } from "../../managers/GameManager"
+import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 
@@ -14,26 +15,22 @@ export default class PlayControls extends Component<Props, State> {
       paused: false,
     }
 
-    this.togglePlay = this.togglePlay.bind(this)
+    this.onClockUpdate = this.onClockUpdate.bind(this)
+    GameManager.getInstance().clock.subscribe(this.onClockUpdate)
   }
 
-  togglePlay() {
-    const { clock } = GameManager.getInstance()
-    const { paused } = this.state
+  onClockUpdate({ paused }: FPSClockSubscriberOptions) {
     this.setState({
-      paused: !paused,
+      paused,
     })
-    if (paused) {
-      clock.play()
-    } else {
-      clock.pause()
-    }
   }
 
   render() {
+    const { clock } = GameManager.getInstance()
+    const onClick = () => (clock.isPaused() ? clock.play() : clock.pause())
     return (
       <div>
-        <button onClick={this.togglePlay}>
+        <button onClick={onClick}>
           {this.state.paused ? "Play" : "Pause"}
         </button>
       </div>
