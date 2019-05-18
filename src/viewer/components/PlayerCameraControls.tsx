@@ -3,20 +3,26 @@ import Grid from "@material-ui/core/Grid"
 import { styled } from "@material-ui/styles"
 import React, { PureComponent } from "react"
 
-import CameraManager from "../../managers/CameraManager"
+import CameraManager, {
+  CameraLocationOptions,
+} from "../../managers/CameraManager"
 import PlayerManager from "../../managers/models/PlayerManager"
 import SceneManager from "../../managers/SceneManager"
 
-1
 interface Props {}
 
-class PlayerControls extends PureComponent<Props> {
+class PlayerCameraControls extends PureComponent<Props> {
   constructor(props: Props) {
     super(props)
   }
 
   onPlayerClick = (playerName: string) => {
     return () => CameraManager.getInstance().setCameraLocation({ playerName })
+  }
+
+  onFieldClick = (fieldLocation: CameraLocationOptions["fieldLocation"]) => {
+    return () =>
+      CameraManager.getInstance().setCameraLocation({ fieldLocation })
   }
 
   renderPlayerButtons() {
@@ -54,4 +60,4 @@ const PlayerButton = styled(Button)({
   margin: 6,
 })
 
-export default PlayerControls
+export default PlayerCameraControls
