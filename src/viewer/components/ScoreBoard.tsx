@@ -114,7 +114,7 @@ const OrangeScoreCard = styled("div")({
 
 const BlueScoreCard = styled("div")({
   backgroundColor: "#4874efaa",
-  borderBottomRightRadius: 5,
+  borderBottomLeftRadius: 5,
   flex: 1,
 })
 

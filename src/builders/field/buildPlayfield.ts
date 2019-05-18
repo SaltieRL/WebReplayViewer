@@ -8,6 +8,7 @@ import {
 
 import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
 import FieldManager from "../../managers/models/FieldManager"
+import { addCameras } from "./addCameras"
 
 export const buildPlayfield = (scene: Scene) => {
   /**
@@ -40,5 +41,7 @@ export const buildPlayfield = (scene: Scene) => {
   const { field } = GameFieldAssets.getAssets()
   field.scale.setScalar(400)
   scene.add(field)
-  return new FieldManager(field)
+
+  const cameras = addCameras(scene)
+  return new FieldManager(field, cameras)
 }

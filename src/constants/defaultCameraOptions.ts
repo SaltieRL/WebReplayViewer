@@ -1,0 +1,1 @@
+export const DEFAULT_CAMERA_OPTIONS = [80, 2, 0.1, 20000]
