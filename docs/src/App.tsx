@@ -4,15 +4,17 @@ import {
   GameManager,
   loadBuilderFromReplay,
   PlayControls,
-  CameraControls,
+  PlayerCameraControls,
   Slider,
+  FieldCameraControls,
 } from "../../src"
+import { Grid, withStyles, WithStyles } from "@material-ui/core"
 
 interface State {
   gameManager?: GameManager
 }
 
-class App extends Component<any, State> {
+class App extends Component<WithStyles, State> {
   constructor(props: any) {
     super(props)
     this.state = {}
@@ -28,18 +30,45 @@ class App extends Component<any, State> {
 
   render() {
     const { gameManager } = this.state
+    const { root } = this.props.classes
     return (
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
         <div>
           <h2>Welcome to React</h2>
         </div>
         {gameManager ? (
-          <>
-            <ReplayViewer gameManager={gameManager} />
-            <PlayControls />
-            <CameraControls />
-            <Slider />
-          </>
+          <Grid
+            container
+            className={root}
+            direction="column"
+            justify="center"
+            spacing={24}
+          >
+            <Grid item style={{ minHeight: 0 }}>
+              <ReplayViewer gameManager={gameManager} />
+            </Grid>
+            <Grid item>
+              <Grid
+                container
+                justify="space-between"
+                alignItems="center"
+                spacing={24}
+              >
+                <Grid item>
+                  <PlayControls />
+                </Grid>
+                <Grid item>
+                  <FieldCameraControls />
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <PlayerCameraControls />
+            </Grid>
+            <Grid item>
+              <Slider />
+            </Grid>
+          </Grid>
         ) : (
           "Loading..."
         )}
@@ -48,4 +77,10 @@ class App extends Component<any, State> {
   }
 }
 
-export default App
+export default withStyles({
+  root: {
+    "&& > div:nth-child(even)": {
+      backgroundColor: "rgba(0, 0, 0, 0.05)",
+    },
+  },
+})(App)
