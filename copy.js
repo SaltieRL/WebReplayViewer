@@ -13,8 +13,8 @@ function copyReadme() {
 function copyAssets() {
   return fse
     .copy(
-      path.resolve(__dirname, "src", "assets"),
-      path.resolve(__dirname, "lib", "assets")
+      path.resolve(__dirname, "src", "assets", "models"),
+      path.resolve(__dirname, "lib", "assets", "models")
     )
     .then(() => console.log("Copied assets"))
 }
@@ -45,7 +45,6 @@ function copyPackageJson() {
         ...other,
         private: false,
         main: "./index.js",
-        module: "./index.esm.js",
         typings: "./index.d.ts",
       }
 
@@ -63,5 +62,5 @@ function copyPackageJson() {
 
 copyPackageJson()
   .then(copyReadme)
-  .then(copyAssets)
+  // .then(copyAssets)
   .catch(console.error)
