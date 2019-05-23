@@ -8,6 +8,7 @@ import Scoreboard from "./ScoreBoard"
 interface Props {
   gameManager: GameManager
 }
+
 interface State {}
 
 class ReplayViewer extends PureComponent<Props, State> {
