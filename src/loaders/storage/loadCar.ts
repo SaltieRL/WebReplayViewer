@@ -9,7 +9,7 @@ export const loadWheel = defaultMemoize(
   async (loadingManager?: LoadingManager) => {
     const { default: glb } = await import(
       // @ts-ignore
-      "../../assets/models/Wheel.glb"
+      /* webpackChunkName: "Wheel" */ "../../assets/models/Wheel.glb"
     )
     const wheelGLTF = await loadObject(glb, loadingManager)
     const wheel = new Group()
@@ -23,7 +23,7 @@ export const loadOrangeCar = defaultMemoize(
   async (loadingManager?: LoadingManager) => {
     const { default: glb } = await import(
       // @ts-ignore
-      "../../assets/models/Octane_ZXR_Orange.glb"
+      /* webpackChunkName: "Octane_ZXR_Orange" */ "../../assets/models/Octane_ZXR_Orange.glb"
     )
     const carGLTF = await loadObject(glb, loadingManager)
     const car = getChildByName(carGLTF, "Octane")
@@ -38,7 +38,7 @@ export const loadBlueCar = defaultMemoize(
   async (loadingManager?: LoadingManager) => {
     const { default: glb } = await import(
       // @ts-ignore
-      "../../assets/models/Octane_ZXR_Blue.glb"
+      /* webpackChunkName: "Octane_ZXR_Blue" */ "../../assets/models/Octane_ZXR_Blue.glb"
     )
     const carGLTF = await loadObject(glb, loadingManager)
     const car = getChildByName(carGLTF, "Octane")
