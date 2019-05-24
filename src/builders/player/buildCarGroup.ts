@@ -18,9 +18,9 @@ export const buildCarGroup = (
 
   // Build the car with its wheels (for rotation)
   const car = isOrangeTeam ? orangeCar.clone(true) : blueCar.clone(true)
+  car.children.forEach(child => (child.position.y += 31))
   car.name = getCarName(playerName)
   car.add(positionWheels(wheel))
-  car.position.y += 31
 
   // Build sprite and camera container (for position)
   const group = new Group()
