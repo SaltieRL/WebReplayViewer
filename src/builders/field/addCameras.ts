@@ -1,4 +1,4 @@
-import { OrthographicCamera, PerspectiveCamera, Scene, AxesHelper } from "three"
+import { OrthographicCamera, PerspectiveCamera, Scene } from "three"
 
 import { DEFAULT_CAMERA_OPTIONS } from "../../constants/defaultCameraOptions"
 import {
