@@ -5,7 +5,7 @@ import BallManager from "../../managers/models/BallManager"
 
 export const buildBall = (scene: Scene) => {
   const { ball } = GameFieldAssets.getAssets()
-  ball.scale.setScalar(110)
+  ball.scale.setScalar(105)
   ball.name = BALL
   scene.add(ball)
   return new BallManager(ball)

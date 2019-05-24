@@ -20,6 +20,7 @@ export const buildCarGroup = (
   const car = isOrangeTeam ? orangeCar.clone(true) : blueCar.clone(true)
   car.name = getCarName(playerName)
   car.add(positionWheels(wheel))
+  car.position.y += 31
 
   // Build sprite and camera container (for position)
   const group = new Group()

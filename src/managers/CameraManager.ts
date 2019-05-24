@@ -51,12 +51,13 @@ class CameraManager {
 
   setCameraLocation({ playerName, fieldLocation }: CameraLocationOptions) {
     const { players, field } = SceneManager.getInstance()
+    // Add hidden sprites back
+    if (this.activePlayer) {
+      this.activePlayer.toggleSprite(true)
+    }
     if (playerName) {
       const player = players.find(player => player.playerName === playerName)
       if (player) {
-        if (this.activePlayer) {
-          this.activePlayer.toggleSprite(true)
-        }
         player.toggleSprite(false)
         this.activePlayer = player
         this.setActiveCamera(player.camera)

@@ -39,7 +39,7 @@ export const buildPlayfield = (scene: Scene) => {
    */
 
   const { field } = GameFieldAssets.getAssets()
-  field.scale.setScalar(400)
+  field.scale.setScalar(410)
   scene.add(field)
 
   const cameras = addCameras(scene)
