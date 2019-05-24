@@ -83,6 +83,7 @@ class CameraManager {
 
   private updateCameraSize() {
     const { activeCamera: camera, width, height } = this
+
     if (camera instanceof PerspectiveCamera) {
       camera.aspect = width / height
       camera.updateProjectionMatrix()
@@ -97,8 +98,8 @@ class CameraManager {
   }
 
   private setActiveCamera(camera: Camera) {
-    this.updateCameraSize()
     this.activeCamera = camera
+    this.updateCameraSize()
   }
 
   /**

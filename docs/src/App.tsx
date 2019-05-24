@@ -32,7 +32,7 @@ class App extends Component<WithStyles, State> {
     const { gameManager } = this.state
     const { root } = this.props.classes
     return (
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+      <div style={{ maxWidth: 900, width: "100%", margin: "0 auto" }}>
         <div>
           <h2>Welcome to React</h2>
         </div>
@@ -44,7 +44,7 @@ class App extends Component<WithStyles, State> {
             justify="center"
             spacing={24}
           >
-            <Grid item style={{ minHeight: 0 }}>
+            <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
               <ReplayViewer gameManager={gameManager} />
             </Grid>
             <Grid item>
