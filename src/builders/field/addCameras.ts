@@ -32,7 +32,6 @@ export const addCameras = (scene: Scene) => {
     0.1,
     20000
   )
-  orthographicCamera.add(new AxesHelper(1000))
   orthographicCamera.name = ORTHOGRAPHIC_CAMERA
   orthographicCamera.position.set(3500, 5000, 5000)
   orthographicCamera.lookAt(-500, 0, -500)
