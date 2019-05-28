@@ -51,12 +51,13 @@ class CameraManager {
 
   setCameraLocation({ playerName, fieldLocation }: CameraLocationOptions) {
     const { players, field } = SceneManager.getInstance()
+    // Add hidden sprites back
+    if (this.activePlayer) {
+      this.activePlayer.toggleSprite(true)
+    }
     if (playerName) {
       const player = players.find(player => player.playerName === playerName)
       if (player) {
-        if (this.activePlayer) {
-          this.activePlayer.toggleSprite(true)
-        }
         player.toggleSprite(false)
         this.activePlayer = player
         this.setActiveCamera(player.camera)
@@ -83,6 +84,7 @@ class CameraManager {
 
   private updateCameraSize() {
     const { activeCamera: camera, width, height } = this
+
     if (camera instanceof PerspectiveCamera) {
       camera.aspect = width / height
       camera.updateProjectionMatrix()
@@ -97,8 +99,8 @@ class CameraManager {
   }
 
   private setActiveCamera(camera: Camera) {
-    this.updateCameraSize()
     this.activeCamera = camera
+    this.updateCameraSize()
   }
 
   /**

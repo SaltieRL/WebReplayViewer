@@ -3,6 +3,7 @@ const path = require("path")
 const PATHS = {
   entry: path.resolve(__dirname, "src/index.ts"),
   bundles: path.resolve(__dirname, "lib"),
+  assets: "assets/models",
 }
 
 module.exports = {
@@ -10,7 +11,7 @@ module.exports = {
   entry: PATHS.entry,
   output: {
     path: PATHS.bundles,
-    filename: "index.js",
+    filename: "[name].bundle.js",
     libraryTarget: "umd",
     library: "ReplayViewer",
     umdNamedDefine: true,
@@ -27,18 +28,26 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        loader: "awesome-typescript-loader",
-        exclude: /node_modules/,
-        query: {
-          declaration: false,
+        exclude: /(node_modules)/,
+        use: {
+          loader: "babel-loader",
+          options: {},
         },
       },
       {
-        test: /\.(glb|mtl|png|jpe?g|gif)$/,
+        test: /\.(glb|mtl)$/,
         use: [
           {
             loader: "file-loader",
-            options: {},
+            options: {
+              outputPath: PATHS.assets,
+              name(file) {
+                if (process.env.NODE_ENV === "development") {
+                  return "[path][name].[ext]"
+                }
+                return "[name].[ext]"
+              },
+            },
           },
         ],
       },

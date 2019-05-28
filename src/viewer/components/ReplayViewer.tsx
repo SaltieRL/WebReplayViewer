@@ -2,12 +2,12 @@ import { styled } from "@material-ui/styles"
 import React, { createRef, PureComponent, RefObject } from "react"
 
 import { GameManager } from "../../managers/GameManager"
-import { addToWindow } from "../../utils/addToWindow"
 import Scoreboard from "./ScoreBoard"
 
 interface Props {
   gameManager: GameManager
 }
+
 interface State {}
 
 class ReplayViewer extends PureComponent<Props, State> {
@@ -19,16 +19,28 @@ class ReplayViewer extends PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    const { clientWidth: width, clientHeight: height } = this.mount.current || {
-      clientWidth: 640,
-      clientHeight: 480,
+    const { current } = this.mount
+    if (!current) {
+      throw new Error("Did not mount replay viewer correctly")
     }
+    const { clientWidth: width, clientHeight: height } = current
     const { gameManager } = this.props
-    this.mount.current!.appendChild(gameManager.getDOMNode())
+    current.appendChild(gameManager.getDOMNode())
     gameManager.updateSize(width, height)
     gameManager.render()
-    addToWindow("game", gameManager)
     gameManager.clock.play()
+
+    addEventListener("resize", this.handleResize)
+  }
+
+  componentWillUnmount() {
+    removeEventListener("resize", this.handleResize)
+  }
+
+  handleResize = () => {
+    const { clientWidth: width, clientHeight: height } = this.mount.current!
+    const { gameManager } = this.props
+    gameManager.updateSize(width, height)
   }
 
   render() {
