@@ -1,6 +1,7 @@
 import { Scene } from "three"
-import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
+
 import { BALL } from "../../constants/gameObjectNames"
+import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
 import BallManager from "../../managers/models/BallManager"
 
 export const buildBall = (scene: Scene) => {

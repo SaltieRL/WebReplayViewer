@@ -1,11 +1,11 @@
-import { ReplayData } from "../models/ReplayData"
-import defaultSceneBuilder from "./SceneBuilder"
-import defaultAnimationBuilder from "./AnimationBuilder"
-import { GameManager } from "../managers/GameManager"
-import FPSClock from "../utils/FPSClock"
-import DataManager from "../managers/DataManager"
-import { ReplayMetadata } from "../models/ReplayMetadata"
 import CameraManager from "../managers/CameraManager"
+import DataManager from "../managers/DataManager"
+import { GameManager } from "../managers/GameManager"
+import { ReplayData } from "../models/ReplayData"
+import { ReplayMetadata } from "../models/ReplayMetadata"
+import FPSClock from "../utils/FPSClock"
+import defaultAnimationBuilder from "./AnimationBuilder"
+import defaultSceneBuilder from "./SceneBuilder"
 
 export interface GameBuilderOptions {
   replayData: ReplayData
@@ -29,7 +29,7 @@ const defaultGameBuilder = async ({
   CameraManager.init()
 
   return GameManager.init({
-    clock: clock,
+    clock,
   })
 }
 

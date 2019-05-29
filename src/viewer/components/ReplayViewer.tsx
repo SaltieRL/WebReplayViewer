@@ -11,7 +11,7 @@ interface Props {
 interface State {}
 
 class ReplayViewer extends PureComponent<Props, State> {
-  private mount: RefObject<HTMLDivElement>
+  private readonly mount: RefObject<HTMLDivElement>
 
   constructor(props: Props) {
     super(props)
@@ -35,6 +35,8 @@ class ReplayViewer extends PureComponent<Props, State> {
 
   componentWillUnmount() {
     removeEventListener("resize", this.handleResize)
+    const { gameManager } = this.props
+    gameManager.clock.pause()
   }
 
   handleResize = () => {

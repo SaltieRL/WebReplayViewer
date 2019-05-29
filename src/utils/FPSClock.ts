@@ -1,7 +1,11 @@
 import { ReplayData } from "../models/ReplayData"
 import { addToWindow } from "./addToWindow"
 
-export type FPSClockSubscriberOptions = { frame: number; paused: boolean }
+export interface FPSClockSubscriberOptions {
+  frame: number
+  paused: boolean
+}
+
 type FPSClockSubscriber = (options: FPSClockSubscriberOptions) => void
 
 /**
@@ -23,23 +27,6 @@ type FPSClockSubscriber = (options: FPSClockSubscriberOptions) => void
  * 4: 1809.6305429935455
  */
 export default class FPSClock {
-  /**
-   * Note that the final frame is ignored when considering the elapsed time per frame. If we
-   * considered this final delta, we would need a frame to "animate to".
-   *
-   * @param data Contains frame delta information
-   */
-  public static convertReplayToClock(data: ReplayData) {
-    let elapsedTime = 0
-    const frames = data.frames.map((frameInfo: number[]) => {
-      const retValue = elapsedTime
-      const delta = frameInfo[0] * 1000
-      elapsedTime += delta
-      return retValue
-    })
-    return new FPSClock(frames)
-  }
-
   public currentFrame: number
   // Used only to keep track of the elapsed time between getDelta calls
   private lastDelta: number
@@ -75,6 +62,11 @@ export default class FPSClock {
 
   public unsubscribe(callback: FPSClockSubscriber) {
     this.callbacks = this.callbacks.filter(value => value !== callback)
+  }
+
+  public reset() {
+    this.setFrame(0)
+    this.callbacks = []
   }
 
   public setFrame(frame: number) {
@@ -169,5 +161,22 @@ export default class FPSClock {
     } else if (this.animation) {
       clearInterval(this.animation as any)
     }
+  }
+
+  /**
+   * Note that the final frame is ignored when considering the elapsed time per frame. If we
+   * considered this final delta, we would need a frame to "animate to".
+   *
+   * @param data Contains frame delta information
+   */
+  public static convertReplayToClock(data: ReplayData) {
+    let elapsedTime = 0
+    const frames = data.frames.map((frameInfo: number[]) => {
+      const retValue = elapsedTime
+      const delta = frameInfo[0] * 1000
+      elapsedTime += delta
+      return retValue
+    })
+    return new FPSClock(frames)
   }
 }

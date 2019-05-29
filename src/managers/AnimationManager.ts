@@ -1,4 +1,4 @@
-import { AnimationAction, AnimationMixer, AnimationClip } from "three"
+import { AnimationAction, AnimationClip, AnimationMixer } from "three"
 
 interface AnimationManagerOptions {
   playerClips: AnimationClip[]
@@ -18,8 +18,8 @@ interface AnimationActions {
 }
 
 export default class AnimationManager {
-  private mixers: AnimationMixers
-  private actions: AnimationActions
+  private readonly mixers: AnimationMixers
+  private readonly actions: AnimationActions
 
   private constructor({
     playerClips,

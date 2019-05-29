@@ -1,5 +1,5 @@
-import React, { PureComponent } from "react"
 import { styled } from "@material-ui/styles"
+import React, { PureComponent } from "react"
 
 import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"

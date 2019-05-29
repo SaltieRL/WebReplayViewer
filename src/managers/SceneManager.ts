@@ -1,4 +1,4 @@
-import { Scene } from "three"
+import { Scene, Vector3 } from "three"
 
 import { addToWindow } from "../utils/addToWindow"
 import BallManager from "./models/BallManager"
@@ -27,7 +27,15 @@ export default class SceneManager {
     addToWindow("arena", field)
   }
 
-  update() {}
+  update() {
+    for (const player of this.players) {
+      if (player.carGroup.position === new Vector3()) {
+        player.carGroup.visible = false
+      } else {
+        player.carGroup.visible = true
+      }
+    }
+  }
 
   /**
    * ========================================
