@@ -1,17 +1,17 @@
 import { Panel } from "./Panel"
 
 export class Stats {
+  dom: HTMLDivElement
+
   private mode: number
 
   private beginTime: number
   private prevTime: number
   private frames: number
 
-  private fpsPanel: Panel
-  private msPanel: Panel
-  private memPanel?: Panel
-
-  dom: HTMLDivElement
+  private readonly fpsPanel: Panel
+  private readonly msPanel: Panel
+  private readonly memPanel?: Panel
 
   constructor() {
     this.mode = 0
@@ -53,7 +53,7 @@ export class Stats {
    * @param id number referenced above
    */
   showPanel(id: number) {
-    for (var i = 0; i < this.dom.children.length; i++) {
+    for (let i = 0; i < this.dom.children.length; i++) {
       const child = this.dom.children[i] as any
       if (child.style) {
         child.style.display = i === id ? "block" : "none"

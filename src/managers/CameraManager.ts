@@ -6,6 +6,7 @@ import {
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC_CAMERA,
 } from "../constants/gameObjectNames"
+import { addToWindow } from "../utils/addToWindow"
 import PlayerManager from "./models/PlayerManager"
 import SceneManager from "./SceneManager"
 
@@ -13,7 +14,7 @@ class CameraManager {
   activeCamera: Camera
 
   private activePlayer?: PlayerManager
-  private readonly _defaultCamera: Camera
+  private readonly defaultCamera: Camera
   private width: number
   private height: number
 
@@ -21,7 +22,7 @@ class CameraManager {
     this.activeCamera = SceneManager.getInstance().field.getCamera(
       ORANGE_GOAL_CAMERA
     ) as any
-    this._defaultCamera = this.activeCamera
+    this.defaultCamera = this.activeCamera
     this.width = 640
     this.height = 480
 
@@ -56,10 +57,11 @@ class CameraManager {
       this.activePlayer.toggleSprite(true)
     }
     if (playerName) {
-      const player = players.find(player => player.playerName === playerName)
+      const player = players.find(p => p.playerName === playerName)
       if (player) {
         player.toggleSprite(false)
         this.activePlayer = player
+        addToWindow("activePlayer", player)
         this.setActiveCamera(player.camera)
       }
     } else if (fieldLocation) {
@@ -77,7 +79,7 @@ class CameraManager {
           this.setActiveCamera(field.getCamera(ORTHOGRAPHIC_CAMERA) as any)
           break
         default:
-          this.setActiveCamera(this._defaultCamera)
+          this.setActiveCamera(this.defaultCamera)
       }
     }
   }
@@ -89,7 +91,6 @@ class CameraManager {
       camera.aspect = width / height
       camera.updateProjectionMatrix()
     } else if (camera instanceof OrthographicCamera) {
-      const { width, height } = this
       camera.left = -width / 2
       camera.right = width / 2
       camera.top = height / 2
@@ -121,7 +122,7 @@ class CameraManager {
   }
 }
 
-export type CameraLocationOptions = {
+export interface CameraLocationOptions {
   playerName?: string
   fieldLocation?: "orange" | "blue" | "center" | "orthographic"
 }

@@ -1,7 +1,8 @@
-import { LoadingManager, Object3D, Group } from "three"
+import { Group, LoadingManager, Object3D } from "three"
+
 import { loadBall } from "../storage/loadBall"
-import { loadField } from "../storage/loadField"
 import { loadBlueCar, loadOrangeCar, loadWheel } from "../storage/loadCar"
+import { loadField } from "../storage/loadField"
 
 interface AvailableAssets {
   ball: Object3D

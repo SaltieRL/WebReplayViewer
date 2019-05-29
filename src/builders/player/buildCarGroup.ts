@@ -1,9 +1,10 @@
-import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
 import { Group, Scene } from "three"
-import { generateSprite } from "./generateSprite"
-import { positionWheels } from "./positionWheels"
+
+import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
 import PlayerManager from "../../managers/models/PlayerManager"
 import { getCarName, getGroupName } from "../utils/playerNameGetters"
+import { generateSprite } from "./generateSprite"
+import { positionWheels } from "./positionWheels"
 
 interface Options {
   playerName: string
@@ -15,6 +16,19 @@ export const buildCarGroup = (
   { playerName, isOrangeTeam }: Options
 ) => {
   const { orangeCar, blueCar, wheel } = GameFieldAssets.getAssets()
+
+  orangeCar.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
+  blueCar.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
+  wheel.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
 
   // Build the car with its wheels (for rotation)
   const car = isOrangeTeam ? orangeCar.clone(true) : blueCar.clone(true)

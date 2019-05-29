@@ -1,6 +1,5 @@
 import { Scene } from "three"
 
-import { addToWindow } from "../utils/addToWindow"
 import BallManager from "./models/BallManager"
 import FieldManager from "./models/FieldManager"
 import PlayerManager from "./models/PlayerManager"
@@ -23,11 +22,17 @@ export default class SceneManager {
     this.ball = ball
     this.field = field
     this.players = players
-
-    addToWindow("arena", field)
   }
 
-  update() {}
+  update() {
+    for (const player of this.players) {
+      if (player.carGroup.position.y < 0) {
+        player.carGroup.visible = false
+      } else {
+        player.carGroup.visible = true
+      }
+    }
+  }
 
   /**
    * ========================================

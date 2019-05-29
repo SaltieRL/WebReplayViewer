@@ -40,6 +40,9 @@ export const buildPlayfield = (scene: Scene) => {
 
   const { field } = GameFieldAssets.getAssets()
   field.scale.setScalar(400)
+
+  field.children.forEach(child => (child.receiveShadow = true))
+  field.receiveShadow = true
   scene.add(field)
 
   const cameras = addCameras(scene)

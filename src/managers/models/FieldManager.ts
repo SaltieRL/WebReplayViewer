@@ -1,4 +1,4 @@
-import { Group, Camera } from "three"
+import { Camera, Group } from "three"
 
 class FieldManager {
   readonly field: Group

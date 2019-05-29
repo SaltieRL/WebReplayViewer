@@ -27,8 +27,8 @@ class PlayerCameraControls extends PureComponent<Props> {
 
   renderPlayerButtons() {
     const { players } = SceneManager.getInstance()
-    const renderTeam = (players: PlayerManager[]) =>
-      players.map(({ playerName }) => {
+    const renderTeam = (team: PlayerManager[]) =>
+      team.map(({ playerName }) => {
         return (
           <PlayerButton
             key={playerName}

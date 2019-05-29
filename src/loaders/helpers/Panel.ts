@@ -3,14 +3,14 @@ const round = Math.round
 type FillStyle = string | CanvasGradient | CanvasPattern
 
 export class Panel {
-  private min: number
-  private max: number
-  private name: string
-  private fg: FillStyle
-  private bg: FillStyle
-
   dom: HTMLCanvasElement
   update: (value: number, maxValue: number) => void
+
+  private min: number
+  private max: number
+  private readonly name: string
+  private readonly fg: FillStyle
+  private readonly bg: FillStyle
 
   constructor(name: string, fg: FillStyle, bg: FillStyle) {
     this.min = Infinity
@@ -26,14 +26,14 @@ export class Panel {
   private init() {
     const PR = round(window.devicePixelRatio || 1)
 
-    const WIDTH = 80 * PR,
-      HEIGHT = 48 * PR,
-      TEXT_X = 3 * PR,
-      TEXT_Y = 2 * PR,
-      GRAPH_X = 3 * PR,
-      GRAPH_Y = 15 * PR,
-      GRAPH_WIDTH = 74 * PR,
-      GRAPH_HEIGHT = 30 * PR
+    const WIDTH = 80 * PR
+    const HEIGHT = 48 * PR
+    const TEXT_X = 3 * PR
+    const TEXT_Y = 2 * PR
+    const GRAPH_X = 3 * PR
+    const GRAPH_Y = 15 * PR
+    const GRAPH_WIDTH = 74 * PR
+    const GRAPH_HEIGHT = 30 * PR
 
     const canvas = document.createElement("canvas")
     canvas.width = WIDTH

@@ -16,6 +16,7 @@ export class GameManager {
 
   private constructor({ clock }: GameManagerOptions) {
     this.renderer = new WebGLRenderer({ antialias: true })
+    this.renderer.shadowMap.enabled = true
     this.animate = this.animate.bind(this)
     this.render = this.render.bind(this)
     this.clock = clock
@@ -54,6 +55,10 @@ export class GameManager {
 
   static builder = defaultGameBuilder
 
+  private destruct() {
+    this.clock.reset()
+  }
+
   /**
    * ========================================
    * Managers are singletons
@@ -67,6 +72,9 @@ export class GameManager {
     return GameManager.instance
   }
   static init(options: GameManagerOptions) {
+    if (GameManager.instance) {
+      GameManager.instance.destruct()
+    }
     GameManager.instance = new GameManager(options)
     return GameManager.instance
   }
