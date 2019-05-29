@@ -1,6 +1,6 @@
 {
   "name": "replay-viewer",
-  "version": "0.2.5",
+  "version": "0.2.7",
   "description": "Rocket League replay viewer React component and tooling",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -45,6 +45,7 @@
     "three": "^0.104.0"
   },
   "dependencies": {
+    "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
     "reselect": "^4.0.0"
   },
@@ -57,6 +58,7 @@
     "@material-ui/core": "^3.9.3",
     "@material-ui/lab": "^3.0.0-alpha.30",
     "@material-ui/styles": "^3.0.0-alpha.10",
+    "@types/lodash.debounce": "^4.0.6",
     "@types/node": "^12.0.0",
     "@types/react": "^16.8.13",
     "@types/three": "^0.103.2",
