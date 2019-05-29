@@ -17,6 +17,19 @@ export const buildCarGroup = (
 ) => {
   const { orangeCar, blueCar, wheel } = GameFieldAssets.getAssets()
 
+  orangeCar.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
+  blueCar.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
+  wheel.children.forEach(child => {
+    child.castShadow = true
+    child.receiveShadow = true
+  })
+
   // Build the car with its wheels (for rotation)
   const car = isOrangeTeam ? orangeCar.clone(true) : blueCar.clone(true)
   car.children.forEach(child => (child.position.y += 31))
