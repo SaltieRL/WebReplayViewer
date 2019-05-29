@@ -1,5 +1,4 @@
 import { ReplayData } from "../models/ReplayData"
-import { addToWindow } from "./addToWindow"
 
 export interface FPSClockSubscriberOptions {
   frame: number
@@ -51,7 +50,6 @@ export default class FPSClock {
     this.currentFrame = 0
     this.lastDelta = 0
 
-    addToWindow("camera", this)
     this.update = this.update.bind(this)
     this.timeout()
   }

@@ -6,6 +6,7 @@ import {
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC_CAMERA,
 } from "../constants/gameObjectNames"
+import { addToWindow } from "../utils/addToWindow"
 import PlayerManager from "./models/PlayerManager"
 import SceneManager from "./SceneManager"
 
@@ -60,6 +61,7 @@ class CameraManager {
       if (player) {
         player.toggleSprite(false)
         this.activePlayer = player
+        addToWindow("activePlayer", player)
         this.setActiveCamera(player.camera)
       }
     } else if (fieldLocation) {
