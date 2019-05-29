@@ -16,6 +16,7 @@ export class GameManager {
 
   private constructor({ clock }: GameManagerOptions) {
     this.renderer = new WebGLRenderer({ antialias: true })
+    this.renderer.shadowMap.enabled = true
     this.animate = this.animate.bind(this)
     this.render = this.render.bind(this)
     this.clock = clock
