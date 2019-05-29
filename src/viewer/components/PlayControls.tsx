@@ -22,9 +22,11 @@ export default class PlayControls extends Component<Props, State> {
   }
 
   onClockUpdate({ paused }: FPSClockSubscriberOptions) {
-    this.setState({
-      paused,
-    })
+    if (paused !== this.state.paused) {
+      this.setState({
+        paused,
+      })
+    }
   }
 
   render() {

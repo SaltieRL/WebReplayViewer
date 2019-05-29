@@ -1,4 +1,5 @@
 import { styled } from "@material-ui/styles"
+import debounce from "lodash.debounce"
 import React, { PureComponent } from "react"
 
 import DataManager from "../../managers/DataManager"
@@ -24,7 +25,7 @@ export default class Scoreboard extends PureComponent<Props, State> {
       gameTime: 300,
     }
 
-    this.onFrame = this.onFrame.bind(this)
+    this.onFrame = debounce(this.onFrame.bind(this), 250, { maxWait: 250 })
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 

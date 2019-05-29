@@ -1,6 +1,7 @@
 import MUISlider from "@material-ui/lab/Slider"
-
+import debounce from "lodash.debounce"
 import React, { Component } from "react"
+
 import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"
 import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
@@ -19,6 +20,7 @@ class Slider extends Component<Props, State> {
       frame: 0,
       maxFrame: DataManager.getInstance().data.frames.length - 1,
     }
+    this.onFrame = debounce(this.onFrame, 250, { maxWait: 250 })
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
