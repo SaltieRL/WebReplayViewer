@@ -5,14 +5,15 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
-    "postinstall": "npm run submodule:init",
+    "postinstall": "npm run submodule:init && cd docs && npm install",
     "clean": "rimraf _bundles lib",
     "lint": "tslint src/**/*.ts{,x} -p tsconfig.json",
     "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc",
     "build:bundle": "npx webpack",
     "build:copy": "node copy.js",
-    "test": "cd lib",
+    "start": "cd docs && npm run start",
+    "link": "npm link && cd docs && npm link replay-viewer",
     "submodule": "git submodule update --remote",
     "submodule:init": "git submodule update --init --remote",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"

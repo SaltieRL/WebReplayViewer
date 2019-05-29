@@ -6,32 +6,30 @@ An extension of the [DistributedReplays](https://github.com/SaltieRL/Distributed
 
 ### Unix
 
-First thing's first: install all of your dependencies. We rely on [Rollup](https://rollupjs.org/guide/en) as a bundler, so most dependencies are plugins for this project.
+First thing's first: install all of your dependencies. We rely on [Webpack](https://webpack.js.org/) as a bundler and [Babel](https://babeljs.io/) as a transpiler, so most dependencies are plugins for this project.
 
 ```bash
 $ npm install
 ```
 
-To launch a hot-reloading configuration, run the following. All file changes will be detected and will cause the package to rebundle.
+### Developing
+
+To launch a hot-reloading configuration, run the following. All file changes will be detected and will cause the package to re-bundle. The examples current live inside of the `docs/` folder but can be modified to show off newer features.
 
 ```bash
-$ npm run start
+$ npm start
 ```
 
-When you're ready to build, the build scripts will generate typescript declaration files and source maps inside the `/lib` folder for your consumption. When in doubt, look at where the `main` value is set in the `package.json` file.
-
-```bash
-$ npm run build
-```
-
-Finally, to load this package into an example build, run the following command. This will tell the `examples/` directory to treat this package as though it were installed inside your `node_modules/` directory.
+If you would like to test with a compiled version of the app, you can run the following command to link the package globally. Then, you can import the bundle as you normally would by replacing instances of `../src/foo` with `replay-viewer/foo`. This will tell the `docs/` directory to treat this package as though it were installed inside your `node_modules/` directory.
 
 ```bash
 $ npm run link
 ```
 
-When you're ready, you can launch the React example by navigating to the examples directory and running the start script
+### Building
+
+After ensuring that your build successfully compiles, you can build using the pre-configured build scripts. When you're ready to build, the build scripts will generate typescript declaration files and source maps inside the `lib/` folder for your consumption. When in doubt, look at where the `main` value is set in the `package.json` file.
 
 ```bash
-$ cd examples/ && npm run start
+$ npm run build
 ```
