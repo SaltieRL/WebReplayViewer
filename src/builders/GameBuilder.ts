@@ -1,3 +1,5 @@
+import { LoadingManager } from "three"
+
 import CameraManager from "../managers/CameraManager"
 import DataManager from "../managers/DataManager"
 import { GameManager } from "../managers/GameManager"
@@ -11,19 +13,21 @@ export interface GameBuilderOptions {
   replayData: ReplayData
   replayMetadata: ReplayMetadata
   clock: FPSClock
+  loadingManager?: LoadingManager
 }
 
 const defaultGameBuilder = async ({
   clock,
   replayData,
   replayMetadata,
+  loadingManager,
 }: GameBuilderOptions) => {
   const { names: playerNames, colors } = replayData
   const players = playerNames.map((name, index) => {
     const isOrangeTeam = colors[index]
     return { name, isOrangeTeam }
   })
-  const sceneManager = await defaultSceneBuilder(players)
+  const sceneManager = await defaultSceneBuilder(players, loadingManager)
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
   CameraManager.init()

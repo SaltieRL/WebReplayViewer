@@ -7,6 +7,9 @@ export { loadBuilderFromReplay } from "./viewer/clients/loadBuilderFromReplay"
 
 // Components
 export { default as ReplayViewer } from "./viewer/components/ReplayViewer"
+export {
+  default as GameManagerLoader,
+} from "./viewer/components/GameManagerLoader"
 export { default as PlayControls } from "./viewer/components/PlayControls"
 export {
   default as PlayerCameraControls,
