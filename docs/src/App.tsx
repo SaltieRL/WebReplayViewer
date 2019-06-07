@@ -1,14 +1,15 @@
+import { Grid, WithStyles, withStyles } from "@material-ui/core"
 import React, { Component } from "react"
+
 import {
-  ReplayViewer,
+  FieldCameraControls,
   GameManager,
   loadBuilderFromReplay,
   PlayControls,
   PlayerCameraControls,
+  ReplayViewer,
   Slider,
-  FieldCameraControls,
 } from "../../src"
-import { Grid, withStyles, WithStyles } from "@material-ui/core"
 
 interface State {
   gameManager?: GameManager
@@ -21,7 +22,7 @@ class App extends Component<WithStyles, State> {
   }
 
   componentDidMount() {
-    const REPLAY_ID = "BDC240CE11E96C735CEBCE8190E3C53A"
+    const REPLAY_ID = "9944A36A11E987D3E286C1B524E68ECC"
 
     loadBuilderFromReplay(REPLAY_ID).then(gameManager => {
       this.setState({ gameManager })
