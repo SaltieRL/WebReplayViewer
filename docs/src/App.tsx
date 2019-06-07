@@ -1,21 +1,14 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core"
 import React, { Component } from "react"
 
-import {
-  FieldCameraControls,
-  GameManager,
-  loadBuilderFromReplay,
-  PlayControls,
-  PlayerCameraControls,
-  ReplayViewer,
-  Slider,
-} from "../../src"
+import { FPSClock, GameManager, loadReplay } from "../../src"
+import { GameBuilderOptions } from "../../src/builders/GameBuilder"
+import Main from "./components/Main"
 
 interface State {
-  gameManager?: GameManager
+  options?: GameBuilderOptions
 }
 
-class App extends Component<WithStyles, State> {
+class App extends Component<any, State> {
   constructor(props: any) {
     super(props)
     this.state = {}
@@ -24,64 +17,36 @@ class App extends Component<WithStyles, State> {
   componentDidMount() {
     const REPLAY_ID = "9944A36A11E987D3E286C1B524E68ECC"
 
-    loadBuilderFromReplay(REPLAY_ID).then(gameManager => {
-      this.setState({ gameManager })
+    // loadBuilderFromReplay(REPLAY_ID).then(gameManager => {
+    //   this.setState({ gameManager })
+    // })
+    loadReplay(REPLAY_ID).then(([replayData, replayMetadata]) => {
+      this.setState({
+        options: {
+          replayData,
+          replayMetadata,
+          clock: FPSClock.convertReplayToClock(replayData),
+        },
+      })
     })
   }
 
   render() {
-    const { gameManager } = this.state
-    const { root } = this.props.classes
+    const { options } = this.state
+
+    if (!options) {
+      return "Loading..."
+    }
+
     return (
       <div style={{ maxWidth: 900, width: "100%", margin: "0 auto" }}>
         <div>
           <h2>Welcome to React</h2>
         </div>
-        {gameManager ? (
-          <Grid
-            container
-            className={root}
-            direction="column"
-            justify="center"
-            spacing={24}
-          >
-            <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
-              <ReplayViewer gameManager={gameManager} />
-            </Grid>
-            <Grid item>
-              <Grid
-                container
-                justify="space-between"
-                alignItems="center"
-                spacing={24}
-              >
-                <Grid item>
-                  <PlayControls />
-                </Grid>
-                <Grid item>
-                  <FieldCameraControls />
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item>
-              <PlayerCameraControls />
-            </Grid>
-            <Grid item>
-              <Slider />
-            </Grid>
-          </Grid>
-        ) : (
-          "Loading..."
-        )}
+        <Main options={options} />
       </div>
     )
   }
 }
 
-export default withStyles({
-  root: {
-    "&& > div:nth-child(even)": {
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
-    },
-  },
-})(App)
+export default App
