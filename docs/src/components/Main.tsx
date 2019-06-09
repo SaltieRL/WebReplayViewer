@@ -1,90 +1,41 @@
-import { Grid, WithStyles, withStyles } from "@material-ui/core"
 import React, { Component } from "react"
 
-import {
-  FieldCameraControls,
-  GameBuilderOptions,
-  GameManager,
-  GameManagerLoader,
-  PlayControls,
-  PlayerCameraControls,
-  ReplayViewer,
-  Slider,
-} from "../../../src"
-
-interface Props extends WithStyles {
-  options: GameBuilderOptions
-}
+import { FPSClock, GameBuilderOptions, loadReplay } from "../../../src"
+import Viewer from "./Viewer"
 
 interface State {
-  gameManager?: GameManager
+  options?: GameBuilderOptions
 }
 
-class Main extends Component<Props, State> {
-  constructor(props: Props) {
+class Main extends Component<any, State> {
+  constructor(props: any) {
     super(props)
     this.state = {}
   }
 
-  renderContent() {
-    const { gameManager } = this.state
-    const { root } = this.props.classes
+  componentDidMount() {
+    const REPLAY_ID = "9944A36A11E987D3E286C1B524E68ECC"
 
-    if (!gameManager) {
-      return "Food machine broke..."
-    }
-
-    return (
-      <Grid
-        container
-        className={root}
-        direction="column"
-        justify="center"
-        spacing={24}
-      >
-        <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
-          <ReplayViewer gameManager={gameManager} />
-        </Grid>
-        <Grid item>
-          <Grid
-            container
-            justify="space-between"
-            alignItems="center"
-            spacing={24}
-          >
-            <Grid item>
-              <PlayControls />
-            </Grid>
-            <Grid item>
-              <FieldCameraControls />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <PlayerCameraControls />
-        </Grid>
-        <Grid item>
-          <Slider />
-        </Grid>
-      </Grid>
-    )
+    loadReplay(REPLAY_ID).then(([replayData, replayMetadata]) => {
+      this.setState({
+        options: {
+          replayData,
+          replayMetadata,
+          clock: FPSClock.convertReplayToClock(replayData),
+        },
+      })
+    })
   }
 
   render() {
-    const { options } = this.props
-    const onLoad = (gm: GameManager) => this.setState({ gameManager: gm })
-    return (
-      <GameManagerLoader options={options} onLoad={onLoad}>
-        {this.renderContent()}
-      </GameManagerLoader>
-    )
+    const { options } = this.state
+
+    if (!options) {
+      return "Loading..."
+    }
+
+    return <Viewer options={options} />
   }
 }
 
-export default withStyles({
-  root: {
-    "&& > div:nth-child(even)": {
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
-    },
-  },
-})(Main)
+export default Main
