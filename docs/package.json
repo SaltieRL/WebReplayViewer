@@ -4,7 +4,7 @@
   "description": "Examples for the web replay viewer",
   "main": "src/index.tsx",
   "scripts": {
-    "start": "./node_modules/.bin/webpack-dev-server --mode development"
+    "start": "npx webpack-dev-server --mode development"
   },
   "keywords": [
     "Examples",

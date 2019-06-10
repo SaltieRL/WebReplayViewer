@@ -1,10 +1,10 @@
-import { defaultMemoize } from "reselect"
 import { Group, LoadingManager } from "three"
 
 import { loadObject } from "../operators/loadObject"
+import { storageMemoize } from "./storageMemoize"
 
-export const loadField = defaultMemoize(
-  async (loadingManager?: LoadingManager) => {
+export const loadField = (loadingManager?: LoadingManager) =>
+  storageMemoize(async () => {
     const { default: glb } = await import(
       // @ts-ignore
       /* webpackChunkName: "Field" */ "../../assets/models/Field.glb"
@@ -14,5 +14,4 @@ export const loadField = defaultMemoize(
     field.name = "Field"
     field.add(...fieldGLTF.scene.children)
     return field
-  }
-)
+  }, "FIELD")

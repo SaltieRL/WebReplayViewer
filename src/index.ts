@@ -7,6 +7,9 @@ export { loadBuilderFromReplay } from "./viewer/clients/loadBuilderFromReplay"
 
 // Components
 export { default as ReplayViewer } from "./viewer/components/ReplayViewer"
+export {
+  default as GameManagerLoader,
+} from "./viewer/components/GameManagerLoader"
 export { default as PlayControls } from "./viewer/components/PlayControls"
 export {
   default as PlayerCameraControls,
@@ -20,6 +23,7 @@ export { default as Slider } from "./viewer/components/Slider"
 export { default as FPSClock } from "./utils/FPSClock"
 
 // Types
+export { GameBuilderOptions } from "./builders/GameBuilder"
 export { ReplayData } from "./models/ReplayData"
 export { ReplayMetadata } from "./models/ReplayMetadata"
 export { CameraLocationOptions } from "./managers/CameraManager"

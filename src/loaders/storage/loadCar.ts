@@ -1,12 +1,12 @@
-import { defaultMemoize } from "reselect"
 import { Group, LoadingManager } from "three"
 
 import { getChildByName } from "../operators/getChildByName"
 import { loadObject } from "../operators/loadObject"
 import { throwLoadingError } from "../operators/throwLoadingError"
+import { storageMemoize } from "./storageMemoize"
 
-export const loadWheel = defaultMemoize(
-  async (loadingManager?: LoadingManager) => {
+export const loadWheel = (loadingManager?: LoadingManager) =>
+  storageMemoize(async () => {
     const { default: glb } = await import(
       // @ts-ignore
       /* webpackChunkName: "Wheel" */ "../../assets/models/Wheel.glb"
@@ -16,11 +16,10 @@ export const loadWheel = defaultMemoize(
     wheel.name = "Wheel"
     wheel.add(...wheelGLTF.scene.children)
     return wheel
-  }
-)
+  }, "WHEEL")
 
-export const loadOrangeCar = defaultMemoize(
-  async (loadingManager?: LoadingManager) => {
+export const loadOrangeCar = (loadingManager?: LoadingManager) =>
+  storageMemoize(async () => {
     const { default: glb } = await import(
       // @ts-ignore
       /* webpackChunkName: "Octane_ZXR_Orange" */ "../../assets/models/Octane_ZXR_Orange.glb"
@@ -31,11 +30,10 @@ export const loadOrangeCar = defaultMemoize(
       throwLoadingError("Octane")
     }
     return car as Group
-  }
-)
+  }, "Octane_ZXR_Orange")
 
-export const loadBlueCar = defaultMemoize(
-  async (loadingManager?: LoadingManager) => {
+export const loadBlueCar = (loadingManager?: LoadingManager) =>
+  storageMemoize(async () => {
     const { default: glb } = await import(
       // @ts-ignore
       /* webpackChunkName: "Octane_ZXR_Blue" */ "../../assets/models/Octane_ZXR_Blue.glb"
@@ -46,5 +44,4 @@ export const loadBlueCar = defaultMemoize(
       throwLoadingError("Octane")
     }
     return car as Group
-  }
-)
+  }, "Octane_ZXR_Blue")

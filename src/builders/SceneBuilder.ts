@@ -1,4 +1,4 @@
-import { Scene } from "three"
+import { LoadingManager, Scene } from "three"
 
 import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
 import SceneManager from "../managers/SceneManager"
@@ -19,10 +19,14 @@ interface Player {
  * required game assets.
  */
 const defaultSceneBuilder = async (
-  playerInfo: Player[]
+  playerInfo: Player[],
+  loadingManager?: LoadingManager
 ): Promise<SceneManager> => {
   const scene = new Scene()
 
+  if (loadingManager) {
+    GameFieldAssets.loadingManager = loadingManager
+  }
   await GameFieldAssets.load()
 
   addLighting(scene)
