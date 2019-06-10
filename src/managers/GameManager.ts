@@ -56,6 +56,7 @@ export class GameManager {
   static builder = defaultGameBuilder
 
   private destruct() {
+    this.clock.unsubscribe(this.animate)
     this.clock.reset()
   }
 
