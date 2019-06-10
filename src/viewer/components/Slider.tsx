@@ -13,6 +13,8 @@ interface State {
   maxFrame: number
 }
 
+const SLIDER_OUTLINE_RADIUS = 24
+
 class Slider extends Component<Props, State> {
   onFrame = debounce(
     ({ frame }: FPSClockSubscriberOptions) => {
@@ -45,14 +47,34 @@ class Slider extends Component<Props, State> {
     const { frame, maxFrame } = this.state
 
     return (
-      <div>
-        <MUISlider
-          value={frame}
-          aria-labelledby="label"
-          onChange={this.handleChange}
-          min={0}
-          max={maxFrame}
-        />
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          height: 12,
+          marginLeft: -SLIDER_OUTLINE_RADIUS / 2,
+          marginRight: -SLIDER_OUTLINE_RADIUS / 2,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            overflow: "hidden",
+            height: SLIDER_OUTLINE_RADIUS * 2,
+            width: "calc(100% - 12px)",
+            paddingLeft: SLIDER_OUTLINE_RADIUS,
+            paddingRight: SLIDER_OUTLINE_RADIUS,
+          }}
+        >
+          <MUISlider
+            value={frame}
+            aria-labelledby="label"
+            onChange={this.handleChange}
+            min={0}
+            max={maxFrame}
+          />
+        </div>
       </div>
     )
   }
