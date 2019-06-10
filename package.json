@@ -1,6 +1,6 @@
 {
   "name": "replay-viewer",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Rocket League replay viewer React component and tooling",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
