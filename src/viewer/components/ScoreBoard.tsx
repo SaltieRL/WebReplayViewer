@@ -17,6 +17,19 @@ interface State {
 }
 
 export default class Scoreboard extends PureComponent<Props, State> {
+  onFrame = debounce(
+    ({ frame }: FPSClockSubscriberOptions) => {
+      const { data } = DataManager.getInstance()
+      const gameTime = getGameTime(data, frame)
+      if (gameTime !== this.state.gameTime) {
+        this.setState({ gameTime })
+      }
+      this.updateGameScore(frame)
+    },
+    250,
+    { maxWait: 250 }
+  )
+
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -25,17 +38,12 @@ export default class Scoreboard extends PureComponent<Props, State> {
       gameTime: 300,
     }
 
-    this.onFrame = debounce(this.onFrame.bind(this), 250, { maxWait: 250 })
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
-  onFrame({ frame }: FPSClockSubscriberOptions) {
-    const { data } = DataManager.getInstance()
-    const gameTime = getGameTime(data, frame)
-    if (gameTime !== this.state.gameTime) {
-      this.setState({ gameTime })
-    }
-    this.updateGameScore(frame)
+  componentWillUnmount() {
+    GameManager.getInstance().clock.unsubscribe(this.onFrame)
+    this.onFrame.cancel()
   }
 
   getDateTimeString() {

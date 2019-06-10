@@ -21,6 +21,10 @@ export default class PlayControls extends Component<Props, State> {
     GameManager.getInstance().clock.subscribe(this.onClockUpdate)
   }
 
+  componentWillUnmount() {
+    GameManager.getInstance().clock.unsubscribe(this.onClockUpdate)
+  }
+
   onClockUpdate({ paused }: FPSClockSubscriberOptions) {
     if (paused !== this.state.paused) {
       this.setState({

@@ -14,18 +14,26 @@ interface State {
 }
 
 class Slider extends Component<Props, State> {
+  onFrame = debounce(
+    ({ frame }: FPSClockSubscriberOptions) => {
+      this.setState({ frame })
+    },
+    250,
+    { maxWait: 250 }
+  )
+
   constructor(props: Props) {
     super(props)
     this.state = {
       frame: 0,
       maxFrame: DataManager.getInstance().data.frames.length - 1,
     }
-    this.onFrame = debounce(this.onFrame, 250, { maxWait: 250 })
     GameManager.getInstance().clock.subscribe(this.onFrame)
   }
 
-  onFrame = ({ frame }: FPSClockSubscriberOptions) => {
-    this.setState({ frame })
+  componentWillUnmount() {
+    GameManager.getInstance().clock.unsubscribe(this.onFrame)
+    this.onFrame.cancel()
   }
 
   handleChange = (_: any, value: number) => {
