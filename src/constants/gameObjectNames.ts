@@ -6,4 +6,9 @@ export const GROUP_SUFFIX = "-group"
 export const BLUE_GOAL_CAMERA = "Blue Goal Camera"
 export const ORANGE_GOAL_CAMERA = "Orange Goal Camera"
 export const ABOVE_FIELD_CAMERA = "Above Field Camera"
-export const ORTHOGRAPHIC_CAMERA = "Orthographic Camera"
+export const ORTHOGRAPHIC = {
+  BLUE_LEFT: "ORTHOGRAPHIC_BLUE_LEFT",
+  BLUE_RIGHT: "ORTHOGRAPHIC_BLUE_RIGHT",
+  ORANGE_LEFT: "ORTHOGRAPHIC_ORANGE_LEFT",
+  ORANGE_RIGHT: "ORTHOGRAPHIC_ORANGE_RIGHT",
+}

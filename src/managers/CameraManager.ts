@@ -4,11 +4,17 @@ import {
   ABOVE_FIELD_CAMERA,
   BLUE_GOAL_CAMERA,
   ORANGE_GOAL_CAMERA,
-  ORTHOGRAPHIC_CAMERA,
+  ORTHOGRAPHIC,
 } from "../constants/gameObjectNames"
 import { dispatchCameraChange } from "../eventbus/events/cameraChange"
 import { dispatchCameraFrameUpdate } from "../eventbus/events/cameraFrameUpdate"
 import SceneManager from "./SceneManager"
+
+const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
+  (key: string) => {
+    return (ORTHOGRAPHIC as any)[key] as string
+  }
+)
 
 class CameraManager {
   activeCamera: Camera
@@ -42,7 +48,8 @@ class CameraManager {
       ballCam: true,
       isUsingBoost: false,
     })
-    if (this.activeCamera.name !== ORTHOGRAPHIC_CAMERA) {
+
+    if (!ORTHOGRAPHIC_CAMERA_NAMES.includes(this.activeCamera.name)) {
       this.activeCamera.lookAt(position)
     }
   }
@@ -65,8 +72,19 @@ class CameraManager {
         case "center":
           this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA) as any)
           break
-        case "orthographic":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC_CAMERA) as any)
+        case "orthographic-orange-left":
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT) as any)
+          break
+        case "orthographic-orange-right":
+          this.setActiveCamera(field.getCamera(
+            ORTHOGRAPHIC.ORANGE_RIGHT
+          ) as any)
+          break
+        case "orthographic-blue-left":
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_LEFT) as any)
+          break
+        case "orthographic-blue-right":
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_RIGHT) as any)
           break
         default:
           this.setActiveCamera(this.defaultCamera)
@@ -117,7 +135,14 @@ class CameraManager {
 
 export interface CameraLocationOptions {
   playerName?: string
-  fieldLocation?: "orange" | "blue" | "center" | "orthographic"
+  fieldLocation?:
+    | "orange"
+    | "blue"
+    | "center"
+    | "orthographic-blue-right"
+    | "orthographic-blue-left"
+    | "orthographic-orange-right"
+    | "orthographic-orange-left"
 }
 
 export default CameraManager

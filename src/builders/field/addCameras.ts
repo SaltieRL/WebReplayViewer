@@ -1,11 +1,11 @@
-import { OrthographicCamera, PerspectiveCamera, Scene } from "three"
+import { OrthographicCamera, PerspectiveCamera, Scene, Vector3 } from "three"
 
 import { DEFAULT_CAMERA_OPTIONS } from "../../constants/defaultCameraOptions"
 import {
   ABOVE_FIELD_CAMERA,
   BLUE_GOAL_CAMERA,
   ORANGE_GOAL_CAMERA,
-  ORTHOGRAPHIC_CAMERA,
+  ORTHOGRAPHIC,
 } from "../../constants/gameObjectNames"
 
 export const addCameras = (scene: Scene) => {
@@ -24,24 +24,46 @@ export const addCameras = (scene: Scene) => {
   aboveFieldCamera.position.set(0, 2000, 0)
   scene.add(aboveFieldCamera)
 
-  const orthographicCamera = new OrthographicCamera(
-    -320,
-    320,
-    240,
-    -240,
-    0.1,
-    20000
-  )
-  orthographicCamera.name = ORTHOGRAPHIC_CAMERA
-  orthographicCamera.position.set(3500, 5000, 5000)
-  orthographicCamera.lookAt(-500, 0, -500)
-  orthographicCamera.zoom = 0.05
-  scene.add(orthographicCamera)
+  const generateOrthographicCamera = () => {
+    const camera = new OrthographicCamera(-320, 320, 240, -240, 0.1, 20000)
+    camera.zoom = 0.05
+    scene.add(camera)
+    return camera
+  }
+
+  const ORTHOGRAPHIC_X = 3500
+  const ORTHOGRAPHIC_Y = 5000
+  const ORTHOGRAPHIC_Z = 5000
+
+  const orthographicCameras = [
+    {
+      name: ORTHOGRAPHIC.BLUE_LEFT,
+      position: new Vector3(ORTHOGRAPHIC_X, ORTHOGRAPHIC_Y, -ORTHOGRAPHIC_Z),
+    },
+    {
+      name: ORTHOGRAPHIC.BLUE_RIGHT,
+      position: new Vector3(-ORTHOGRAPHIC_X, ORTHOGRAPHIC_Y, -ORTHOGRAPHIC_Z),
+    },
+    {
+      name: ORTHOGRAPHIC.ORANGE_LEFT,
+      position: new Vector3(-ORTHOGRAPHIC_X, ORTHOGRAPHIC_Y, ORTHOGRAPHIC_Z),
+    },
+    {
+      name: ORTHOGRAPHIC.ORANGE_RIGHT,
+      position: new Vector3(ORTHOGRAPHIC_X, ORTHOGRAPHIC_Y, ORTHOGRAPHIC_Z),
+    },
+  ].map(({ name, position }) => {
+    const camera = generateOrthographicCamera()
+    camera.name = name
+    camera.position.set(position.x, position.y, position.z)
+    camera.lookAt(0, 0, 0)
+    return camera
+  })
 
   return [
     blueGoalCamera,
     orangeGoalCamera,
     aboveFieldCamera,
-    orthographicCamera,
+    ...orthographicCameras,
   ]
 }
