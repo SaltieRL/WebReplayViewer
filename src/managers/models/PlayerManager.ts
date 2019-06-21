@@ -1,5 +1,12 @@
-import { Group, PerspectiveCamera, Vector3 } from "three"
+import {
+  Group,
+  OrthographicCamera,
+  PerspectiveCamera,
+  Sprite,
+  Vector3,
+} from "three"
 
+import { SPRITE_SCALAR } from "../../builders/player/generateSprite"
 import { SPRITE } from "../../constants/gameObjectNames"
 import {
   addCameraChangeListener,
@@ -20,10 +27,17 @@ export default class PlayerManager {
   readonly camera: PerspectiveCamera
   private activeCamera: boolean
 
+  private readonly sprite: Sprite
+
   constructor(playerName: string, isOrangeTeam: boolean, carGroup: Group) {
     this.playerName = playerName
     this.carGroup = carGroup
     this.isOrangeTeam = isOrangeTeam
+
+    this.sprite = this.carGroup.children.find(
+      child => child.name === SPRITE
+    ) as Sprite
+
     this.camera = new PerspectiveCamera(80, 2, 0.1, 20000)
     this.activeCamera = false
     this.carGroup.add(this.camera)
@@ -36,6 +50,9 @@ export default class PlayerManager {
     const isActiveCamera = camera === this.camera
     this.toggleSprite(!isActiveCamera)
     this.activeCamera = isActiveCamera
+    this.sprite.scale.setScalar(
+      camera instanceof OrthographicCamera ? SPRITE_SCALAR * 3 : SPRITE_SCALAR
+    )
   }
 
   onCameraFrameUpdate = ({ ballPosition }: CameraFrameUpdateEvent) => {
@@ -72,7 +89,6 @@ export default class PlayerManager {
   }
 
   private toggleSprite(display: boolean) {
-    const sprite = this.carGroup.children.find(child => child.name === SPRITE)
-    sprite!.visible = display
+    this.sprite.visible = display
   }
 }

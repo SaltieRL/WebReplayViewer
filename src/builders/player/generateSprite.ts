@@ -8,6 +8,8 @@ import {
 
 import { SPRITE } from "../../constants/gameObjectNames"
 
+export const SPRITE_SCALAR = 800
+
 export const generateSprite = (playerName: string, orangeTeam: boolean) => {
   const name = playerName.toUpperCase()
 
@@ -81,7 +83,7 @@ export const generateSprite = (playerName: string, orangeTeam: boolean) => {
   })
   const sprite = new Sprite(spriteMaterial)
   sprite.name = SPRITE
-  sprite.scale.setScalar(600)
+  sprite.scale.setScalar(SPRITE_SCALAR)
 
   return sprite
 }
