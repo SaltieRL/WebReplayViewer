@@ -1,6 +1,7 @@
 import { WebGLRenderer } from "three"
 
 import defaultGameBuilder from "../builders/GameBuilder"
+import EventBus from "../eventbus/EventBus"
 import FPSClock, { FPSClockSubscriberOptions } from "../utils/FPSClock"
 import AnimationManager from "./AnimationManager"
 import CameraManager from "./CameraManager"
@@ -58,6 +59,7 @@ export class GameManager {
   private destruct() {
     this.clock.unsubscribe(this.animate)
     this.clock.reset()
+    EventBus.reset()
   }
 
   /**
