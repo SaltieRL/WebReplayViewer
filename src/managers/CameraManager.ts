@@ -6,14 +6,13 @@ import {
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC_CAMERA,
 } from "../constants/gameObjectNames"
-import { addToWindow } from "../utils/addToWindow"
-import PlayerManager from "./models/PlayerManager"
+import { dispatchCameraChange } from "../eventbus/events/cameraChange"
+import { dispatchCameraFrameUpdate } from "../eventbus/events/cameraFrameUpdate"
 import SceneManager from "./SceneManager"
 
 class CameraManager {
   activeCamera: Camera
 
-  private activePlayer?: PlayerManager
   private readonly defaultCamera: Camera
   private width: number
   private height: number
@@ -38,13 +37,11 @@ class CameraManager {
 
   update() {
     const { position } = SceneManager.getInstance().ball.ball
-    if (this.activePlayer) {
-      this.activePlayer.updateCamera({
-        ballPosition: position,
-        ballCam: true,
-        isUsingBoost: false,
-      })
-    }
+    dispatchCameraFrameUpdate({
+      ballPosition: position,
+      ballCam: true,
+      isUsingBoost: false,
+    })
     if (this.activeCamera.name !== ORTHOGRAPHIC_CAMERA) {
       this.activeCamera.lookAt(position)
     }
@@ -52,16 +49,9 @@ class CameraManager {
 
   setCameraLocation({ playerName, fieldLocation }: CameraLocationOptions) {
     const { players, field } = SceneManager.getInstance()
-    // Add hidden sprites back
-    if (this.activePlayer) {
-      this.activePlayer.toggleSprite(true)
-    }
     if (playerName) {
       const player = players.find(p => p.playerName === playerName)
       if (player) {
-        player.toggleSprite(false)
-        this.activePlayer = player
-        addToWindow("activePlayer", player)
         this.setActiveCamera(player.camera)
       }
     } else if (fieldLocation) {
@@ -82,6 +72,9 @@ class CameraManager {
           this.setActiveCamera(this.defaultCamera)
       }
     }
+
+    // Dispatch to all manager listeners
+    dispatchCameraChange({ camera: this.activeCamera })
   }
 
   private updateCameraSize() {
