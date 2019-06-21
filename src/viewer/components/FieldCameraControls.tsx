@@ -21,12 +21,14 @@ const optionNames = {
   center: "Above Field",
 }
 const orthographicOptions: CameraLocationOptions["fieldLocation"][] = [
+  "orthographic-above-field",
   "orthographic-blue-left",
   "orthographic-blue-right",
   "orthographic-orange-left",
   "orthographic-orange-right",
 ]
 const orthographicOptionNames = {
+  ["orthographic-above-field"]: "Above Field",
   ["orthographic-blue-left"]: "Blue Left",
   ["orthographic-blue-right"]: "Blue Right",
   ["orthographic-orange-left"]: "Orange Left",

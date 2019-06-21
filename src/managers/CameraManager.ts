@@ -72,6 +72,9 @@ class CameraManager {
         case "center":
           this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA) as any)
           break
+        case "orthographic-above-field":
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ABOVE_FIELD) as any)
+          break
         case "orthographic-orange-left":
           this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT) as any)
           break
@@ -143,6 +146,7 @@ export interface CameraLocationOptions {
     | "orthographic-blue-left"
     | "orthographic-orange-right"
     | "orthographic-orange-left"
+    | "orthographic-above-field"
 }
 
 export default CameraManager

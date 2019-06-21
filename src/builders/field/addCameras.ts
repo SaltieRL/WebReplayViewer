@@ -52,6 +52,10 @@ export const addCameras = (scene: Scene) => {
       name: ORTHOGRAPHIC.ORANGE_RIGHT,
       position: new Vector3(ORTHOGRAPHIC_X, ORTHOGRAPHIC_Y, ORTHOGRAPHIC_Z),
     },
+    {
+      name: ORTHOGRAPHIC.ABOVE_FIELD,
+      position: new Vector3(0, 8000, 0),
+    },
   ].map(({ name, position }) => {
     const camera = generateOrthographicCamera()
     camera.name = name
