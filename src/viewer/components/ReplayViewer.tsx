@@ -4,7 +4,7 @@ import FullscreenIcon from "@material-ui/icons/Fullscreen"
 import FullscreenExitIcon from "@material-ui/icons/FullscreenExit"
 import { styled } from "@material-ui/styles"
 import React, { createRef, PureComponent, RefObject } from "react"
-import Fullscreen from "react-full-screen"
+import FullScreen from "react-full-screen"
 
 import { GameManager } from "../../managers/GameManager"
 import Scoreboard from "./ScoreBoard"
@@ -66,7 +66,10 @@ class ReplayViewer extends PureComponent<Props, State> {
     const onClick = () => this.toggleFullscreen(!this.state.fullScreen)
     return (
       <ViewerContainer>
-        <Fullscreen enabled={fullScreen} onChange={this.toggleFullscreen}>
+        <FullscreenWrapper
+          enabled={fullScreen}
+          onChange={this.toggleFullscreen}
+        >
           <Viewer>
             <div ref={this.mount} />
           </Viewer>
@@ -78,7 +81,7 @@ class ReplayViewer extends PureComponent<Props, State> {
               </Typography>
             </Button>
           </FullscreenToggle>
-        </Fullscreen>
+        </FullscreenWrapper>
       </ViewerContainer>
     )
   }
@@ -97,6 +100,12 @@ const Viewer = styled("div")({
     width: "100%",
     height: "100%",
   },
+})
+
+const FullscreenWrapper = styled(FullScreen)({
+  width: "100%",
+
+  height: "100%",
 })
 
 const FullscreenToggle = styled("div")({
