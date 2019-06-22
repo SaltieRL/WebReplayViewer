@@ -91,6 +91,10 @@ const ViewerContainer = styled("div")({
   width: "100%",
   height: 480,
   position: "relative",
+  "&& .fullscreen": {
+    width: "100%",
+    height: "100%",
+  },
 })
 
 const Viewer = styled("div")({
@@ -104,7 +108,6 @@ const Viewer = styled("div")({
 
 const FullscreenWrapper = styled(FullScreen)({
   width: "100%",
-
   height: "100%",
 })
 
