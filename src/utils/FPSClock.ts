@@ -1,11 +1,5 @@
+import { dispatchFrameEvent } from "../eventbus/events/frame"
 import { ReplayData } from "../models/ReplayData"
-
-export interface FPSClockSubscriberOptions {
-  frame: number
-  paused: boolean
-}
-
-type FPSClockSubscriber = (options: FPSClockSubscriberOptions) => void
 
 /**
  * This clock provides a simple callback system that keeps track of elapsed and delta time
@@ -39,12 +33,10 @@ export default class FPSClock {
 
   private paused: boolean
   private animation?: number
-  private callbacks: FPSClockSubscriber[]
 
   constructor(frameToDuration: number[]) {
     this.frameToDuration = frameToDuration
     this.paused = true
-    this.callbacks = []
     this.deltaQueue = []
     this.elapsedTime = 0
     this.currentFrame = 0
@@ -54,17 +46,8 @@ export default class FPSClock {
     this.timeout()
   }
 
-  public subscribe(callback: FPSClockSubscriber) {
-    this.callbacks.push(callback)
-  }
-
-  public unsubscribe(callback: FPSClockSubscriber) {
-    this.callbacks = this.callbacks.filter(value => value !== callback)
-  }
-
   public reset() {
     this.setFrame(0)
-    this.callbacks = []
   }
 
   public setFrame(frame: number) {
@@ -147,18 +130,16 @@ export default class FPSClock {
     }
   }
 
-  private doCallbacks() {
-    for (const callback of this.callbacks) {
-      callback({ frame: this.currentFrame, paused: this.paused })
-    }
-  }
-
   private timeout(enable: boolean = true) {
     if (enable) {
       this.animation = setInterval(this.update, 1000 / 60) as any
     } else if (this.animation) {
       clearInterval(this.animation as any)
     }
+  }
+
+  private doCallbacks() {
+    dispatchFrameEvent({ frame: this.currentFrame })
   }
 
   /**
