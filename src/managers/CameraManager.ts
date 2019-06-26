@@ -8,7 +8,12 @@ import {
 } from "../constants/gameObjectNames"
 import { dispatchCameraChange } from "../eventbus/events/cameraChange"
 import { dispatchCameraFrameUpdate } from "../eventbus/events/cameraFrameUpdate"
-import { addFrameListener } from "../eventbus/events/frame"
+import {
+  addCanvasResizeListener,
+  CanvasResizeEvent,
+  removeCanvasResizeListener,
+} from "../eventbus/events/canvasResize"
+import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
 import SceneManager from "./SceneManager"
 
 const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
@@ -36,9 +41,10 @@ class CameraManager {
     this.activeCamera.position.y = 750
 
     addFrameListener(this.update)
+    addCanvasResizeListener(this.updateSize)
   }
 
-  updateSize(width: number, height: number) {
+  private readonly updateSize = ({ width, height }: CanvasResizeEvent) => {
     this.width = width
     this.height = height
     this.updateCameraSize()
@@ -136,6 +142,14 @@ class CameraManager {
   static init() {
     CameraManager.instance = new CameraManager()
     return CameraManager.instance
+  }
+  static destruct() {
+    const { instance } = CameraManager
+    if (instance) {
+      removeFrameListener(instance.update)
+      removeCanvasResizeListener(instance.updateSize)
+      CameraManager.instance = undefined
+    }
   }
 }
 
