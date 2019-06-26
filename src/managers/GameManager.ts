@@ -2,7 +2,17 @@ import { WebGLRenderer } from "three"
 
 import defaultGameBuilder from "../builders/GameBuilder"
 import EventBus from "../eventbus/EventBus"
-import FPSClock, { FPSClockSubscriberOptions } from "../utils/FPSClock"
+import {
+  addFrameListener,
+  FrameEvent,
+  removeFrameListener,
+} from "../eventbus/events/frame"
+import {
+  addPlayPauseListener,
+  PlayPauseEvent,
+  removePlayPauseListener,
+} from "../eventbus/events/playPause"
+import FPSClock from "../utils/FPSClock"
 import AnimationManager from "./AnimationManager"
 import CameraManager from "./CameraManager"
 import SceneManager from "./SceneManager"
@@ -21,18 +31,20 @@ export class GameManager {
     this.animate = this.animate.bind(this)
     this.render = this.render.bind(this)
     this.clock = clock
-    clock.subscribe(this.animate)
 
     AnimationManager.getInstance().playAnimationClips()
+    addPlayPauseListener(this.onPlayPause)
+    addFrameListener(this.animate)
   }
 
-  animate({  }: FPSClockSubscriberOptions) {
+  onPlayPause = ({ paused }: PlayPauseEvent) => {
+    paused ? this.clock.pause() : this.clock.play()
+  }
+
+  animate({  }: FrameEvent) {
     const delta = this.clock.getDelta()
-    CameraManager.getInstance().update()
 
     if (delta) {
-      SceneManager.getInstance().update()
-      CameraManager.getInstance().update()
       AnimationManager.getInstance().updateAnimationClips(delta)
       this.render()
     }
@@ -56,8 +68,9 @@ export class GameManager {
 
   static builder = defaultGameBuilder
 
-  private destruct() {
-    this.clock.unsubscribe(this.animate)
+  destruct() {
+    removePlayPauseListener(this.onPlayPause)
+    removeFrameListener(this.animate)
     this.clock.reset()
     EventBus.reset()
   }
@@ -75,9 +88,6 @@ export class GameManager {
     return GameManager.instance
   }
   static init(options: GameManagerOptions) {
-    if (GameManager.instance) {
-      GameManager.instance.destruct()
-    }
     GameManager.instance = new GameManager(options)
     return GameManager.instance
   }
