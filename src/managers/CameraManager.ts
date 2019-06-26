@@ -8,6 +8,7 @@ import {
 } from "../constants/gameObjectNames"
 import { dispatchCameraChange } from "../eventbus/events/cameraChange"
 import { dispatchCameraFrameUpdate } from "../eventbus/events/cameraFrameUpdate"
+import { addFrameListener } from "../eventbus/events/frame"
 import SceneManager from "./SceneManager"
 
 const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
@@ -33,6 +34,8 @@ class CameraManager {
 
     this.activeCamera.position.z = 5000
     this.activeCamera.position.y = 750
+
+    addFrameListener(this.update)
   }
 
   updateSize(width: number, height: number) {
@@ -41,7 +44,7 @@ class CameraManager {
     this.updateCameraSize()
   }
 
-  update() {
+  private readonly update = () => {
     const { position } = SceneManager.getInstance().ball.ball
     dispatchCameraFrameUpdate({
       ballPosition: position,
