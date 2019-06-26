@@ -3,6 +3,11 @@ import { WebGLRenderer } from "three"
 import defaultGameBuilder from "../builders/GameBuilder"
 import EventBus from "../eventbus/EventBus"
 import {
+  addCanvasResizeListener,
+  CanvasResizeEvent,
+  removeCanvasResizeListener,
+} from "../eventbus/events/canvasResize"
+import {
   addFrameListener,
   FrameEvent,
   removeFrameListener,
@@ -35,6 +40,7 @@ export class GameManager {
     AnimationManager.getInstance().playAnimationClips()
     addPlayPauseListener(this.onPlayPause)
     addFrameListener(this.animate)
+    addCanvasResizeListener(this.updateSize)
   }
 
   onPlayPause = ({ paused }: PlayPauseEvent) => {
@@ -54,25 +60,18 @@ export class GameManager {
     return this.renderer.domElement
   }
 
-  updateSize(width: number = 640, height: number = 480) {
-    CameraManager.getInstance().updateSize(width, height)
-    this.renderer.setSize(width, height)
-    this.render()
-  }
-
   render() {
     const { scene } = SceneManager.getInstance()
     const { activeCamera } = CameraManager.getInstance()
     this.renderer.render(scene, activeCamera)
   }
 
-  static builder = defaultGameBuilder
-
-  destruct() {
-    removePlayPauseListener(this.onPlayPause)
-    removeFrameListener(this.animate)
-    this.clock.reset()
-    EventBus.reset()
+  private readonly updateSize = ({
+    width = 640,
+    height = 480,
+  }: CanvasResizeEvent) => {
+    this.renderer.setSize(width, height)
+    this.render()
   }
 
   /**
@@ -80,6 +79,7 @@ export class GameManager {
    * Managers are singletons
    * ========================================
    */
+  static builder = defaultGameBuilder
   private static instance?: GameManager
   static getInstance() {
     if (!GameManager.instance) {
@@ -90,5 +90,21 @@ export class GameManager {
   static init(options: GameManagerOptions) {
     GameManager.instance = new GameManager(options)
     return GameManager.instance
+  }
+  static destruct() {
+    // Destruct other managers
+    SceneManager.destruct()
+    CameraManager.destruct()
+
+    // Handle destruction of the existing game
+    const { instance } = GameManager
+    if (instance) {
+      removePlayPauseListener(instance.onPlayPause)
+      removeFrameListener(instance.animate)
+      removeCanvasResizeListener(instance.updateSize)
+      instance.clock.reset()
+      EventBus.reset()
+      GameManager.instance = undefined
+    }
   }
 }
