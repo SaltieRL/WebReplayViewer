@@ -1,6 +1,6 @@
 import { Scene } from "three"
 
-import { addFrameListener } from "../eventbus/events/frame"
+import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
 import BallManager from "./models/BallManager"
 import FieldManager from "./models/FieldManager"
 import PlayerManager from "./models/PlayerManager"
@@ -52,5 +52,12 @@ export default class SceneManager {
   static init(options: SceneManagerOptions) {
     SceneManager.instance = new SceneManager(options)
     return SceneManager.instance
+  }
+  static destruct() {
+    const { instance } = SceneManager
+    if (instance) {
+      removeFrameListener(instance.update)
+      SceneManager.instance = undefined
+    }
   }
 }
