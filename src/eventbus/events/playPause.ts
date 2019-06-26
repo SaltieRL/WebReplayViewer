@@ -1,6 +1,9 @@
 import { PLAY_PAUSE } from "../../constants/eventNames"
 import EventBus from "../EventBus"
 
+/**
+ * Fires when the global game clock has paused.
+ */
 export interface PlayPauseEvent {
   paused: boolean
 }
