@@ -3,6 +3,10 @@ import { WebGLRenderer } from "three"
 import defaultGameBuilder from "../builders/GameBuilder"
 import EventBus from "../eventbus/EventBus"
 import {
+  addCameraChangeListener,
+  removeCameraChangeListener,
+} from "../eventbus/events/cameraChange"
+import {
   addCanvasResizeListener,
   CanvasResizeEvent,
   removeCanvasResizeListener,
@@ -41,6 +45,7 @@ export class GameManager {
     addPlayPauseListener(this.onPlayPause)
     addFrameListener(this.animate)
     addCanvasResizeListener(this.updateSize)
+    addCameraChangeListener(this.render)
   }
 
   onPlayPause = ({ paused }: PlayPauseEvent) => {
@@ -60,7 +65,7 @@ export class GameManager {
     return this.renderer.domElement
   }
 
-  render() {
+  private readonly render = () => {
     const { scene } = SceneManager.getInstance()
     const { activeCamera } = CameraManager.getInstance()
     this.renderer.render(scene, activeCamera)
@@ -102,6 +107,7 @@ export class GameManager {
       removePlayPauseListener(instance.onPlayPause)
       removeFrameListener(instance.animate)
       removeCanvasResizeListener(instance.updateSize)
+      removeCameraChangeListener(instance.render)
       instance.clock.reset()
       EventBus.reset()
       GameManager.instance = undefined
