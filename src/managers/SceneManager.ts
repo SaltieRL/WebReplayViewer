@@ -1,5 +1,6 @@
 import { Scene } from "three"
 
+import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
 import BallManager from "./models/BallManager"
 import FieldManager from "./models/FieldManager"
 import PlayerManager from "./models/PlayerManager"
@@ -22,9 +23,11 @@ export default class SceneManager {
     this.ball = ball
     this.field = field
     this.players = players
+
+    addFrameListener(this.update)
   }
 
-  update() {
+  private readonly update = () => {
     for (const player of this.players) {
       if (player.carGroup.position.y < 0) {
         player.carGroup.visible = false
@@ -49,5 +52,12 @@ export default class SceneManager {
   static init(options: SceneManagerOptions) {
     SceneManager.instance = new SceneManager(options)
     return SceneManager.instance
+  }
+  static destruct() {
+    const { instance } = SceneManager
+    if (instance) {
+      removeFrameListener(instance.update)
+      SceneManager.instance = undefined
+    }
   }
 }

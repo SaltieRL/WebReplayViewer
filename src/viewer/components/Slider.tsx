@@ -2,9 +2,13 @@ import MUISlider from "@material-ui/lab/Slider"
 import debounce from "lodash.debounce"
 import React, { Component } from "react"
 
+import {
+  addFrameListener,
+  FrameEvent,
+  removeFrameListener,
+} from "../../eventbus/events/frame"
 import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"
-import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 
@@ -17,7 +21,7 @@ const SLIDER_OUTLINE_RADIUS = 24
 
 class Slider extends Component<Props, State> {
   onFrame = debounce(
-    ({ frame }: FPSClockSubscriberOptions) => {
+    ({ frame }: FrameEvent) => {
       this.setState({ frame })
     },
     250,
@@ -30,11 +34,11 @@ class Slider extends Component<Props, State> {
       frame: 0,
       maxFrame: DataManager.getInstance().data.frames.length - 1,
     }
-    GameManager.getInstance().clock.subscribe(this.onFrame)
+    addFrameListener(this.onFrame)
   }
 
   componentWillUnmount() {
-    GameManager.getInstance().clock.unsubscribe(this.onFrame)
+    removeFrameListener(this.onFrame)
     this.onFrame.cancel()
   }
 

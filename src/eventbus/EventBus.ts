@@ -31,6 +31,9 @@ class EventBus {
     if (!this.listeners[type]) {
       this.listeners[type] = []
     }
+    // Remove duplicate event listeners
+    this.removeEventListener(type, callback, scope)
+    // Add this listener to the list
     this.listeners[type].push({ type, callback, scope })
   }
 

@@ -6,6 +6,7 @@ import { styled } from "@material-ui/styles"
 import React, { createRef, PureComponent, RefObject } from "react"
 import FullScreen from "react-full-screen"
 
+import { dispatchCanvasResizeEvent } from "../../eventbus/events/canvasResize"
 import { GameManager } from "../../managers/GameManager"
 import Scoreboard from "./ScoreBoard"
 
@@ -33,11 +34,9 @@ class ReplayViewer extends PureComponent<Props, State> {
     if (!current) {
       throw new Error("Did not mount replay viewer correctly")
     }
-    const { clientWidth: width, clientHeight: height } = current
     const { gameManager } = this.props
     current.appendChild(gameManager.getDOMNode())
-    gameManager.updateSize(width, height)
-    gameManager.render()
+    this.handleResize()
     gameManager.clock.play()
 
     addEventListener("resize", this.handleResize)
@@ -51,8 +50,7 @@ class ReplayViewer extends PureComponent<Props, State> {
 
   handleResize = () => {
     const { clientWidth: width, clientHeight: height } = this.mount.current!
-    const { gameManager } = this.props
-    gameManager.updateSize(width, height)
+    dispatchCanvasResizeEvent({ width, height })
   }
 
   toggleFullscreen = (enabled: boolean) => {
@@ -91,6 +89,10 @@ const ViewerContainer = styled("div")({
   width: "100%",
   height: 480,
   position: "relative",
+  "&& .fullscreen": {
+    width: "100%",
+    height: "100%",
+  },
 })
 
 const Viewer = styled("div")({
@@ -104,7 +106,6 @@ const Viewer = styled("div")({
 
 const FullscreenWrapper = styled(FullScreen)({
   width: "100%",
-
   height: "100%",
 })
 

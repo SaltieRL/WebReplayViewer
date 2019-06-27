@@ -41,6 +41,10 @@ class GameManagerLoader extends Component<Props, State> {
     })
   }
 
+  componentWillUnmount() {
+    GameManager.destruct()
+  }
+
   handleProgress = (item: any, loaded: number, total: number) => {
     const newPercent = Math.round((loaded / total) * 1000) / 10
     const { percentLoaded } = this.state

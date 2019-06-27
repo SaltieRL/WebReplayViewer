@@ -8,6 +8,12 @@ import {
 } from "../constants/gameObjectNames"
 import { dispatchCameraChange } from "../eventbus/events/cameraChange"
 import { dispatchCameraFrameUpdate } from "../eventbus/events/cameraFrameUpdate"
+import {
+  addCanvasResizeListener,
+  CanvasResizeEvent,
+  removeCanvasResizeListener,
+} from "../eventbus/events/canvasResize"
+import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
 import SceneManager from "./SceneManager"
 
 const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
@@ -33,15 +39,18 @@ class CameraManager {
 
     this.activeCamera.position.z = 5000
     this.activeCamera.position.y = 750
+
+    addFrameListener(this.update)
+    addCanvasResizeListener(this.updateSize)
   }
 
-  updateSize(width: number, height: number) {
+  private readonly updateSize = ({ width, height }: CanvasResizeEvent) => {
     this.width = width
     this.height = height
     this.updateCameraSize()
   }
 
-  update() {
+  private readonly update = () => {
     const { position } = SceneManager.getInstance().ball.ball
     dispatchCameraFrameUpdate({
       ballPosition: position,
@@ -105,6 +114,25 @@ class CameraManager {
       camera.aspect = width / height
       camera.updateProjectionMatrix()
     } else if (camera instanceof OrthographicCamera) {
+      /**
+       * Here, we are computing the zoom of the camera given the aspect ratio. For cameras with an
+       * aspect ratio greater than 4:3, we base the zoom on the height. Otherwise, we use width. The
+       * minimum zoom should always be 0.02.
+       *
+       * The zoom when based on the height is a simple linear function y = x / 12500 + 0.01, where x
+       * is the new height and y is the desired zoom.
+       *
+       * The denominator of the width-based computation is simply the slope of the previous
+       * function, 12500, multiplied by 1.3 since this is aspect ratio breaking point we have set in
+       * the if statement.
+       */
+      if (width / height > 1.3) {
+        const newZoom = height / 12500 + 0.01
+        camera.zoom = Math.max(newZoom, 0.02)
+      } else {
+        const newZoom = width / 16250 + 0.01
+        camera.zoom = Math.max(newZoom, 0.02)
+      }
       camera.left = -width / 2
       camera.right = width / 2
       camera.top = height / 2
@@ -116,6 +144,7 @@ class CameraManager {
   private setActiveCamera(camera: Camera) {
     this.activeCamera = camera
     this.updateCameraSize()
+    this.update()
   }
 
   /**
@@ -133,6 +162,14 @@ class CameraManager {
   static init() {
     CameraManager.instance = new CameraManager()
     return CameraManager.instance
+  }
+  static destruct() {
+    const { instance } = CameraManager
+    if (instance) {
+      removeFrameListener(instance.update)
+      removeCanvasResizeListener(instance.updateSize)
+      CameraManager.instance = undefined
+    }
   }
 }
 

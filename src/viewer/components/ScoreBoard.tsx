@@ -2,12 +2,15 @@ import { styled } from "@material-ui/styles"
 import debounce from "lodash.debounce"
 import React, { PureComponent } from "react"
 
+import {
+  addFrameListener,
+  FrameEvent,
+  removeFrameListener,
+} from "../../eventbus/events/frame"
 import DataManager from "../../managers/DataManager"
-import { GameManager } from "../../managers/GameManager"
 import { Goal } from "../../models/ReplayMetadata"
 import { getGameTime } from "../../operators/frameGetters"
 import { getPlayerById } from "../../operators/metadataGetters"
-import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 interface State {
@@ -18,7 +21,7 @@ interface State {
 
 export default class Scoreboard extends PureComponent<Props, State> {
   onFrame = debounce(
-    ({ frame }: FPSClockSubscriberOptions) => {
+    ({ frame }: FrameEvent) => {
       const { data } = DataManager.getInstance()
       const gameTime = getGameTime(data, frame)
       if (gameTime !== this.state.gameTime) {
@@ -38,11 +41,11 @@ export default class Scoreboard extends PureComponent<Props, State> {
       gameTime: 300,
     }
 
-    GameManager.getInstance().clock.subscribe(this.onFrame)
+    addFrameListener(this.onFrame)
   }
 
   componentWillUnmount() {
-    GameManager.getInstance().clock.unsubscribe(this.onFrame)
+    removeFrameListener(this.onFrame)
     this.onFrame.cancel()
   }
 

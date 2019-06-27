@@ -1,8 +1,14 @@
 import Button from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
 import React, { Component } from "react"
+
+import {
+  addPlayPauseListener,
+  dispatchPlayPauseEvent,
+  PlayPauseEvent,
+  removePlayPauseListener,
+} from "../../eventbus/events/playPause"
 import { GameManager } from "../../managers/GameManager"
-import { FPSClockSubscriberOptions } from "../../utils/FPSClock"
 
 interface Props {}
 
@@ -17,32 +23,34 @@ export default class PlayControls extends Component<Props, State> {
       paused: false,
     }
 
-    this.onClockUpdate = this.onClockUpdate.bind(this)
-    GameManager.getInstance().clock.subscribe(this.onClockUpdate)
+    addPlayPauseListener(this.onPlayPause)
   }
 
   componentWillUnmount() {
-    GameManager.getInstance().clock.unsubscribe(this.onClockUpdate)
+    removePlayPauseListener(this.onPlayPause)
   }
 
-  onClockUpdate({ paused }: FPSClockSubscriberOptions) {
-    if (paused !== this.state.paused) {
-      this.setState({
-        paused,
-      })
-    }
+  setPlayPause = () => {
+    const isPaused = this.state.paused
+    dispatchPlayPauseEvent({
+      paused: !isPaused,
+    })
+  }
+
+  onPlayPause = ({ paused }: PlayPauseEvent) => {
+    this.setState({
+      paused,
+    })
   }
 
   render() {
     const { clock } = GameManager.getInstance()
-    const onPlayPauseClick = () =>
-      clock.isPaused() ? clock.play() : clock.pause()
     const onResetClick = () => clock.setFrame(0)
 
     return (
       <Grid container spacing={24}>
         <Grid item>
-          <Button variant="outlined" onClick={onPlayPauseClick}>
+          <Button variant="outlined" onClick={this.setPlayPause}>
             {this.state.paused ? "Play" : "Pause"}
           </Button>
         </Grid>
