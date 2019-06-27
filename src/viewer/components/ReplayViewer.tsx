@@ -37,7 +37,6 @@ class ReplayViewer extends PureComponent<Props, State> {
     const { gameManager } = this.props
     current.appendChild(gameManager.getDOMNode())
     this.handleResize()
-    gameManager.render()
     gameManager.clock.play()
 
     addEventListener("resize", this.handleResize)
