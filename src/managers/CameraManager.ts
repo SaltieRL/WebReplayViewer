@@ -144,6 +144,7 @@ class CameraManager {
   private setActiveCamera(camera: Camera) {
     this.activeCamera = camera
     this.updateCameraSize()
+    this.update()
   }
 
   /**
