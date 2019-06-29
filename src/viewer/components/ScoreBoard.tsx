@@ -49,9 +49,10 @@ export default class Scoreboard extends PureComponent<Props, State> {
     this.onFrame.cancel()
   }
 
-  getDateTimeString() {
-    const { gameTime } = this.state
-
+  getTimerString() {
+    let { gameTime } = this.state
+    // The frame is filled as -100 when the data is missing, so we set the minimum to 0
+    gameTime = gameTime < 0 ? 0 : gameTime
     const seconds = gameTime % 60
     const minutes = (gameTime - seconds) / 60
     const secondsString = seconds < 10 ? `0${seconds}` : seconds
@@ -66,7 +67,7 @@ export default class Scoreboard extends PureComponent<Props, State> {
           <Score>{team0Score}</Score>
         </BlueScoreCard>
         <GameTimeCard>
-          <GameTime>{this.getDateTimeString()}</GameTime>
+          <GameTime>{this.getTimerString()}</GameTime>
         </GameTimeCard>
         <OrangeScoreCard>
           <Score>{team1Score}</Score>
