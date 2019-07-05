@@ -24,6 +24,7 @@ import {
 import FPSClock from "../utils/FPSClock"
 import AnimationManager from "./AnimationManager"
 import CameraManager from "./CameraManager"
+import KeyManager from "./KeyManager"
 import SceneManager from "./SceneManager"
 
 interface GameManagerOptions {
@@ -100,6 +101,7 @@ export class GameManager {
     // Destruct other managers
     SceneManager.destruct()
     CameraManager.destruct()
+    KeyManager.destruct()
 
     // Handle destruction of the existing game
     const { instance } = GameManager
