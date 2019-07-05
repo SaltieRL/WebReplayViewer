@@ -14,11 +14,13 @@ const options: CameraLocationOptions["fieldLocation"][] = [
   "blue",
   "orange",
   "center",
+  "freecam",
 ]
 const optionNames = {
   blue: "Blue Goal",
   orange: "Orange Goal",
   center: "Above Field",
+  freecam: "Free Cam",
 }
 const orthographicOptions: CameraLocationOptions["fieldLocation"][] = [
   "orthographic-above-field",

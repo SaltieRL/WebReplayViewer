@@ -3,6 +3,7 @@ import { Camera, OrthographicCamera, PerspectiveCamera } from "three"
 import {
   ABOVE_FIELD_CAMERA,
   BLUE_GOAL_CAMERA,
+  FREE_CAMERA,
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC,
 } from "../constants/gameObjectNames"
@@ -14,13 +15,8 @@ import {
   removeCanvasResizeListener,
 } from "../eventbus/events/canvasResize"
 import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
+import { isOrthographicCamera } from "../operators/isOrthographicCamera"
 import SceneManager from "./SceneManager"
-
-const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
-  (key: string) => {
-    return (ORTHOGRAPHIC as any)[key] as string
-  }
-)
 
 class CameraManager {
   activeCamera: Camera
@@ -32,7 +28,7 @@ class CameraManager {
   private constructor() {
     this.activeCamera = SceneManager.getInstance().field.getCamera(
       ORANGE_GOAL_CAMERA
-    ) as any
+    )!
     this.defaultCamera = this.activeCamera
     this.width = 640
     this.height = 480
@@ -58,7 +54,7 @@ class CameraManager {
       isUsingBoost: false,
     })
 
-    if (!ORTHOGRAPHIC_CAMERA_NAMES.includes(this.activeCamera.name)) {
+    if (!isOrthographicCamera(this.activeCamera)) {
       this.activeCamera.lookAt(position)
     }
   }
@@ -73,30 +69,41 @@ class CameraManager {
     } else if (fieldLocation) {
       switch (fieldLocation) {
         case "orange":
-          this.setActiveCamera(field.getCamera(ORANGE_GOAL_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(ORANGE_GOAL_CAMERA))
           break
         case "blue":
-          this.setActiveCamera(field.getCamera(BLUE_GOAL_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(BLUE_GOAL_CAMERA))
           break
         case "center":
-          this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA))
+          break
+        case "freecam":
+          const freecam = field.getCamera(FREE_CAMERA) as PerspectiveCamera
+          if (!isOrthographicCamera(this.activeCamera)) {
+            if (freecam.parent) {
+              freecam.parent.updateMatrixWorld()
+            }
+            freecam.position.setFromMatrixPosition(
+              this.activeCamera.matrixWorld
+            )
+            freecam.rotation.fromArray(this.activeCamera.rotation.toArray())
+          }
+          this.setActiveCamera(freecam)
           break
         case "orthographic-above-field":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ABOVE_FIELD) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ABOVE_FIELD))
           break
         case "orthographic-orange-left":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT))
           break
         case "orthographic-orange-right":
-          this.setActiveCamera(field.getCamera(
-            ORTHOGRAPHIC.ORANGE_RIGHT
-          ) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_RIGHT))
           break
         case "orthographic-blue-left":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_LEFT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_LEFT))
           break
         case "orthographic-blue-right":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_RIGHT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_RIGHT))
           break
         default:
           this.setActiveCamera(this.defaultCamera)
@@ -141,7 +148,10 @@ class CameraManager {
     }
   }
 
-  private setActiveCamera(camera: Camera) {
+  private setActiveCamera(camera?: Camera) {
+    if (!camera) {
+      return
+    }
     this.activeCamera = camera
     this.updateCameraSize()
     this.update()
@@ -179,6 +189,7 @@ export interface CameraLocationOptions {
     | "orange"
     | "blue"
     | "center"
+    | "freecam"
     | "orthographic-blue-right"
     | "orthographic-blue-left"
     | "orthographic-orange-right"
