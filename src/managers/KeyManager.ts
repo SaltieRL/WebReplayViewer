@@ -75,6 +75,8 @@ class KeyManager {
 
   private readonly sendDispatch = () => {
     // The last key press was detected 2000ms ago, shut off dispatch
+    // TODO: This will shut off dispatches if you press a new key and then release the new key
+    // without keyup on the first. Should fix for edge case.
     if (performance.now() - this.lastKeyPress > 2000) {
       this.keysPressed = []
       return

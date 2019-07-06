@@ -42,15 +42,11 @@ export const applyDirections = (
         newVector.add(new Vector3(0, -multiplier, 0))
         break
       case "left":
-        localCameraDirection.setY(0)
-        localCameraDirection.setZ(-cameraDirection.x)
-        localCameraDirection.setX(cameraDirection.z)
+        localCameraDirection.cross(new Vector3(0, -1, 0))
         newVector.add(localCameraDirection.multiplyScalar(multiplier))
         break
       case "right":
-        localCameraDirection.setY(0)
-        localCameraDirection.setZ(cameraDirection.x)
-        localCameraDirection.setX(-cameraDirection.z)
+        localCameraDirection.cross(new Vector3(0, 1, 0))
         newVector.add(localCameraDirection.multiplyScalar(multiplier))
         break
     }
