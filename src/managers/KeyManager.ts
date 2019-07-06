@@ -11,9 +11,14 @@ import {
 
 class KeyManager {
   private listening: boolean
+  private keysPressed: number[]
+  private interval?: number
+  private lastKeyPress: number
 
   private constructor() {
     this.listening = false
+    this.keysPressed = []
+    this.lastKeyPress = 0
 
     addCameraChangeListener(this.onCameraChange)
   }
@@ -28,50 +33,88 @@ class KeyManager {
   toggleKeyListener() {
     this.listening = !this.listening
     if (this.listening) {
-      document.addEventListener("keydown", this.onKeyEvent)
+      document.addEventListener("keyup", this.onKeyUpEvent)
+      document.addEventListener("keydown", this.onKeyDownEvent)
+      // If we don't remove these keys on blur/focus, they get "stuck" when refocusing the document
+      document.addEventListener("focus", this.resetKeyCodes)
+      document.addEventListener("blur", this.resetKeyCodes)
+      this.interval = setInterval(this.sendDispatch, 1000 / 30) as any
     } else {
-      document.removeEventListener("keydown", this.onKeyEvent)
+      document.removeEventListener("keyup", this.onKeyUpEvent)
+      document.removeEventListener("keydown", this.onKeyDownEvent)
+      document.removeEventListener("focus", this.resetKeyCodes)
+      document.removeEventListener("blur", this.resetKeyCodes)
+      if (this.interval) {
+        clearInterval(this.interval)
+      }
     }
 
     return this.listening
   }
 
-  onKeyEvent = ({ key, shiftKey, ctrlKey }: KeyboardEvent) => {
-    let direction: KeyControlEvent["direction"] | undefined
-    switch (key.toLowerCase()) {
-      case "a":
-      case "arrowleft":
-        direction = "left"
-        break
-      case "s":
-      case "arrowdown":
-        direction = "backward"
-        break
-      case "w":
-      case "arrowup":
-        direction = "forward"
-        break
-      case "d":
-      case "arrowright":
-        direction = "right"
-        break
-      case " ":
-        direction = "up"
-        break
-      case "escape":
-        if (this.listening) {
-          this.toggleKeyListener()
-        }
-        break
-      default:
-        if (ctrlKey) {
-          direction = "down"
-        }
+  private readonly onKeyUpEvent = ({ keyCode }: KeyboardEvent) => {
+    this.keysPressed = this.keysPressed.filter(code => keyCode !== code)
+  }
+
+  private readonly onKeyDownEvent = ({ keyCode }: KeyboardEvent) => {
+    // Kill listeners on escape key
+    if (keyCode === 27 && this.listening) {
+      this.toggleKeyListener()
     }
-    if (direction) {
+
+    this.lastKeyPress = performance.now()
+
+    if (!this.keysPressed.includes(keyCode)) {
+      this.keysPressed.push(keyCode)
+    }
+  }
+
+  private readonly resetKeyCodes = () => {
+    this.keysPressed = []
+  }
+
+  private readonly sendDispatch = () => {
+    // The last key press was detected 2000ms ago, shut off dispatch
+    if (performance.now() - this.lastKeyPress > 2000) {
+      this.keysPressed = []
+      return
+    }
+
+    if (this.keysPressed.length) {
+      const directions: KeyControlEvent["directions"] = []
+      let speed = false
+      this.keysPressed.forEach(keyCode => {
+        switch (keyCode) {
+          case 17: // Control
+            directions.push("down")
+            break
+          case 37: // Left arrow
+          case 65: // A
+            directions.push("left")
+            break
+          case 38: // Up arrow
+          case 87: // W
+            directions.push("forward")
+            break
+          case 39: // Right arrow
+          case 68: // D
+            directions.push("right")
+            break
+          case 40: // Down arrow
+          case 83: // S
+            directions.push("backward")
+            break
+          case 32: // Space
+            directions.push("up")
+            break
+          case 16: // Shift
+            speed = true
+            break
+        }
+      })
       dispatchKeyControlEvent({
-        direction,
-        speed: shiftKey,
+        directions,
+        speed,
       })
     }
   }

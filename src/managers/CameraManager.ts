@@ -1,4 +1,4 @@
-import { Camera, OrthographicCamera, PerspectiveCamera } from "three"
+import { Camera, OrthographicCamera, PerspectiveCamera, Vector3 } from "three"
 
 import {
   ABOVE_FIELD_CAMERA,
@@ -15,6 +15,12 @@ import {
   removeCanvasResizeListener,
 } from "../eventbus/events/canvasResize"
 import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
+import {
+  addKeyControlListener,
+  applyDirections,
+  KeyControlEvent,
+  removeKeyControlListener,
+} from "../eventbus/events/keyControl"
 import { isOrthographicCamera } from "../operators/isOrthographicCamera"
 import SceneManager from "./SceneManager"
 
@@ -24,6 +30,7 @@ class CameraManager {
   private readonly defaultCamera: Camera
   private width: number
   private height: number
+  private ballCam: boolean
 
   private constructor() {
     this.activeCamera = SceneManager.getInstance().field.getCamera(
@@ -32,12 +39,19 @@ class CameraManager {
     this.defaultCamera = this.activeCamera
     this.width = 640
     this.height = 480
+    this.ballCam = true
 
     this.activeCamera.position.z = 5000
     this.activeCamera.position.y = 750
 
     addFrameListener(this.update)
     addCanvasResizeListener(this.updateSize)
+    addKeyControlListener(this.onKeyControl)
+  }
+
+  toggleBallCam() {
+    this.ballCam = !this.ballCam
+    this.update()
   }
 
   private readonly updateSize = ({ width, height }: CanvasResizeEvent) => {
@@ -50,7 +64,7 @@ class CameraManager {
     const { position } = SceneManager.getInstance().ball.ball
     dispatchCameraFrameUpdate({
       ballPosition: position,
-      ballCam: true,
+      ballCam: this.ballCam,
       isUsingBoost: false,
     })
 
@@ -112,6 +126,37 @@ class CameraManager {
 
     // Dispatch to all manager listeners
     dispatchCameraChange({ camera: this.activeCamera })
+  }
+
+  private readonly onKeyControl = ({ directions, speed }: KeyControlEvent) => {
+    if (this.activeCamera.name === FREE_CAMERA) {
+      const cameraDirection = new Vector3()
+      this.activeCamera.getWorldDirection(cameraDirection)
+      const multiplier = speed ? 75 : 15
+      const newDirection = applyDirections(
+        cameraDirection,
+        directions,
+        multiplier
+      )
+      const newPosition = new Vector3()
+      newPosition.copy(this.activeCamera.position)
+      newPosition.add(newDirection)
+
+      // Don't allow phasing inside of the ball
+      const { position: ballPosition } = SceneManager.getInstance().ball.ball
+      if (ballPosition.distanceTo(newPosition) < 200) {
+        return
+      }
+      // Don't allow cameras under the field
+      if (newPosition.y < 10) {
+        newPosition.setY(10)
+      }
+
+      // If all checks pass, set the new position
+      this.activeCamera.position.copy(newPosition)
+      this.update()
+      dispatchCameraChange({ camera: this.activeCamera })
+    }
   }
 
   private updateCameraSize() {
@@ -178,6 +223,7 @@ class CameraManager {
     if (instance) {
       removeFrameListener(instance.update)
       removeCanvasResizeListener(instance.updateSize)
+      removeKeyControlListener(instance.onKeyControl)
       CameraManager.instance = undefined
     }
   }
