@@ -1,13 +1,13 @@
 import Button from "@material-ui/core/Button"
 import Typography from "@material-ui/core/Typography"
-import FullscreenIcon from "@material-ui/icons/Fullscreen"
-import FullscreenExitIcon from "@material-ui/icons/FullscreenExit"
 import React, { createRef, PureComponent, RefObject } from "react"
 import FullScreen from "react-full-screen"
 import styled from "styled-components"
 
 import { dispatchCanvasResizeEvent } from "../../eventbus/events/canvasResize"
 import { GameManager } from "../../managers/GameManager"
+import FullscreenExitIcon from "./icons/FullscreenExitIcon"
+import FullscreenIcon from "./icons/FullscreenIcon"
 import Scoreboard from "./ScoreBoard"
 
 interface Props {
