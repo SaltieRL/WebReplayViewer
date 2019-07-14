@@ -38,7 +38,6 @@
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "peerDependencies": {
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.30",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -57,9 +56,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.30",
-    "@material-ui/styles": "^3.0.0-alpha.10",
     "@types/lodash.debounce": "^4.0.6",
     "@types/node": "^12.0.0",
     "@types/react": "^16.8.13",
