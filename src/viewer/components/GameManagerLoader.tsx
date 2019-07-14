@@ -1,8 +1,8 @@
 import CircularProgress from "@material-ui/core/CircularProgress"
-import Typography from "@material-ui/core/Typography"
-import { styled } from "@material-ui/styles"
+import Typography, { TypographyProps } from "@material-ui/core/Typography"
 import React, { Component } from "react"
-import { LoadingManager } from "three"
+import styled from "styled-components"
+import { LoadingManager } from "three/src/loaders/LoadingManager"
 
 import { GameBuilderOptions } from "../../builders/GameBuilder"
 import { GameManager } from "../../managers/GameManager"
@@ -69,13 +69,13 @@ class GameManagerLoader extends Component<Props, State> {
   }
 }
 
-const LoadingContainer = styled("div")({
-  width: "100%",
-  position: "relative",
-  textAlign: "center",
-})
-const Type = styled(Typography)({
-  paddingTop: 16,
-})
+const LoadingContainer = styled.div`
+  width: 100%;
+  position: relative;
+  text-align: center;
+`
+const Type = styled(Typography)`
+  padding-top: 16px;
+` as React.ComponentType<TypographyProps>
 
 export default GameManagerLoader

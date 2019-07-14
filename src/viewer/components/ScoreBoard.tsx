@@ -1,6 +1,6 @@
-import { styled } from "@material-ui/styles"
 import debounce from "lodash.debounce"
 import React, { PureComponent } from "react"
+import styled from "styled-components"
 
 import {
   addFrameListener,
@@ -102,48 +102,43 @@ export default class Scoreboard extends PureComponent<Props, State> {
   }
 }
 
-const ScoreContainer = styled("div")({
-  display: "flex",
-  alignItems: "stretch",
-  top: 0,
-  position: "absolute",
-  zIndex: 10,
-  left: "50%",
-  textAlign: "center",
-  transform: "translateX(-50%)",
-  width: 400,
-  borderStyle: "solid",
-  borderWidth: 3,
-  borderColor: "#fffa",
-  borderBottomRightRadius: 10,
-  borderBottomLeftRadius: 10,
-})
-
-const OrangeScoreCard = styled("div")({
-  backgroundColor: "#e27740aa",
-  borderBottomRightRadius: 5,
-  flex: 1,
-})
-
-const BlueScoreCard = styled("div")({
-  backgroundColor: "#4874efaa",
-  borderBottomLeftRadius: 5,
-  flex: 1,
-})
-
-const Score = styled("div")({
-  color: "#fff",
-  fontFamily: "monospace",
-  fontSize: "xx-large",
-})
-
-const GameTimeCard = styled("div")({
-  backgroundColor: "#000a",
-})
-
-const GameTime = styled("div")({
-  color: "#fff",
-  fontFamily: "monospace",
-  fontSize: "xx-large",
-  width: 100,
-})
+const ScoreContainer = styled.div`
+  display: flex;
+  align-items: stretch;
+  top: 0;
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  text-align: center;
+  transform: translateX(-50%);
+  width: 400px;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #fffa;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+`
+const OrangeScoreCard = styled.div`
+  background-color: #e27740aa;
+  border-bottom-right-radius: 5px;
+  flex: 1;
+`
+const BlueScoreCard = styled.div`
+  background-color: #4874efaa;
+  border-bottom-left-radius: 5px;
+  flex: 1;
+`
+const Score = styled.div`
+  color: #fff;
+  font-family: monospace;
+  font-size: xx-large;
+`
+const GameTimeCard = styled.div`
+  background-color: #000a;
+`
+const GameTime = styled.div`
+  color: #fff;
+  font-family: monospace;
+  font-size: xx-large;
+  width: 100px;
+`

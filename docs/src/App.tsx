@@ -29,7 +29,7 @@ class App extends Component<any, State> {
     return (
       <div style={{ maxWidth: 900, width: "100%", margin: "0 auto" }}>
         <div>
-          <h2>Welcome to React</h2>
+          <h2>Welcome to Replay Viewer</h2>
         </div>
         <Tabs value={tab} onChange={this.handleChange}>
           <Tab label="Viewer" value="viewer" />

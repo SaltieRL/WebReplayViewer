@@ -1,6 +1,7 @@
 const path = require("path"),
   webpack = require("webpack"),
-  HtmlWebpackPlugin = require("html-webpack-plugin")
+  HtmlWebpackPlugin = require("html-webpack-plugin"),
+  AutoDllPlugin = require("autodll-webpack-plugin")
 
 module.exports = {
   entry: {
@@ -8,12 +9,17 @@ module.exports = {
     vendor: ["react", "react-dom"],
   },
   output: {
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    filename: "js/[name].bundle.js",
+    publicPath: "/",
   },
-  devtool: "source-map",
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
+  },
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    splitChunks: false,
   },
   module: {
     rules: [
@@ -37,5 +43,12 @@ module.exports = {
       template: path.resolve(__dirname, "src/index.html"),
     }),
     new webpack.HotModuleReplacementPlugin(),
+    new AutoDllPlugin({
+      inject: true, // will inject the DLL bundle to index.html
+      filename: "[name].dll.js",
+      entry: {
+        vendor: ["react", "react-dom"],
+      },
+    }),
   ],
 }
