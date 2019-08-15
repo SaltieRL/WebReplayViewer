@@ -111,6 +111,13 @@ export default class FPSClock {
     return delta / 1000
   }
 
+  /**
+   * Returns the elapsed time in milliseconds.
+   */
+  public getElapsedTime() {
+    return this.frameToDuration[this.currentFrame]
+  }
+
   private update() {
     if (!this.paused) {
       this.getElapsedFrames()
@@ -139,7 +146,10 @@ export default class FPSClock {
   }
 
   private doCallbacks() {
-    dispatchFrameEvent({ frame: this.currentFrame })
+    dispatchFrameEvent({
+      frame: this.currentFrame,
+      elapsedTime: this.getElapsedTime(),
+    })
   }
 
   /**

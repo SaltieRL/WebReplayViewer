@@ -6,6 +6,7 @@ import EventBus from "../EventBus"
  */
 export interface FrameEvent {
   frame: number
+  elapsedTime: number
 }
 
 export const {
