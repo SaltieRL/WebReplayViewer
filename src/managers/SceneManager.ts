@@ -1,6 +1,10 @@
 import { Scene } from "three"
 
-import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
+import {
+  addFrameListener,
+  FrameEvent,
+  removeFrameListener,
+} from "../eventbus/events/frame"
 import BallManager from "./models/BallManager"
 import FieldManager from "./models/FieldManager"
 import PlayerManager from "./models/PlayerManager"
@@ -27,7 +31,7 @@ export default class SceneManager {
     addFrameListener(this.update)
   }
 
-  private readonly update = () => {
+  private readonly update = ({ delta }: FrameEvent) => {
     for (const player of this.players) {
       if (player.carGroup.position.y < 0) {
         player.carGroup.visible = false
