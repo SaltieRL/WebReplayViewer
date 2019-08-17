@@ -52,9 +52,7 @@ export class GameManager {
     paused ? this.clock.pause() : this.clock.play()
   }
 
-  animate({  }: FrameEvent) {
-    const delta = this.clock.getDelta()
-
+  animate({ delta }: FrameEvent) {
     if (delta) {
       AnimationManager.getInstance().updateAnimationClips(delta)
       this.render()

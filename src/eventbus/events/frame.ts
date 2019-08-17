@@ -5,6 +5,7 @@ import EventBus from "../EventBus"
  * Fires each time the global game clock advances a frame or updates its current frame.
  */
 export interface FrameEvent {
+  delta: number
   frame: number
   elapsedTime: number
 }
