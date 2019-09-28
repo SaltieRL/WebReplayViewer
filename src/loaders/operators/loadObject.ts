@@ -1,5 +1,6 @@
 import { LoadingManager } from "three"
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 
 export const loadObject = (path: string, loadingManager?: LoadingManager) => {
   return new Promise(
@@ -8,6 +9,9 @@ export const loadObject = (path: string, loadingManager?: LoadingManager) => {
       reject: (err: Error | ErrorEvent) => void
     ) => {
       const gltfLoader = new GLTFLoader(loadingManager)
+      const dracoLoader = new DRACOLoader()
+      dracoLoader.setDecoderPath('/draco/')
+      gltfLoader.setDRACOLoader(dracoLoader)
       gltfLoader.load(
         path,
         (gltf: GLTF) => {
