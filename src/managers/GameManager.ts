@@ -41,7 +41,10 @@ export class GameManager {
     this.render = this.render.bind(this)
     this.clock = clock
 
+    // Spawns the animation clips
     AnimationManager.getInstance().playAnimationClips()
+    // Forces every animation to "take position"
+    AnimationManager.getInstance().updateAnimationClips(0)
     addPlayPauseListener(this.onPlayPause)
     addFrameListener(this.animate)
     addCanvasResizeListener(this.updateSize)
