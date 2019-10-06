@@ -77,6 +77,7 @@ class ReplayViewer extends PureComponent<Props, State> {
               </Typography>
             </Button>
           </FullscreenToggle>
+          {this.props.children}
         </FullscreenWrapper>
       </ViewerContainer>
     )
