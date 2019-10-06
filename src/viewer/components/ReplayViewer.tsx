@@ -12,6 +12,7 @@ import Scoreboard from "./ScoreBoard"
 
 interface Props {
   gameManager: GameManager
+  autoplay?: boolean
 }
 
 interface State {
@@ -34,10 +35,15 @@ class ReplayViewer extends PureComponent<Props, State> {
     if (!current) {
       throw new Error("Did not mount replay viewer correctly")
     }
-    const { gameManager } = this.props
+    const { gameManager, autoplay } = this.props
+    // Mount and resize canvas
     current.appendChild(gameManager.getDOMNode())
     this.handleResize()
-    gameManager.clock.play()
+
+    // Only start when explicitly asked
+    if (autoplay) {
+      gameManager.clock.play()
+    }
 
     addEventListener("resize", this.handleResize)
   }
