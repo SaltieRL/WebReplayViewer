@@ -5,6 +5,7 @@ import FullScreen from "react-full-screen"
 import styled from "styled-components"
 
 import { dispatchCanvasResizeEvent } from "../../eventbus/events/canvasResize"
+import { dispatchPlayPauseEvent } from "../../eventbus/events/playPause"
 import { GameManager } from "../../managers/GameManager"
 import FullscreenExitIcon from "./icons/FullscreenExitIcon"
 import FullscreenIcon from "./icons/FullscreenIcon"
@@ -40,10 +41,8 @@ class ReplayViewer extends PureComponent<Props, State> {
     current.appendChild(gameManager.getDOMNode())
     this.handleResize()
 
-    // Only start when explicitly asked
-    if (autoplay) {
-      gameManager.clock.play()
-    }
+    // Set the play/pause status to match autoplay property
+    dispatchPlayPauseEvent({ paused: !autoplay })
 
     addEventListener("resize", this.handleResize)
   }
