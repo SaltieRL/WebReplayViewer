@@ -1,4 +1,4 @@
-import MUISlider from "@material-ui/lab/Slider"
+import MUISlider, { SliderProps } from "@material-ui/lab/Slider"
 import debounce from "lodash.debounce"
 import React, { Component } from "react"
 
@@ -10,7 +10,7 @@ import {
 import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"
 
-interface Props {}
+interface Props extends Partial<SliderProps> {}
 
 interface State {
   frame: number
@@ -72,6 +72,7 @@ class Slider extends Component<Props, State> {
           }}
         >
           <MUISlider
+            {...this.props}
             value={frame}
             aria-labelledby="label"
             onChange={this.handleChange}
