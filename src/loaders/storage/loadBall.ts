@@ -9,7 +9,7 @@ export const loadBall = (loadingManager?: LoadingManager) =>
   storageMemoize(async () => {
     const { default: glb } = await import(
       // @ts-ignore
-      /* webpackChunkName: "Ball" */ "../../assets/models/Ball.glb"
+      /* webpackChunkName: "Ball" */ "../../assets/models/draco/Ball.glb"
     )
     const ballGLTF = await loadObject(glb, loadingManager)
     const ball = getChildByName(ballGLTF, "Ball")
