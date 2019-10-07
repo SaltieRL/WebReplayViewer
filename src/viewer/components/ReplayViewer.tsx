@@ -5,6 +5,7 @@ import FullScreen from "react-full-screen"
 import styled from "styled-components"
 
 import { dispatchCanvasResizeEvent } from "../../eventbus/events/canvasResize"
+import { dispatchPlayPauseEvent } from "../../eventbus/events/playPause"
 import { GameManager } from "../../managers/GameManager"
 import FullscreenExitIcon from "./icons/FullscreenExitIcon"
 import FullscreenIcon from "./icons/FullscreenIcon"
@@ -12,6 +13,7 @@ import Scoreboard from "./ScoreBoard"
 
 interface Props {
   gameManager: GameManager
+  autoplay?: boolean
 }
 
 interface State {
@@ -34,10 +36,13 @@ class ReplayViewer extends PureComponent<Props, State> {
     if (!current) {
       throw new Error("Did not mount replay viewer correctly")
     }
-    const { gameManager } = this.props
+    const { gameManager, autoplay } = this.props
+    // Mount and resize canvas
     current.appendChild(gameManager.getDOMNode())
     this.handleResize()
-    gameManager.clock.play()
+
+    // Set the play/pause status to match autoplay property
+    dispatchPlayPauseEvent({ paused: !autoplay })
 
     addEventListener("resize", this.handleResize)
   }
@@ -77,6 +82,7 @@ class ReplayViewer extends PureComponent<Props, State> {
               </Typography>
             </Button>
           </FullscreenToggle>
+          {this.props.children}
         </FullscreenWrapper>
       </ViewerContainer>
     )

@@ -44,7 +44,7 @@ class Viewer extends Component<Props, State> {
         spacing={24}
       >
         <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
-          <ReplayViewer gameManager={gameManager} />
+          <ReplayViewer gameManager={gameManager} autoplay />
         </Grid>
         <Grid item>
           <Grid
