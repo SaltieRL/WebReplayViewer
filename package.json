@@ -47,6 +47,7 @@
     "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
     "react-full-screen": "^0.2.4",
+    "rl-loadout-lib": "^0.1.1",
     "styled-components": "^4.3.2"
   },
   "devDependencies": {
