@@ -22,7 +22,16 @@ interface CameraSettings {
 }
 
 interface Loadout {
-  car: string
+  antenna: number
+  banner: number
+  boost: number
+  car: number
+  engineAudio: number
+  goalExplosion: number
+  skin: number
+  topper: number
+  trail: number
+  wheels: number
 }
 
-export { ReplayPlayer }
+export { ReplayPlayer, Loadout }

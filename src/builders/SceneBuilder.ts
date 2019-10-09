@@ -6,10 +6,12 @@ import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
 import { buildCarGroup } from "./player/buildCarGroup"
 import { addLighting } from "./scene/addLighting"
+import { Loadout } from "../models/ReplayPlayer";
 
 interface Player {
   name: string
   isOrangeTeam: boolean
+  loadout: Loadout
 }
 
 /**
