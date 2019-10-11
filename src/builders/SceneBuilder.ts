@@ -4,15 +4,13 @@ import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
 import SceneManager from "../managers/SceneManager"
 import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
-import { buildCarGroup } from "./player/buildCarGroup"
 import { addLighting } from "./scene/addLighting"
-import { Loadout } from "../models/ReplayPlayer";
-
-interface Player {
-  name: string
-  isOrangeTeam: boolean
-  loadout: Loadout
-}
+import { ExtendedPlayer } from '../models/ReplayMetadata';
+import { loadRlLoadout } from '../loaders/storage/loadRlLoadout';
+import { RocketAssetManager, RocketConfig } from 'rl-loadout-lib';
+import { buildRocketLoadoutGroup } from './player/buildRocketLoadoutScene';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 /**
  * @description The sole purpose of this function is to initialize and tie together all of the
@@ -21,7 +19,7 @@ interface Player {
  * required game assets.
  */
 const defaultSceneBuilder = async (
-  playerInfo: Player[],
+  playerInfo: ExtendedPlayer[],
   loadingManager?: LoadingManager
 ): Promise<SceneManager> => {
   const scene = new Scene()
@@ -31,11 +29,19 @@ const defaultSceneBuilder = async (
   }
   await GameFieldAssets.load()
 
+  const gltfLoader = new GLTFLoader()
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('/draco/')
+  gltfLoader.setDRACOLoader(dracoLoader)
+
+  const config = new RocketConfig(gltfLoader)
+  const manager = new RocketAssetManager(config)
+  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player))
+  const bodies = await Promise.all(bodyPromises)
+
   addLighting(scene)
   const field = buildPlayfield(scene)
-  const players = playerInfo.map(({ name, isOrangeTeam }) =>
-    buildCarGroup(scene, { playerName: name, isOrangeTeam })
-  )
+  const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
   const ball = buildBall(scene)
 
   return SceneManager.init({

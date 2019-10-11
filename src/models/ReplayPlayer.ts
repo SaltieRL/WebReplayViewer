@@ -32,6 +32,17 @@ interface Loadout {
   topper: number
   trail: number
   wheels: number
+  primaryColor: number
+  accentColor: number
+  bannerPaint: number
+  boostPaint: number
+  carPaint: number
+  goalExplosionPaint: number
+  skinPaint: number
+  trailPaint: number
+  wheelsPaint: number
+  topperPaint: number
+  antennaPaint: number
 }
 
 export { ReplayPlayer, Loadout }

@@ -22,11 +22,7 @@ const defaultGameBuilder = async ({
   replayMetadata,
   loadingManager,
 }: GameBuilderOptions) => {
-  const players = replayMetadata.players.map(player => ({
-    isOrangeTeam: player.isOrange,
-    loadout: player.loadout,
-    name
-  }))
+  const players = replayMetadata.players
   const sceneManager = await defaultSceneBuilder(players, loadingManager)
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
