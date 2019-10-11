@@ -1,4 +1,4 @@
-import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel } from 'rl-loadout-lib';
+import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel, Body, Wheel } from 'rl-loadout-lib';
 import { ExtendedPlayer } from '../../models/ReplayMetadata';
 
 export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer):
@@ -14,8 +14,8 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
     player.loadout.antennaPaint
   )
 
-  const bodyTask = manager.loadBody(player.loadout.car, paintConfig, 23)
-  const wheelTask = manager.loadWheel(player.loadout.wheels, paintConfig, 376)
+  const bodyTask = manager.loadBody(player.loadout.car, paintConfig, Body.DEFAULT)
+  const wheelTask = manager.loadWheel(player.loadout.wheels, paintConfig, Wheel.DEFAULT)
 
   const body: BodyModel = await bodyTask
   const wheels: WheelsModel = await wheelTask
