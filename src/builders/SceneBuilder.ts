@@ -34,7 +34,7 @@ const defaultSceneBuilder = async (
   dracoLoader.setDecoderPath('/draco/')
   gltfLoader.setDRACOLoader(dracoLoader)
 
-  const config = new RocketConfig(gltfLoader)
+  const config = new RocketConfig(gltfLoader, loadingManager)
   const manager = new RocketAssetManager(config)
   const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player))
   const bodies = await Promise.all(bodyPromises)
