@@ -1,10 +1,10 @@
-import Button from "@material-ui/core/Button"
+import Button, { ButtonProps } from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import Typography from "@material-ui/core/Typography"
-import { styled } from "@material-ui/styles"
 import React, { PureComponent } from "react"
+import styled from "styled-components"
 
 import CameraManager, {
   CameraLocationOptions,
@@ -121,8 +121,10 @@ class FieldCameraControls extends PureComponent<Props, State> {
   }
 }
 
-const FieldButton = styled(Button)({
-  margin: 6,
-})
+const FieldButton = styled(Button)`
+  && {
+    margin: 6px;
+  }
+` as React.ComponentType<ButtonProps>
 
 export default FieldCameraControls

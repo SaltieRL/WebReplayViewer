@@ -42,7 +42,10 @@ export class GameManager {
     this.render = this.render.bind(this)
     this.clock = clock
 
+    // Spawns the animation clips
     AnimationManager.getInstance().playAnimationClips()
+    // Forces every animation to "take position"
+    AnimationManager.getInstance().updateAnimationClips(0)
     addPlayPauseListener(this.onPlayPause)
     addFrameListener(this.animate)
     addCanvasResizeListener(this.updateSize)
@@ -53,9 +56,7 @@ export class GameManager {
     paused ? this.clock.pause() : this.clock.play()
   }
 
-  animate({  }: FrameEvent) {
-    const delta = this.clock.getDelta()
-
+  animate({ delta }: FrameEvent) {
     if (delta) {
       AnimationManager.getInstance().updateAnimationClips(delta)
       this.render()

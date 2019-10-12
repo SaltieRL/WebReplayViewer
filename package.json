@@ -1,6 +1,6 @@
 {
   "name": "replay-viewer",
-  "version": "0.4.1",
+  "version": "0.5.2",
   "description": "Rocket League replay viewer React component and tooling",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -38,9 +38,7 @@
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "peerDependencies": {
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.30",
-    "@material-ui/styles": "^3.0.0-alpha.10",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "three": "^0.104.0"
@@ -48,7 +46,8 @@
   "dependencies": {
     "lodash.debounce": "^4.0.8",
     "moment": "^2.24.0",
-    "react-full-screen": "^0.2.4"
+    "react-full-screen": "^0.2.4",
+    "styled-components": "^4.3.2"
   },
   "devDependencies": {
     "@babel/core": "^7.4.5",
@@ -57,13 +56,11 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.3.3",
     "@material-ui/core": "^3.9.3",
-    "@material-ui/icons": "^3.0.1",
     "@material-ui/lab": "^3.0.0-alpha.30",
-    "@material-ui/styles": "^3.0.0-alpha.10",
     "@types/lodash.debounce": "^4.0.6",
     "@types/node": "^12.0.0",
     "@types/react": "^16.8.13",
-    "@types/three": "^0.103.2",
+    "@types/styled-components": "^4.1.18",
     "babel-loader": "^8.0.6",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
     "file-loader": "^3.0.1",
@@ -72,7 +69,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "rimraf": "^2.6.3",
-    "three": "^0.104.0",
+    "three": "^0.108.0",
     "tslint": "^5.16.0",
     "tslint-react": "^4.0.0",
     "typescript": "^3.4.3",

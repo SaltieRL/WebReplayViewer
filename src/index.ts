@@ -10,6 +10,9 @@ export { default as ReplayViewer } from "./viewer/components/ReplayViewer"
 export {
   default as GameManagerLoader,
 } from "./viewer/components/GameManagerLoader"
+export {
+  default as CompactPlayControls,
+} from "./viewer/components/CompactPlayControls"
 export { default as PlayControls } from "./viewer/components/PlayControls"
 export {
   default as PlayerCameraControls,

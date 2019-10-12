@@ -1,7 +1,7 @@
-import Button from "@material-ui/core/Button"
+import Button, { ButtonProps } from "@material-ui/core/Button"
 import Grid from "@material-ui/core/Grid"
-import { styled } from "@material-ui/styles"
 import React, { PureComponent } from "react"
+import styled from "styled-components"
 
 import CameraManager, {
   CameraLocationOptions,
@@ -56,8 +56,10 @@ class PlayerCameraControls extends PureComponent<Props> {
   }
 }
 
-const PlayerButton = styled(Button)({
-  margin: 6,
-})
+const PlayerButton = styled(Button)`
+  && {
+    margin: 6px;
+  }
+` as React.ComponentType<ButtonProps>
 
 export default PlayerCameraControls

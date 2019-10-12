@@ -79,6 +79,13 @@ export default class FPSClock {
   }
 
   /**
+   * Returns the elapsed time in milliseconds.
+   */
+  public getElapsedTime() {
+    return this.frameToDuration[this.currentFrame]
+  }
+
+  /**
    * Returns the number of seconds elapsed since the last time getDelta was called. This function
    * uses a combination of the performance.now() functionality when animations are rolling,
    * combined with a small queue of delta modifications made by the setFrame function. This will
@@ -87,7 +94,7 @@ export default class FPSClock {
    *
    * @returns {number} seconds
    */
-  public getDelta(): number {
+  private getDelta(): number {
     const now = performance.now()
     // Initialize empty delta
     if (!this.lastDelta) {
@@ -139,7 +146,11 @@ export default class FPSClock {
   }
 
   private doCallbacks() {
-    dispatchFrameEvent({ frame: this.currentFrame })
+    dispatchFrameEvent({
+      delta: this.getDelta(),
+      frame: this.currentFrame,
+      elapsedTime: this.getElapsedTime(),
+    })
   }
 
   /**
