@@ -84,11 +84,11 @@ class KeyManager {
 
     if (this.keysPressed.length) {
       const directions: KeyControlEvent["directions"] = []
-      let speed = false
+      let speed = true
       this.keysPressed.forEach(keyCode => {
         switch (keyCode) {
-          case 17: // Control
-            directions.push("down")
+          case 70: // F
+            speed = false
             break
           case 37: // Left arrow
           case 65: // A
@@ -110,7 +110,8 @@ class KeyManager {
             directions.push("up")
             break
           case 16: // Shift
-            speed = true
+            // speed = true
+            directions.push("down")
             break
         }
       })
