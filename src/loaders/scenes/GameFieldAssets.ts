@@ -1,16 +1,11 @@
 import { Group, LoadingManager, Object3D } from "three"
 
 import { loadBall } from "../storage/loadBall"
-import { loadBlueCar, loadOrangeCar, loadWheel } from "../storage/loadCar"
 import { loadField } from "../storage/loadField"
 
 interface AvailableAssets {
   ball: Object3D
   field: Group
-
-  orangeCar: Group
-  blueCar: Group
-  wheel: Object3D
 }
 
 class GameFieldAssets {
@@ -25,17 +20,11 @@ class GameFieldAssets {
     const lm = this.loadingManager
     return Promise.all([
       loadBall(lm),
-      loadField(lm),
-      loadOrangeCar(lm),
-      loadBlueCar(lm),
-      loadWheel(lm),
-    ]).then(([ball, field, orangeCar, blueCar, wheel]) => {
+      loadField(lm)
+    ]).then(([ball, field]) => {
       this.assets = {
         ball,
-        field,
-        orangeCar,
-        blueCar,
-        wheel,
+        field
       }
     })
   }
