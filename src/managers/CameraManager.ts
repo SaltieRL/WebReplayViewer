@@ -1,8 +1,9 @@
-import { Camera, OrthographicCamera, PerspectiveCamera } from "three"
+import { Camera, OrthographicCamera, PerspectiveCamera, Vector3 } from "three"
 
 import {
   ABOVE_FIELD_CAMERA,
   BLUE_GOAL_CAMERA,
+  FREE_CAMERA,
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC,
 } from "../constants/gameObjectNames"
@@ -14,13 +15,14 @@ import {
   removeCanvasResizeListener,
 } from "../eventbus/events/canvasResize"
 import { addFrameListener, removeFrameListener } from "../eventbus/events/frame"
+import {
+  addKeyControlListener,
+  applyDirections,
+  KeyControlEvent,
+  removeKeyControlListener,
+} from "../eventbus/events/keyControl"
+import { isOrthographicCamera } from "../operators/isOrthographicCamera"
 import SceneManager from "./SceneManager"
-
-const ORTHOGRAPHIC_CAMERA_NAMES: string[] = Object.keys(ORTHOGRAPHIC).map(
-  (key: string) => {
-    return (ORTHOGRAPHIC as any)[key] as string
-  }
-)
 
 class CameraManager {
   activeCamera: Camera
@@ -28,20 +30,28 @@ class CameraManager {
   private readonly defaultCamera: Camera
   private width: number
   private height: number
+  private ballCam: boolean
 
   private constructor() {
     this.activeCamera = SceneManager.getInstance().field.getCamera(
       ORANGE_GOAL_CAMERA
-    ) as any
+    )!
     this.defaultCamera = this.activeCamera
     this.width = 640
     this.height = 480
+    this.ballCam = true
 
     this.activeCamera.position.z = 5000
     this.activeCamera.position.y = 750
 
     addFrameListener(this.update)
     addCanvasResizeListener(this.updateSize)
+    addKeyControlListener(this.onKeyControl)
+  }
+
+  toggleBallCam() {
+    this.ballCam = !this.ballCam
+    this.update()
   }
 
   private readonly updateSize = ({ width, height }: CanvasResizeEvent) => {
@@ -54,11 +64,11 @@ class CameraManager {
     const { position } = SceneManager.getInstance().ball.ball
     dispatchCameraFrameUpdate({
       ballPosition: position,
-      ballCam: true,
+      ballCam: this.ballCam,
       isUsingBoost: false,
     })
 
-    if (!ORTHOGRAPHIC_CAMERA_NAMES.includes(this.activeCamera.name)) {
+    if (!isOrthographicCamera(this.activeCamera)) {
       this.activeCamera.lookAt(position)
     }
   }
@@ -73,30 +83,41 @@ class CameraManager {
     } else if (fieldLocation) {
       switch (fieldLocation) {
         case "orange":
-          this.setActiveCamera(field.getCamera(ORANGE_GOAL_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(ORANGE_GOAL_CAMERA))
           break
         case "blue":
-          this.setActiveCamera(field.getCamera(BLUE_GOAL_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(BLUE_GOAL_CAMERA))
           break
         case "center":
-          this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA) as any)
+          this.setActiveCamera(field.getCamera(ABOVE_FIELD_CAMERA))
+          break
+        case "freecam":
+          const freecam = field.getCamera(FREE_CAMERA) as PerspectiveCamera
+          if (!isOrthographicCamera(this.activeCamera)) {
+            if (freecam.parent) {
+              freecam.parent.updateMatrixWorld()
+            }
+            freecam.position.setFromMatrixPosition(
+              this.activeCamera.matrixWorld
+            )
+            freecam.rotation.fromArray(this.activeCamera.rotation.toArray())
+          }
+          this.setActiveCamera(freecam)
           break
         case "orthographic-above-field":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ABOVE_FIELD) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ABOVE_FIELD))
           break
         case "orthographic-orange-left":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_LEFT))
           break
         case "orthographic-orange-right":
-          this.setActiveCamera(field.getCamera(
-            ORTHOGRAPHIC.ORANGE_RIGHT
-          ) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.ORANGE_RIGHT))
           break
         case "orthographic-blue-left":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_LEFT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_LEFT))
           break
         case "orthographic-blue-right":
-          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_RIGHT) as any)
+          this.setActiveCamera(field.getCamera(ORTHOGRAPHIC.BLUE_RIGHT))
           break
         default:
           this.setActiveCamera(this.defaultCamera)
@@ -105,6 +126,37 @@ class CameraManager {
 
     // Dispatch to all manager listeners
     dispatchCameraChange({ camera: this.activeCamera })
+  }
+
+  private readonly onKeyControl = ({ directions, speed }: KeyControlEvent) => {
+    if (this.activeCamera.name === FREE_CAMERA) {
+      const cameraDirection = new Vector3()
+      this.activeCamera.getWorldDirection(cameraDirection)
+      const multiplier = speed ? 75 : 15
+      const newDirection = applyDirections(
+        cameraDirection,
+        directions,
+        multiplier
+      )
+      const newPosition = new Vector3()
+      newPosition.copy(this.activeCamera.position)
+      newPosition.add(newDirection)
+
+      // Don't allow phasing inside of the ball
+      const { position: ballPosition } = SceneManager.getInstance().ball.ball
+      if (ballPosition.distanceTo(newPosition) < 200) {
+        return
+      }
+      // Don't allow cameras under the field
+      if (newPosition.y < 10) {
+        newPosition.setY(10)
+      }
+
+      // If all checks pass, set the new position
+      this.activeCamera.position.copy(newPosition)
+      this.update()
+      dispatchCameraChange({ camera: this.activeCamera })
+    }
   }
 
   private updateCameraSize() {
@@ -141,7 +193,10 @@ class CameraManager {
     }
   }
 
-  private setActiveCamera(camera: Camera) {
+  private setActiveCamera(camera?: Camera) {
+    if (!camera) {
+      return
+    }
     this.activeCamera = camera
     this.updateCameraSize()
     this.update()
@@ -168,6 +223,7 @@ class CameraManager {
     if (instance) {
       removeFrameListener(instance.update)
       removeCanvasResizeListener(instance.updateSize)
+      removeKeyControlListener(instance.onKeyControl)
       CameraManager.instance = undefined
     }
   }
@@ -179,6 +235,7 @@ export interface CameraLocationOptions {
     | "orange"
     | "blue"
     | "center"
+    | "freecam"
     | "orthographic-blue-right"
     | "orthographic-blue-left"
     | "orthographic-orange-right"

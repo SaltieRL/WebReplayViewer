@@ -4,6 +4,7 @@ import { DEFAULT_CAMERA_OPTIONS } from "../../constants/defaultCameraOptions"
 import {
   ABOVE_FIELD_CAMERA,
   BLUE_GOAL_CAMERA,
+  FREE_CAMERA,
   ORANGE_GOAL_CAMERA,
   ORTHOGRAPHIC,
 } from "../../constants/gameObjectNames"
@@ -23,6 +24,11 @@ export const addCameras = (scene: Scene) => {
   aboveFieldCamera.name = ABOVE_FIELD_CAMERA
   aboveFieldCamera.position.set(0, 2000, 0)
   scene.add(aboveFieldCamera)
+
+  const freeCamera = new PerspectiveCamera(...DEFAULT_CAMERA_OPTIONS)
+  freeCamera.name = FREE_CAMERA
+  freeCamera.position.set(0, 1000, 0)
+  scene.add(freeCamera)
 
   const generateOrthographicCamera = () => {
     const camera = new OrthographicCamera(-320, 320, 240, -240, 0.1, 20000)
@@ -68,6 +74,7 @@ export const addCameras = (scene: Scene) => {
     blueGoalCamera,
     orangeGoalCamera,
     aboveFieldCamera,
+    freeCamera,
     ...orthographicCameras,
   ]
 }
