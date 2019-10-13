@@ -45,4 +45,4 @@ interface Loadout {
   antennaPaint: number
 }
 
-export { ReplayPlayer, Loadout }
+export { ReplayPlayer }
