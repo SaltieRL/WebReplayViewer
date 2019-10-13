@@ -27,7 +27,6 @@ const defaultSceneBuilder = async (
   if (loadingManager) {
     GameFieldAssets.loadingManager = loadingManager
   }
-  await GameFieldAssets.load()
 
   const gltfLoader = new GLTFLoader()
   const dracoLoader = new DRACOLoader()
@@ -37,6 +36,8 @@ const defaultSceneBuilder = async (
   const config = new RocketConfig(gltfLoader, loadingManager)
   const manager = new RocketAssetManager(config)
   const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player))
+
+  await GameFieldAssets.load()
   const bodies = await Promise.all(bodyPromises)
 
   addLighting(scene)
