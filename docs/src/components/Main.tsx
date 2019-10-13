@@ -25,7 +25,7 @@ class Main extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const REPLAY_ID = "9944A36A11E987D3E286C1B524E68ECC"
+    const REPLAY_ID = "80F9E0AA11E9EDD0CC415BA96B37926C"
 
     loadReplay(REPLAY_ID, true).then(([replayData, replayMetadata]) => {
       this.setState({
