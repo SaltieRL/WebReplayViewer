@@ -22,8 +22,13 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
 
   body.addWheelsModel(wheels)
 
-  body.scene.castShadow = true
-  body.scene.receiveShadow = true
+  body.scene.traverse(object => {
+    // @ts-ignore
+    if (object.isMesh) {
+      object.receiveShadow = true
+      object.castShadow = true
+    }
+  })
 
   return {player, body}
 }
