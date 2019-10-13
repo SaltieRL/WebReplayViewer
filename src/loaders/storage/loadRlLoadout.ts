@@ -38,6 +38,7 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
       phongMaterial.normalMap = oldMaterial.normalMap
       phongMaterial.color = oldMaterial.color
       phongMaterial.shininess = 1 - oldMaterial.roughness
+      phongMaterial.skinning = true
 
       mesh.material = phongMaterial
       mesh.material.needsUpdate = true
