@@ -1,4 +1,4 @@
-import { LoadingManager, Scene } from "three"
+import { Cache, LoadingManager, Scene } from 'three'
 
 import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
 import SceneManager from "../managers/SceneManager"
@@ -23,6 +23,9 @@ const defaultSceneBuilder = async (
   loadingManager?: LoadingManager
 ): Promise<SceneManager> => {
   const scene = new Scene()
+
+  // Enabled caching used by three's loaders
+  Cache.enabled = true
 
   if (loadingManager) {
     GameFieldAssets.loadingManager = loadingManager
