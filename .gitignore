@@ -1,5 +1,6 @@
 # Editor
 .*
+*.iml
 
 # NPM
 node_modules/
