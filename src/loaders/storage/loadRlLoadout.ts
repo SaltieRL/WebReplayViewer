@@ -1,25 +1,35 @@
-import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel, Body, Wheel } from 'rl-loadout-lib'
+import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel, Body, Wheel, Decal } from 'rl-loadout-lib'
 import { ExtendedPlayer } from '../../models/ReplayMetadata'
 import { Mesh, MeshPhongMaterial, MeshStandardMaterial } from 'three'
 
-export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer):
+export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer, defaultLoadout?: boolean):
   Promise<{ body: BodyModel; player: ExtendedPlayer }> {
-  const paintConfig = createPaintConfig(
-    player.isOrange,
-    player.loadout.primaryColor,
-    player.loadout.accentColor,
-    player.loadout.carPaint,
-    player.loadout.skinPaint,
-    player.loadout.wheelsPaint,
-    player.loadout.topperPaint,
-    player.loadout.antennaPaint
-  )
+  let body: BodyModel
+  let wheels: WheelsModel
 
-  const bodyTask = manager.loadBody(player.loadout.car, paintConfig, Body.DEFAULT)
-  const wheelTask = manager.loadWheel(player.loadout.wheels, paintConfig, Wheel.DEFAULT)
+  if (defaultLoadout) {
+    const paintConfig = createPaintConfig(player.isOrange)
+    body = new BodyModel(Body.DEFAULT, Decal.NONE, paintConfig, manager.config)
+    wheels = new WheelsModel(Wheel.DEFAULT, paintConfig, manager.config)
+    await Promise.all([body.load(), wheels.load()])
+  } else {
+    const paintConfig = createPaintConfig(
+      player.isOrange,
+      player.loadout.primaryColor,
+      player.loadout.accentColor,
+      player.loadout.carPaint,
+      player.loadout.skinPaint,
+      player.loadout.wheelsPaint,
+      player.loadout.topperPaint,
+      player.loadout.antennaPaint
+    )
 
-  const body: BodyModel = await bodyTask
-  const wheels: WheelsModel = await wheelTask
+    const bodyTask = manager.loadBody(player.loadout.car, paintConfig, Body.DEFAULT)
+    const wheelTask = manager.loadWheel(player.loadout.wheels, paintConfig, Wheel.DEFAULT)
+
+    body = await bodyTask
+    wheels = await wheelTask
+  }
 
   body.addWheelsModel(wheels)
 

@@ -15,6 +15,7 @@ export interface GameBuilderOptions {
   replayMetadata: ReplayMetadata
   clock: FPSClock
   loadingManager?: LoadingManager
+  defaultLoadouts: boolean
 }
 
 const defaultGameBuilder = async ({
@@ -22,9 +23,10 @@ const defaultGameBuilder = async ({
   replayData,
   replayMetadata,
   loadingManager,
+  defaultLoadouts
 }: GameBuilderOptions) => {
   const players = replayMetadata.players
-  const sceneManager = await defaultSceneBuilder(players, loadingManager)
+  const sceneManager = await defaultSceneBuilder(players, loadingManager, defaultLoadouts)
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
   CameraManager.init()

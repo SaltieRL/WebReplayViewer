@@ -20,7 +20,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
  */
 const defaultSceneBuilder = async (
   playerInfo: ExtendedPlayer[],
-  loadingManager?: LoadingManager
+  loadingManager?: LoadingManager,
+  defaultLoadouts?: boolean
 ): Promise<SceneManager> => {
   const scene = new Scene()
 
@@ -38,7 +39,7 @@ const defaultSceneBuilder = async (
 
   const config = new RocketConfig(gltfLoader, loadingManager)
   const manager = new RocketAssetManager(config)
-  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player))
+  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, defaultLoadouts))
 
   await GameFieldAssets.load()
   const bodies = await Promise.all(bodyPromises)
