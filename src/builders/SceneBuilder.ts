@@ -1,13 +1,13 @@
 import { Cache, LoadingManager, Scene } from 'three'
 
-import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
-import SceneManager from "../managers/SceneManager"
-import { buildBall } from "./ball/buildBall"
-import { buildPlayfield } from "./field/buildPlayfield"
-import { addLighting } from "./scene/addLighting"
+import GameFieldAssets from '../loaders/scenes/GameFieldAssets'
+import SceneManager from '../managers/SceneManager'
+import { buildBall } from './ball/buildBall'
+import { buildPlayfield } from './field/buildPlayfield'
+import { addLighting } from './scene/addLighting'
 import { ExtendedPlayer } from '../models/ReplayMetadata';
 import { loadRlLoadout } from '../loaders/storage/loadRlLoadout';
-import { RocketAssetManager, RocketConfig } from 'rl-loadout-lib';
+import { RocketAssetManager, RocketConfig, TextureFormat } from 'rl-loadout-lib';
 import { buildRocketLoadoutGroup } from './player/buildRocketLoadoutScene';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
@@ -37,7 +37,7 @@ const defaultSceneBuilder = async (
   dracoLoader.setDecoderPath('/draco/')
   gltfLoader.setDRACOLoader(dracoLoader)
 
-  const config = new RocketConfig(gltfLoader, loadingManager)
+  const config = new RocketConfig({gltfLoader, loadingManager, textureFormat: TextureFormat.PNG})
   const manager = new RocketAssetManager(config)
   const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, defaultLoadouts))
 
