@@ -41,7 +41,7 @@
     "@material-ui/lab": "^3.0.0-alpha.30",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "three": "^0.104.0"
+    "three": "^0.108.0"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
