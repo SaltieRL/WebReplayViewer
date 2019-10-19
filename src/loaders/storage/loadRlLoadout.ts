@@ -25,10 +25,12 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
     )
 
     const bodyTask = manager.loadBody(player.loadout.car, paintConfig, Body.DEFAULT)
-    const wheelTask = manager.loadWheel(player.loadout.wheels, paintConfig, Wheel.DEFAULT)
 
+    // TODO use the default wheel for now, there aren't a lot of wheels in rocket-loadout yet, and not yet fully supported
+    wheels = new WheelsModel(Wheel.DEFAULT, paintConfig, manager.config)
+
+    await wheels.load()
     body = await bodyTask
-    wheels = await wheelTask
   }
 
   body.addWheelsModel(wheels)
