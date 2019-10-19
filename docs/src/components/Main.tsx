@@ -33,7 +33,7 @@ class Main extends Component<Props, State> {
           replayData,
           replayMetadata,
           clock: FPSClock.convertReplayToClock(replayData),
-          defaultLoadouts: true
+          defaultLoadouts: false
         },
       })
     })
