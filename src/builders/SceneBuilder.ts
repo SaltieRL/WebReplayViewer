@@ -1,4 +1,4 @@
-import { LoadingManager, Scene } from "three"
+import { LoadingManager, Scene, WebGLRenderer, Mesh, MeshStandardMaterial } from "three"
 
 import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
 import SceneManager from "../managers/SceneManager"
@@ -6,6 +6,7 @@ import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
 import { buildCarGroup } from "./player/buildCarGroup"
 import { addLighting } from "./scene/addLighting"
+import { addEnvironment } from "./scene/addEnvironment"
 
 interface Player {
   name: string
@@ -20,6 +21,7 @@ interface Player {
  */
 const defaultSceneBuilder = async (
   playerInfo: Player[],
+  renderer: WebGLRenderer,
   loadingManager?: LoadingManager
 ): Promise<SceneManager> => {
   const scene = new Scene()
@@ -29,12 +31,20 @@ const defaultSceneBuilder = async (
   }
   await GameFieldAssets.load()
 
+  const envMap = addEnvironment(scene, renderer)
   addLighting(scene)
   const field = buildPlayfield(scene)
   const players = playerInfo.map(({ name, isOrangeTeam }) =>
     buildCarGroup(scene, { playerName: name, isOrangeTeam })
   )
   const ball = buildBall(scene)
+
+  // TODO ?
+  scene.traverse( child => {
+    if ( (<Mesh> child).isMesh ) {
+      (<MeshStandardMaterial> (<Mesh> child).material).envMap = envMap
+    }
+  })
 
   return SceneManager.init({
     scene,

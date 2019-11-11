@@ -35,7 +35,7 @@ module.exports = {
         },
       },
       {
-        test: /\.(glb|mtl)$/,
+        test: /\.(glb|mtl|hdr|exr)$/,
         use: [
           {
             loader: "file-loader",

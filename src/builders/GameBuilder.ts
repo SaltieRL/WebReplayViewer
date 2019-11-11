@@ -1,4 +1,4 @@
-import { LoadingManager } from "three"
+import { LoadingManager, WebGLRenderer } from "three"
 
 import CameraManager from "../managers/CameraManager"
 import DataManager from "../managers/DataManager"
@@ -28,7 +28,8 @@ const defaultGameBuilder = async ({
     const isOrangeTeam = colors[index]
     return { name, isOrangeTeam }
   })
-  const sceneManager = await defaultSceneBuilder(players, loadingManager)
+  const renderer = new WebGLRenderer({ antialias: true })
+  const sceneManager = await defaultSceneBuilder(players, renderer, loadingManager)
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
   CameraManager.init()
@@ -36,6 +37,7 @@ const defaultGameBuilder = async ({
 
   return GameManager.init({
     clock,
+    renderer
   })
 }
 

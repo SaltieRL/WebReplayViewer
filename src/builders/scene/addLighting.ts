@@ -2,12 +2,12 @@ import { AmbientLight, DirectionalLight, HemisphereLight, Scene } from "three"
 
 export const addLighting = (scene: Scene) => {
   // Ambient light provides uniform lighting to all objects in the scene
-  const ambientLight = new AmbientLight(0xffffff, 0.2)
-  scene.add(ambientLight)
+  // const ambientLight = new AmbientLight(0xffffff, 0.2)
+  // scene.add(ambientLight)
 
   // Hemisphere light gives the cars their shine and color
-  const hemisphereLight = new HemisphereLight(0xffffbb, 0xffffff, 0.5)
-  scene.add(hemisphereLight)
+  // const hemisphereLight = new HemisphereLight(0xffffbb, 0xffffff, 0.5)
+  // scene.add(hemisphereLight)
 
   // The directional light is purely responsible for casting shadows
   const dirLight = new DirectionalLight(0xffffff, 1.5)

@@ -28,15 +28,16 @@ import KeyManager from "./KeyManager"
 import SceneManager from "./SceneManager"
 
 interface GameManagerOptions {
-  clock: FPSClock
+  clock: FPSClock,
+  renderer: WebGLRenderer
 }
 
 export class GameManager {
   clock: FPSClock
-  private readonly renderer: WebGLRenderer
+  renderer: WebGLRenderer
 
-  private constructor({ clock }: GameManagerOptions) {
-    this.renderer = new WebGLRenderer({ antialias: true })
+  private constructor({ clock, renderer }: GameManagerOptions) {
+    this.renderer = renderer
     this.renderer.shadowMap.enabled = true
     this.animate = this.animate.bind(this)
     this.render = this.render.bind(this)

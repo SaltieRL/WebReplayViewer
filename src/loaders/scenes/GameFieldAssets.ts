@@ -1,8 +1,9 @@
-import { Group, LoadingManager, Object3D } from "three"
+import { Group, LoadingManager, Object3D, DataTexture } from "three"
 
 import { loadBall } from "../storage/loadBall"
 import { loadBlueCar, loadOrangeCar, loadWheel } from "../storage/loadCar"
 import { loadField } from "../storage/loadField"
+import { loadEnvironment } from "../storage/loadEnvironment"
 
 interface AvailableAssets {
   ball: Object3D
@@ -11,6 +12,7 @@ interface AvailableAssets {
   orangeCar: Group
   blueCar: Group
   wheel: Object3D
+  environment: DataTexture
 }
 
 class GameFieldAssets {
@@ -29,13 +31,15 @@ class GameFieldAssets {
       loadOrangeCar(lm),
       loadBlueCar(lm),
       loadWheel(lm),
-    ]).then(([ball, field, orangeCar, blueCar, wheel]) => {
+      loadEnvironment(lm)
+    ]).then(([ball, field, orangeCar, blueCar, wheel, environment]) => {
       this.assets = {
         ball,
         field,
         orangeCar,
         blueCar,
         wheel,
+        environment
       }
     })
   }
