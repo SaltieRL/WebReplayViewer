@@ -15,21 +15,21 @@
   "author": "Saltie",
   "license": "MIT",
   "dependencies": {
-    "@material-ui/core": "^3.9.3",
-    "@material-ui/lab": "^3.0.0-alpha.30",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "three": "^0.108.0"
+    "@material-ui/core": "^4.6.1",
+    "@material-ui/lab": "^4.0.0-alpha.32",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "three": "^0.110.0"
   },
   "devDependencies": {
-    "@types/react-dom": "^16.8.4",
+    "@types/react-dom": "^16.9.4",
     "autodll-webpack-plugin": "^0.4.2",
     "awesome-typescript-loader": "^5.2.1",
-    "file-loader": "^3.0.1",
+    "file-loader": "^4.2.0",
     "html-webpack-plugin": "^3.2.0",
-    "typescript": "^3.4.5",
-    "webpack": "^4.30.0",
-    "webpack-dev-server": "^3.3.1"
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-dev-server": "^3.9.0"
   },
   "browserslist": [
     ">0.2%",
