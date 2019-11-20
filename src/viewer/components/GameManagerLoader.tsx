@@ -60,7 +60,9 @@ class GameManagerLoader extends Component<Props, State> {
     if (!gameManager) {
       return (
         <LoadingContainer>
-          <CircularProgress />
+          <CircularProgressContainer>
+            <CircularProgress />
+          </CircularProgressContainer>
           <Type variant="caption">{`Importing assets: ${percentLoaded}%`}</Type>
         </LoadingContainer>
       )
@@ -74,7 +76,11 @@ const LoadingContainer = styled.div`
   position: relative;
   text-align: center;
 `
+const CircularProgressContainer = styled.div`
+  width: 100%;
+`
 const Type = styled(Typography)`
+  width: 100%;
   padding-top: 16px;
 ` as React.ComponentType<TypographyProps>
 
