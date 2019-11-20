@@ -14,10 +14,7 @@
   ],
   "author": "Saltie",
   "license": "MIT",
-  "dependencies": {
-    "@material-ui/core": "^4.6.1",
-    "three": "^0.110.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/react-dom": "^16.9.4",
     "autodll-webpack-plugin": "^0.4.2",
