@@ -7,7 +7,6 @@ import { loadField } from "../storage/loadField"
 interface AvailableAssets {
   ball: Object3D
   field: Group
-
   orangeCar: Group
   blueCar: Group
   wheel: Object3D
@@ -36,7 +35,7 @@ class GameFieldAssets {
         orangeCar,
         blueCar,
         wheel,
-      }
+      } as AvailableAssets
     })
   }
 

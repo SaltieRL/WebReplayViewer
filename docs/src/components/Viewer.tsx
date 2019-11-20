@@ -41,7 +41,7 @@ class Viewer extends Component<Props, State> {
         className={root}
         direction="column"
         justify="center"
-        spacing={24}
+        spacing={3}
       >
         <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
           <ReplayViewer gameManager={gameManager} autoplay />
@@ -51,7 +51,7 @@ class Viewer extends Component<Props, State> {
             container
             justify="space-between"
             alignItems="center"
-            spacing={24}
+            spacing={3}
           >
             <Grid item>
               <PlayControls />

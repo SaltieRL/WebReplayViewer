@@ -76,10 +76,10 @@ class CompactPlayControls extends Component<Props, State> {
 
   render() {
     const { paused, cameraControlsShowing } = this.state
-    const { focused, thumb, track } = this.props.classes
+    const { thumb, track } = this.props.classes
     return (
       <ControlsWrapper>
-        <Grid container spacing={24} alignItems="center">
+        <Grid container spacing={3} alignItems="center">
           <Grid item>
             <Button onClick={this.setPlayPause}>
               {paused ? <PlayIcon /> : <PausedIcon />}
@@ -90,7 +90,6 @@ class CompactPlayControls extends Component<Props, State> {
               classes={{
                 thumb,
                 track,
-                focused,
               }}
             />
           </Grid>
@@ -122,7 +121,6 @@ const ControlsWrapper = styled.div`
 `
 
 export default withStyles({
-  focused: {},
   track: {
     backgroundColor: "#fff",
   },
