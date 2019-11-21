@@ -1,16 +1,16 @@
-import { LoadingManager, Scene } from "three"
+import { Cache, LoadingManager, Scene } from 'three'
 
-import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
-import SceneManager from "../managers/SceneManager"
-import { buildBall } from "./ball/buildBall"
-import { buildPlayfield } from "./field/buildPlayfield"
-import { buildCarGroup } from "./player/buildCarGroup"
-import { addLighting } from "./scene/addLighting"
-
-interface Player {
-  name: string
-  isOrangeTeam: boolean
-}
+import GameFieldAssets from '../loaders/scenes/GameFieldAssets'
+import SceneManager from '../managers/SceneManager'
+import { buildBall } from './ball/buildBall'
+import { buildPlayfield } from './field/buildPlayfield'
+import { addLighting } from './scene/addLighting'
+import { ExtendedPlayer } from '../models/ReplayMetadata';
+import { loadRlLoadout } from '../loaders/storage/loadRlLoadout';
+import { RocketAssetManager, RocketConfig, TextureFormat } from 'rl-loadout-lib';
+import { buildRocketLoadoutGroup } from './player/buildRocketLoadoutScene';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 /**
  * @description The sole purpose of this function is to initialize and tie together all of the
@@ -19,21 +19,39 @@ interface Player {
  * required game assets.
  */
 const defaultSceneBuilder = async (
-  playerInfo: Player[],
-  loadingManager?: LoadingManager
+  playerInfo: ExtendedPlayer[],
+  loadingManager?: LoadingManager,
+  defaultLoadouts?: boolean
 ): Promise<SceneManager> => {
   const scene = new Scene()
+
+  // Enabled caching used by three's loaders
+  Cache.enabled = true
 
   if (loadingManager) {
     GameFieldAssets.loadingManager = loadingManager
   }
+
+  const gltfLoader = new GLTFLoader()
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath('/draco/')
+  gltfLoader.setDRACOLoader(dracoLoader)
+
+  const config = new RocketConfig({
+    gltfLoader,
+    loadingManager,
+    textureFormat: TextureFormat.PNG,
+    useCompressedModels: true
+  })
+  const manager = new RocketAssetManager(config)
+  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, defaultLoadouts))
+
   await GameFieldAssets.load()
+  const bodies = await Promise.all(bodyPromises)
 
   addLighting(scene)
   const field = buildPlayfield(scene)
-  const players = playerInfo.map(({ name, isOrangeTeam }) =>
-    buildCarGroup(scene, { playerName: name, isOrangeTeam })
-  )
+  const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
   const ball = buildBall(scene)
 
   return SceneManager.init({
