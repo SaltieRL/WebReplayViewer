@@ -25,7 +25,7 @@ class GameFieldAssets {
       this.assets = {
         ball,
         field
-      }
+      } as AvailableAssets
     })
   }
 

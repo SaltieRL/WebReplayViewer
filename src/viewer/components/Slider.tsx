@@ -1,4 +1,4 @@
-import MUISlider, { SliderProps } from "@material-ui/lab/Slider"
+import MUISlider, { SliderProps } from "@material-ui/core/Slider"
 import debounce from "lodash.debounce"
 import React, { Component } from "react"
 
@@ -42,8 +42,8 @@ class Slider extends Component<Props, State> {
     this.onFrame.cancel()
   }
 
-  handleChange = (_: any, value: number) => {
-    const frame = Math.round(value)
+  handleChange = (_: any, value: number | number[]) => {
+    const frame = Math.round(value as number)
     GameManager.getInstance().clock.setFrame(frame)
   }
 
