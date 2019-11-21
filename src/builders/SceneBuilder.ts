@@ -37,7 +37,12 @@ const defaultSceneBuilder = async (
   dracoLoader.setDecoderPath('/draco/')
   gltfLoader.setDRACOLoader(dracoLoader)
 
-  const config = new RocketConfig({gltfLoader, loadingManager, textureFormat: TextureFormat.PNG})
+  const config = new RocketConfig({
+    gltfLoader,
+    loadingManager,
+    textureFormat: TextureFormat.PNG,
+    useCompressedModels: true
+  })
   const manager = new RocketAssetManager(config)
   const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, defaultLoadouts))
 
