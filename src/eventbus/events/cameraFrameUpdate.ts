@@ -1,4 +1,4 @@
-import { Vector3 } from "three"
+import { Camera, Vector3 } from "three"
 
 import { CAMERA_FRAME_UPDATE } from "../../constants/eventNames"
 import EventBus from "../EventBus"
@@ -10,6 +10,7 @@ export interface CameraFrameUpdateEvent {
   ballPosition: Vector3
   ballCam: boolean
   isUsingBoost: boolean
+  activeCamera: Camera
 }
 
 export const {

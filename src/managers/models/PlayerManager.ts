@@ -1,12 +1,11 @@
 import {
-  Group,
-  OrthographicCamera,
+  Camera,
+  Group, OrthographicCamera,
   PerspectiveCamera,
   Sprite,
   Vector3,
 } from "three"
 
-import { SPRITE_SCALAR } from "../../builders/player/generateSprite"
 import { SPRITE } from "../../constants/gameObjectNames"
 import {
   addCameraChangeListener,
@@ -16,6 +15,7 @@ import {
   addCameraFrameUpdateListener,
   CameraFrameUpdateEvent,
 } from "../../eventbus/events/cameraFrameUpdate"
+import { SPRITE_ORTHO_SCALE } from "../../builders/player/generateSprite";
 
 const CAMERA_ABOVE_PLAYER = 200
 
@@ -50,14 +50,12 @@ export default class PlayerManager {
     const isActiveCamera = camera === this.camera
     this.toggleSprite(!isActiveCamera)
     this.activeCamera = isActiveCamera
-    this.sprite.scale.setScalar(
-      camera instanceof OrthographicCamera ? SPRITE_SCALAR * 3 : SPRITE_SCALAR
-    )
   }
 
-  onCameraFrameUpdate = ({ ballPosition }: CameraFrameUpdateEvent) => {
+  onCameraFrameUpdate = ({ ballPosition, activeCamera }: CameraFrameUpdateEvent) => {
     // Ignore frame updates if we aren't the active camera
     if (!this.activeCamera) {
+      this.updateSprite(activeCamera)
       return
     }
 
@@ -86,6 +84,19 @@ export default class PlayerManager {
     //     camera.updateProjectionMatrix()
     // }
     camera.position.copy(vectorToBall)
+  }
+
+  updateSprite(activeCamera: Camera) {
+    if (!this.activeCamera) {
+      if (activeCamera instanceof OrthographicCamera) {
+        this.sprite.scale.setScalar(SPRITE_ORTHO_SCALE)
+      } else {
+        const spritePos = this.sprite.localToWorld(new Vector3())
+        const camPos = activeCamera.localToWorld(new Vector3())
+        const scale = spritePos.distanceTo(camPos) / 3
+        this.sprite.scale.setScalar(scale)
+      }
+    }
   }
 
   private toggleSprite(display: boolean) {
