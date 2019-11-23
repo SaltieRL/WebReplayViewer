@@ -50,6 +50,7 @@ export default class PlayerManager {
     const isActiveCamera = camera === this.camera
     this.toggleSprite(!isActiveCamera)
     this.activeCamera = isActiveCamera
+    this.updateSprite(camera)
   }
 
   onCameraFrameUpdate = ({ ballPosition, activeCamera }: CameraFrameUpdateEvent) => {
