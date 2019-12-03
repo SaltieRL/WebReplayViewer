@@ -1,5 +1,16 @@
 # Replay Viewer
 
+[![NPM package][npm]][npm-url]
+[![Language Grade][lgtm]][lgtm-url]
+[![Discord][discord]][discord-url]
+
+[npm]: https://img.shields.io/npm/v/replay-viewer
+[npm-url]: https://www.npmjs.com/package/replay-viewer
+[lgtm]: https://img.shields.io/lgtm/grade/javascript/github/SaltieRL/WebReplayViewer.svg?label=code%20quality
+[lgtm-url]: https://lgtm.com/projects/g/SaltieRL/WebReplayViewer/
+[discord]: https://img.shields.io/discord/482991399017512960.svg?colorB=7581dc&logo=discord&logoColor=white
+[discord-url]: https://discord.gg/EaFRh7v
+
 An extension of the [DistributedReplays](https://github.com/SaltieRL/DistributedReplays) website, this library aims to provide a React component + utilities for displaying a Rocket League replay viewer in WebGL using Three.js
 
 ## Setup
