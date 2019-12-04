@@ -1,8 +1,8 @@
 import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel, Body, Wheel, Decal } from 'rl-loadout-lib'
 import { ExtendedPlayer } from '../../models/ReplayMetadata'
-import { Mesh, MeshPhongMaterial, MeshStandardMaterial } from 'three'
+import { Mesh, MeshPhongMaterial, MeshStandardMaterial, Texture } from 'three'
 
-export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer, defaultLoadout?: boolean):
+export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer, envMap: Texture, defaultLoadout?: boolean):
   Promise<{ body: BodyModel; player: ExtendedPlayer }> {
   let body: BodyModel
   let wheels: WheelsModel
@@ -51,6 +51,8 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
       phongMaterial.color = oldMaterial.color
       phongMaterial.shininess = (1 - oldMaterial.roughness) * 100
       phongMaterial.skinning = oldMaterial.skinning
+      phongMaterial.reflectivity = 0
+      phongMaterial.envMap = envMap
 
       mesh.material = phongMaterial
       mesh.material.needsUpdate = true

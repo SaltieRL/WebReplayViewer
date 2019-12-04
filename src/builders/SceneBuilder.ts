@@ -1,4 +1,4 @@
-import { Cache, LoadingManager, Scene, WebGLRenderer, Mesh, MeshStandardMaterial } from 'three'
+import { Cache, LoadingManager, Scene, WebGLRenderer } from 'three'
 
 import GameFieldAssets from '../loaders/scenes/GameFieldAssets'
 import SceneManager from '../managers/SceneManager'
@@ -46,23 +46,16 @@ const defaultSceneBuilder = async (
     useCompressedModels: true
   })
   const manager = new RocketAssetManager(config)
-  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, defaultLoadouts))
 
   await GameFieldAssets.load()
-  const bodies = await Promise.all(bodyPromises)
 
-  const envMap = addEnvironment(scene, renderer)
   addLighting(scene)
-  const field = buildPlayfield(scene)
+  const envMap = addEnvironment(scene, renderer)
+  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, envMap, defaultLoadouts))
+  const bodies = await Promise.all(bodyPromises)
+  const field = buildPlayfield(scene, envMap)
   const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
-  const ball = buildBall(scene)
-
-  // TODO ?
-  scene.traverse( child => {
-    if ( (<Mesh> child).isMesh ) {
-      (<MeshStandardMaterial> (<Mesh> child).material).envMap = envMap
-    }
-  })
+  const ball = buildBall(scene, envMap)
 
   return SceneManager.init({
     scene,
