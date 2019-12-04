@@ -16,7 +16,7 @@ jobs:
     - name: Build the project
       run: npm run build
     - name: Publish to NPM
-    - uses: primer/publish@master
+      uses: primer/publish@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
