@@ -1,16 +1,16 @@
-import { Cache, LoadingManager, Scene, WebGLRenderer } from 'three'
+import { RocketAssetManager, RocketConfig, TextureFormat } from "rl-loadout-lib"
+import { Cache, LoadingManager, Scene, WebGLRenderer } from "three"
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
-import GameFieldAssets from '../loaders/scenes/GameFieldAssets'
-import SceneManager from '../managers/SceneManager'
-import { buildBall } from './ball/buildBall'
-import { buildPlayfield } from './field/buildPlayfield'
-import { addLighting } from './scene/addLighting'
-import { ExtendedPlayer } from '../models/ReplayMetadata';
-import { loadRlLoadout } from '../loaders/storage/loadRlLoadout';
-import { RocketAssetManager, RocketConfig, TextureFormat } from 'rl-loadout-lib';
-import { buildRocketLoadoutGroup } from './player/buildRocketLoadoutScene';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
+import { loadRlLoadout } from "../loaders/storage/loadRlLoadout"
+import SceneManager from "../managers/SceneManager"
+import { ExtendedPlayer } from "../models/ReplayMetadata"
+import { buildBall } from "./ball/buildBall"
+import { buildPlayfield } from "./field/buildPlayfield"
+import { buildRocketLoadoutGroup } from "./player/buildRocketLoadoutScene"
+import { addLighting } from "./scene/addLighting"
 import { addEnvironment } from "./scene/addEnvironment";
 
 /**
@@ -36,14 +36,14 @@ const defaultSceneBuilder = async (
 
   const gltfLoader = new GLTFLoader()
   const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath('/draco/')
+  dracoLoader.setDecoderPath("/draco/")
   gltfLoader.setDRACOLoader(dracoLoader)
 
   const config = new RocketConfig({
     gltfLoader,
     loadingManager,
     textureFormat: TextureFormat.PNG,
-    useCompressedModels: true
+    useCompressedModels: true,
   })
   const manager = new RocketAssetManager(config)
 
@@ -51,7 +51,9 @@ const defaultSceneBuilder = async (
 
   addLighting(scene)
   const envMap = addEnvironment(scene, renderer)
-  const bodyPromises = playerInfo.map(player => loadRlLoadout(manager, player, envMap, defaultLoadouts))
+  const bodyPromises = playerInfo.map(player =>
+    loadRlLoadout(manager, player, envMap, defaultLoadouts)
+  )
   const bodies = await Promise.all(bodyPromises)
   const field = buildPlayfield(scene, envMap)
   const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))

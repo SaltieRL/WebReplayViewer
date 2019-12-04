@@ -1,9 +1,22 @@
-import { createPaintConfig, RocketAssetManager, BodyModel, WheelsModel, Body, Wheel, Decal } from 'rl-loadout-lib'
-import { ExtendedPlayer } from '../../models/ReplayMetadata'
-import { Mesh, MeshPhongMaterial, MeshStandardMaterial, Texture } from 'three'
+import {
+  Body,
+  BodyModel,
+  createPaintConfig,
+  Decal,
+  RocketAssetManager,
+  Wheel,
+  WheelsModel,
+} from "rl-loadout-lib"
+import { Mesh, MeshPhongMaterial, MeshStandardMaterial, Texture } from "three"
 
-export async function loadRlLoadout(manager: RocketAssetManager, player: ExtendedPlayer, envMap: Texture, defaultLoadout?: boolean):
-  Promise<{ body: BodyModel; player: ExtendedPlayer }> {
+import { ExtendedPlayer } from "../../models/ReplayMetadata"
+
+export const loadRlLoadout = async (
+  manager: RocketAssetManager,
+  player: ExtendedPlayer,
+  envMap: Texture,
+  defaultLoadout?: boolean
+): Promise<{ body: BodyModel; player: ExtendedPlayer }> => {
   let body: BodyModel
   let wheels: WheelsModel
 
@@ -24,9 +37,14 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
       player.loadout.antennaPaint
     )
 
-    const bodyTask = manager.loadBody(player.loadout.car, paintConfig, Body.DEFAULT)
+    const bodyTask = manager.loadBody(
+      player.loadout.car,
+      paintConfig,
+      Body.DEFAULT
+    )
 
-    // TODO use the default wheel for now, there aren't a lot of wheels in rocket-loadout yet, and not yet fully supported
+    // TODO use the default wheel for now, there aren't a lot of wheels in rocket-loadout yet,
+    // and not yet fully supported
     wheels = new WheelsModel(Wheel.DEFAULT, paintConfig, manager.config)
 
     await wheels.load()
@@ -61,5 +79,5 @@ export async function loadRlLoadout(manager: RocketAssetManager, player: Extende
     }
   })
 
-  return {player, body}
+  return { player, body }
 }
