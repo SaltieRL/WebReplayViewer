@@ -1,12 +1,6 @@
-import React, { Component } from "react"
+import React, { Component, ErrorInfo } from "react"
 
-import {
-  FPSClock,
-  GameBuilderOptions,
-  loadReplay,
-  ReplayData,
-  ReplayMetadata,
-} from "../../../src"
+import { FPSClock, GameBuilderOptions, loadReplay } from "../../../src"
 import CompactViewer from "./CompactViewer"
 import Viewer from "./Viewer"
 
@@ -16,6 +10,8 @@ interface Props {
 
 interface State {
   options?: GameBuilderOptions
+  error?: Error
+  errorInfo?: ErrorInfo
 }
 
 class Main extends Component<Props, State> {
@@ -25,7 +21,7 @@ class Main extends Component<Props, State> {
   }
 
   componentDidMount() {
-    const REPLAY_ID = "9944A36A11E987D3E286C1B524E68ECC"
+    const REPLAY_ID = "80F9E0AA11E9EDD0CC415BA96B37926C"
 
     loadReplay(REPLAY_ID, true).then(([replayData, replayMetadata]) => {
       this.setState({
@@ -33,17 +29,25 @@ class Main extends Component<Props, State> {
           replayData,
           replayMetadata,
           clock: FPSClock.convertReplayToClock(replayData),
+          defaultLoadouts: false
         },
       })
     })
   }
 
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    this.setState({ error, errorInfo })
+  }
+
   render() {
-    const { options } = this.state
+    const { options, error, errorInfo } = this.state
 
     if (!options) {
       return "Loading..."
+    } else if (error || errorInfo) {
+      return JSON.stringify(error)
     }
+
     return this.props.compact ? (
       <CompactViewer options={options} />
     ) : (

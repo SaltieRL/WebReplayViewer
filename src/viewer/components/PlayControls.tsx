@@ -48,7 +48,7 @@ export default class PlayControls extends Component<Props, State> {
     const onResetClick = () => clock.setFrame(0)
 
     return (
-      <Grid container spacing={24}>
+      <Grid container spacing={3}>
         <Grid item>
           <Button variant="outlined" onClick={this.setPlayPause}>
             {this.state.paused ? "Play" : "Pause"}
