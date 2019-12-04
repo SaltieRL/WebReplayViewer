@@ -1,6 +1,10 @@
 name: "Build and Test"
 
-on: [push]
+on: 
+  push:
+    paths:
+      - 'src/*'
+      - 'docs/*
 
 jobs:
   build:
@@ -13,7 +17,7 @@ jobs:
       run: npm ci
     - name: Build the project
       run: npm run build
-    - name: Run linterLint
+    - name: Run linter
       uses: mooyoul/tslint-actions@v1.1.1
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
