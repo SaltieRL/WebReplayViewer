@@ -13,5 +13,8 @@ jobs:
       run: npm ci
     - name: Build the project
       run: npm run build
-    - name: Run linter
-      run: npm run lint
+    - name: Run linterLint
+      uses: mooyoul/tslint-actions@v1.1.1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        pattern: '*.ts'
