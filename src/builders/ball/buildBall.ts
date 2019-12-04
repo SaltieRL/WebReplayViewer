@@ -10,8 +10,8 @@ export const buildBall = (scene: Scene, envMap: Texture) => {
   ball.name = BALL
   ball.castShadow = true
   ball.traverse( child => {
-    if ( (<Mesh> child).isMesh ) {
-      (<MeshStandardMaterial> (<Mesh> child).material).envMap = envMap
+    if ( (child as Mesh).isMesh ) {
+      ((child as Mesh).material as MeshStandardMaterial).envMap = envMap
     }
   })
   scene.add(ball)

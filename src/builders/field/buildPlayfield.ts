@@ -48,10 +48,10 @@ export const buildPlayfield = (scene: Scene, envMap: Texture) => {
 
   const { field } = GameFieldAssets.getAssets()
   field.scale.setScalar(400)
-  field.traverse( child => {
+  field.traverse(child => {
     child.receiveShadow = true;
-    if ( (<Mesh> child).isMesh ) {
-      (<MeshStandardMaterial> (<Mesh> child).material).envMap = envMap
+    if ((child as Mesh).isMesh) {
+      ((child as Mesh).material as MeshStandardMaterial).envMap = envMap
     }
   })
   field.receiveShadow = true
