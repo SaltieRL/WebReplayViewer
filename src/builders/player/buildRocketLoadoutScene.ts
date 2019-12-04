@@ -1,11 +1,15 @@
-import { BodyModel } from 'rl-loadout-lib';
-import { ExtendedPlayer } from '../../models/ReplayMetadata';
-import { getCarName, getGroupName } from '../utils/playerNameGetters';
-import { Group, Scene } from 'three';
-import { generateSprite } from './generateSprite';
-import PlayerManager from '../../managers/models/PlayerManager';
+import { BodyModel } from "rl-loadout-lib"
+import { Group, Scene } from "three"
 
-export function buildRocketLoadoutGroup(scene: Scene, {body, player}: { body: BodyModel; player: ExtendedPlayer }) {
+import PlayerManager from "../../managers/models/PlayerManager"
+import { ExtendedPlayer } from "../../models/ReplayMetadata"
+import { getCarName, getGroupName } from "../utils/playerNameGetters"
+import { generateSprite } from "./generateSprite"
+
+export const buildRocketLoadoutGroup = (
+  scene: Scene,
+  { body, player }: { body: BodyModel; player: ExtendedPlayer }
+) => {
   body.scene.name = getCarName(player.name)
 
   // Build sprite and camera container (for position)
