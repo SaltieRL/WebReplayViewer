@@ -1,7 +1,7 @@
 const path = require("path")
 const fse = require("fs-extra")
 
-function copyReadme() {
+async function copyReadme() {
   return fse
     .copyFile(
       path.resolve(__dirname, "README.md"),
@@ -10,16 +10,7 @@ function copyReadme() {
     .then(() => console.log("Copied README.md"))
 }
 
-function copyAssets() {
-  return fse
-    .copy(
-      path.resolve(__dirname, "src", "assets", "models"),
-      path.resolve(__dirname, "lib", "assets", "models")
-    )
-    .then(() => console.log("Copied assets"))
-}
-
-function copyPackageJson() {
+async function copyPackageJson() {
   return new Promise(resolve => {
     fse.readFile(
       path.resolve(__dirname, "package.json"),
@@ -62,5 +53,4 @@ function copyPackageJson() {
 
 copyPackageJson()
   .then(copyReadme)
-  // .then(copyAssets)
   .catch(console.error)

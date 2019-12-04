@@ -52,8 +52,9 @@ class FieldCameraControls extends PureComponent<Props, State> {
   }
 
   toggleDialog = () => {
+    const dialogOpen = !this.state.dialogOpen
     this.setState({
-      dialogOpen: !this.state.dialogOpen,
+      dialogOpen,
     })
   }
 
