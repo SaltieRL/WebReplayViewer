@@ -4,6 +4,7 @@ import CameraManager from "../managers/CameraManager"
 import DataManager from "../managers/DataManager"
 import { GameManager } from "../managers/GameManager"
 import KeyManager from "../managers/KeyManager"
+import DrawingManager from "../managers/DrawingManager"
 import { ReplayData } from "../models/ReplayData"
 import { ReplayMetadata } from "../models/ReplayMetadata"
 import FPSClock from "../utils/FPSClock"
@@ -31,6 +32,7 @@ const defaultGameBuilder = async ({
   DataManager.init({ replayData, replayMetadata })
   CameraManager.init()
   KeyManager.init()
+  DrawingManager.init()
 
   return GameManager.init({
     clock,

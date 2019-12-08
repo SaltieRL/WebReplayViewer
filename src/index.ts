@@ -21,6 +21,7 @@ export {
   default as FieldCameraControls,
 } from "./viewer/components/FieldCameraControls"
 export { default as Slider } from "./viewer/components/Slider"
+export { default as DrawingControls } from "./viewer/components/DrawingControls"
 
 // Utilities
 export { default as FPSClock } from "./utils/FPSClock"
