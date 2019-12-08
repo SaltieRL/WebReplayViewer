@@ -88,9 +88,9 @@ export default class DrawingManager {
 
   private readonly onMouseDown = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
     if (altKey) {
-      this.startLine(offsetX, offsetY)
+      this.drawSpheres3D(offsetX, offsetY)
     } else {
-      ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.drawSpheres3D(offsetX, offsetY)
+      ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.startLine(offsetX, offsetY)
     }
     this.isDrawing = true
   }
@@ -98,9 +98,9 @@ export default class DrawingManager {
   private readonly onMouseMove = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
     if (this.isDrawing) {
       if (altKey) {
-        this.updateLine(offsetX, offsetY)
+        this.drawSpheres3D(offsetX, offsetY)
       } else {
-        ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.drawSpheres3D(offsetX, offsetY)
+        ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.updateLine(offsetX, offsetY)
       }
     }
   }
@@ -108,9 +108,9 @@ export default class DrawingManager {
   private readonly onMouseUp = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
     if (this.isDrawing) {
       if (altKey) {
-
+        this.drawSpheres3D(offsetX, offsetY)
       } else {
-        ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.drawSpheres3D(offsetX, offsetY)
+        ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.updateLine(offsetX, offsetY)
       }
       this.isDrawing = false
     }
