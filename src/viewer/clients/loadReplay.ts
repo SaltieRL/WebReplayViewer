@@ -1,8 +1,8 @@
 import { ReplayData } from "../../models/ReplayData"
 import { ReplayMetadata } from "../../models/ReplayMetadata"
 
-const fetchByURL = (url: string) =>
-  fetch(url, {
+const fetchByURL = (url: string, local?: boolean) =>
+  fetch(url, local ? {} : {
     method: "GET",
     headers: {
       Accept: "application/json",
@@ -14,12 +14,14 @@ const cache: { [key: string]: [ReplayData, ReplayMetadata] } = {}
 
 export const loadReplay = async (
   replayId: string,
-  cached?: boolean
+  cached?: boolean,
+  local?: boolean
 ): Promise<[ReplayData, ReplayMetadata]> => {
+  const url = local ? "../examples/" : "https://calculated.gg/api/replay/"
   const fetch = () =>
     Promise.all([
-      fetchByURL(`https://calculated.gg/api/replay/${replayId}/positions`),
-      fetchByURL(`https://calculated.gg/api/v1/replay/${replayId}?key=1`),
+      fetchByURL(`${url+replayId}/positions${local && '.json'}`, local),
+      fetchByURL(`${url+replayId}${local ? "/metadata.json" : "?key=1"}`, local),
     ])
   if (cached) {
     if (!cache[replayId]) {
