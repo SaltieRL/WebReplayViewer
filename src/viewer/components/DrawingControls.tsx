@@ -1,8 +1,16 @@
-import Button, { ButtonProps } from "@material-ui/core/Button"
+import Button from "@material-ui/core/Button"
 import Dialog from "@material-ui/core/Dialog"
 import List from "@material-ui/core/List"
 import ListItem from "@material-ui/core/ListItem"
 import Typography from "@material-ui/core/Typography"
+import Grid from "@material-ui/core/Grid"
+import ButtonGroup from "@material-ui/core/ButtonGroup"
+import ColorIcon from "./icons/ColorIcon"
+import DropDownIcon from "./icons/DropDownIcon"
+import DeleteIcon from "./icons/DeleteIcon"
+import PencilIcon from "./icons/PencilIcon"
+import PencilOffIcon from "./icons/PencilOffIcon"
+
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 
@@ -13,15 +21,19 @@ interface Props {}
 interface State {
   isDrawingMode: boolean
   shouldShowDialog: boolean
+  selectedColor: string
 }
 
 class DrawingControls extends PureComponent<Props, State> {
+  colorPicker: React.RefObject<HTMLInputElement>
   constructor(props: Props) {
     super(props)
     this.state = {
       isDrawingMode: false,
-      shouldShowDialog: true
+      shouldShowDialog: true,
+      selectedColor: '#ff0000',
     }
+    this.colorPicker = React.createRef()
   }
   
   toggleDrawingMode = () => {
@@ -29,14 +41,25 @@ class DrawingControls extends PureComponent<Props, State> {
     this.setState({
       isDrawingMode,
     })
-    DrawingManager.getInstance().toggleDrawingMode(isDrawingMode)
+    isDrawingMode ? DrawingManager.init() : DrawingManager.destruct()
   }
 
   dialogShown = () => {
-    const shouldShowDialog = false
     this.setState({
-      shouldShowDialog,
+      shouldShowDialog: false,
     })
+  }
+
+  changeSelectedColor = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const color = e.target.value
+    this.setState({
+      selectedColor: color,
+    });
+    DrawingManager.getInstance().setColor(color)
+  }
+
+  toggleColorPicker = () => {
+    this.colorPicker.current && this.colorPicker.current.click()
   }
 
   renderDialog = () => {
@@ -68,22 +91,47 @@ class DrawingControls extends PureComponent<Props, State> {
     )
   }
 
+  clearDrawings = () => {
+    DrawingManager.getInstance().clearDrawings()
+  }
+
+  renderControlButtons = () => {
+    return (
+      <Grid item>
+      <ButtonGroup size="small" aria-label="small outlined button group" variant="outlined">
+        <Button onClick={this.toggleColorPicker}>
+            <ColorIcon selectedColor={this.state.selectedColor} />
+            <DropDownIcon />
+            <HiddenInput ref={this.colorPicker} type="color" value={this.state.selectedColor} onChange={this.changeSelectedColor} id="color-picker" />
+        </Button>
+        <Button onClick={this.clearDrawings}>
+          <DeleteIcon />
+        </Button>
+        <Button>Three</Button>
+      </ButtonGroup>
+    </Grid>
+    )
+  }
+
   render() {
     return (
-      <div>
-        <DrawingButton onClick={this.toggleDrawingMode} variant="outlined">
-          {this.state.isDrawingMode ? 'Turn Drawing Mode OFF' : 'Turn Drawing Mode ON'}
-        </DrawingButton>
+      <Grid container spacing={3}>
+        <Grid item>
+          <Button onClick={this.toggleDrawingMode} variant="outlined" startIcon={this.state.isDrawingMode ? <PencilOffIcon /> : <PencilIcon />}>
+            Drawing Mode
+          </Button>
+        </Grid>
+        {this.state.isDrawingMode && this.renderControlButtons()}
         {this.renderDialog()}
-      </div>
+      </Grid>
     )
   }
 }
 
-const DrawingButton = styled(Button)`
+const HiddenInput = styled.input`
   && {
-    margin: 6px;
+    display: none;
   }
-` as React.ComponentType<ButtonProps>
+`
 
 export default DrawingControls
