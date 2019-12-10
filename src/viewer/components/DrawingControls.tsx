@@ -1,27 +1,30 @@
 import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import Typography from "@material-ui/core/Typography"
 import Grid from "@material-ui/core/Grid"
 import ButtonGroup from "@material-ui/core/ButtonGroup"
+import Input from "@material-ui/core/Input"
+import InputAdornment from "@material-ui/core/InputAdornment"
+
 import ColorIcon from "./icons/ColorIcon"
 import DropDownIcon from "./icons/DropDownIcon"
 import DeleteIcon from "./icons/DeleteIcon"
 import PencilIcon from "./icons/PencilIcon"
 import PencilOffIcon from "./icons/PencilOffIcon"
+import SphereIcon from "./icons/SphereIcon"
+import LineIcon from "./icons/LineIcon"
 
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 
 import DrawingManager from "../../managers/DrawingManager"
 
-interface Props {}
+interface Props { }
 
 interface State {
   isDrawingMode: boolean
-  shouldShowDialog: boolean
-  selectedColor: string
+  color: string
+  sphereRadius: number
+  drawObject: string
+  is3dMode: boolean
 }
 
 class DrawingControls extends PureComponent<Props, State> {
@@ -30,31 +33,35 @@ class DrawingControls extends PureComponent<Props, State> {
     super(props)
     this.state = {
       isDrawingMode: false,
-      shouldShowDialog: true,
-      selectedColor: '#ff0000',
+      color: "#00ea0c",
+      sphereRadius: 200,
+      drawObject: "line",
+      is3dMode: false,
     }
     this.colorPicker = React.createRef()
   }
-  
+
   toggleDrawingMode = () => {
     const isDrawingMode = !this.state.isDrawingMode
     this.setState({
       isDrawingMode,
     })
-    isDrawingMode ? DrawingManager.init() : DrawingManager.destruct()
+    isDrawingMode ? DrawingManager.init(this.state) : DrawingManager.destruct()
   }
 
-  dialogShown = () => {
+  toggle3dMode = () => {
+    const is3dMode = !this.state.is3dMode
     this.setState({
-      shouldShowDialog: false,
+      is3dMode: is3dMode
     })
+    DrawingManager.getInstance().is3dMode = is3dMode
   }
 
-  changeSelectedColor = (e: React.ChangeEvent<HTMLInputElement>) => {
+  changecolor = (e: React.ChangeEvent<HTMLInputElement>) => {
     const color = e.target.value
     this.setState({
-      selectedColor: color,
-    });
+      color: color,
+    })
     DrawingManager.getInstance().setColor(color)
   }
 
@@ -62,33 +69,20 @@ class DrawingControls extends PureComponent<Props, State> {
     this.colorPicker.current && this.colorPicker.current.click()
   }
 
-  renderDialog = () => {
-    return (
-      <Dialog open={this.state.isDrawingMode && this.state.shouldShowDialog} onClose={this.dialogShown}>
-        <List>
-          <ListItem>
-            <Typography>
-              Holding ALT and dragging will draw spheres in 3D that will stick even when Free Cam
-            </Typography>
-          </ListItem>
-          <ListItem>
-            <Typography>
-              Just dragging will draw Lines in front camera
-            </Typography>
-          </ListItem>
-          <ListItem>
-            <Typography>
-              Holding CTRL and dragging will draw spheres in front of camera.
-            </Typography>
-          </ListItem>
-          <ListItem>
-            <Typography>
-              Turning Drawing Mode OFF will delete all existing drawings.
-            </Typography>
-          </ListItem>
-        </List>
-      </Dialog>
-    )
+  changeSelectedDrawObject = (object: string) => {
+    if (this.state.drawObject === object) return
+    this.setState({
+      drawObject: object,
+    })
+    DrawingManager.getInstance().drawObject = object
+  }
+
+  changeSphereRadius = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const radius = Number(e.target.value)
+    this.setState({
+      sphereRadius: radius,
+    })
+    DrawingManager.getInstance().sphereRadius = radius
   }
 
   clearDrawings = () => {
@@ -97,32 +91,66 @@ class DrawingControls extends PureComponent<Props, State> {
 
   renderControlButtons = () => {
     return (
-      <Grid item>
-      <ButtonGroup size="small" aria-label="small outlined button group" variant="outlined">
-        <Button onClick={this.toggleColorPicker}>
-            <ColorIcon selectedColor={this.state.selectedColor} />
-            <DropDownIcon />
-            <HiddenInput ref={this.colorPicker} type="color" value={this.state.selectedColor} onChange={this.changeSelectedColor} id="color-picker" />
-        </Button>
-        <Button onClick={this.clearDrawings}>
-          <DeleteIcon />
-        </Button>
-        <Button>Three</Button>
-      </ButtonGroup>
-    </Grid>
+      <React.Fragment>
+        <Grid item>
+          <ButtonGroup size="small" variant="outlined">
+            <Button onClick={this.toggleColorPicker}>
+              <ColorIcon selectedColor={this.state.color} />
+              <DropDownIcon />
+              <HiddenInput
+                ref={this.colorPicker}
+                type="color"
+                value={this.state.color}
+                onChange={this.changecolor}
+              />
+            </Button>
+            <Button onClick={this.clearDrawings}>
+              <DeleteIcon />
+            </Button>
+            <Button onClick={this.toggle3dMode} title="3D-Draw on the field object or in front of camera">
+              {this.state.is3dMode ? "3D" : "2D"}
+            </Button>
+            <Button
+              variant={this.state.drawObject == "sphere" ? "contained" : "outlined"}
+              color={this.state.drawObject == "sphere" ? "primary" : "default"}
+              onClick={() => this.changeSelectedDrawObject("sphere")}
+            >
+              <SphereIcon color={this.state.drawObject == "sphere" ? "#ffffff" : "#000000"} />
+            </Button>
+            <Button
+              variant={this.state.drawObject == "line" ? "contained" : "outlined"}
+              color={this.state.drawObject == "line" ? "primary" : "default"}
+              onClick={() => this.changeSelectedDrawObject("line")}
+            >
+              <LineIcon color={this.state.drawObject == "line" ? "#ffffff" : "#000000"} />
+            </Button>
+          </ButtonGroup>
+        </Grid>
+        {this.state.drawObject == "sphere"
+          ? <Grid item xs={2}>
+            <Input
+              type="number"
+              placeholder="Sphere radius"
+              defaultValue={this.state.sphereRadius}
+              onChange={this.changeSphereRadius}
+              startAdornment={<InputAdornment position="start">Radius</InputAdornment>}
+            />
+          </Grid>
+          : null
+        }
+      </React.Fragment>
     )
   }
 
   render() {
     return (
-      <Grid container spacing={3}>
+      <Grid container spacing={3} alignItems="center">
         <Grid item>
           <Button onClick={this.toggleDrawingMode} variant="outlined" startIcon={this.state.isDrawingMode ? <PencilOffIcon /> : <PencilIcon />}>
             Drawing Mode
           </Button>
         </Grid>
         {this.state.isDrawingMode && this.renderControlButtons()}
-        {this.renderDialog()}
       </Grid>
     )
   }

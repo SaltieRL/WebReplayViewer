@@ -14,6 +14,13 @@ import SceneManager from "./SceneManager"
 import CameraManager from "./CameraManager"
 import { GameManager } from "./GameManager"
 
+export interface DrawingState {
+  color?: string 
+  sphereRadius?: number
+  drawObject?: string
+  is3dMode?: boolean
+}
+
 interface DrawableMeshes {
   sphere: Mesh
   line: Line
@@ -26,10 +33,13 @@ interface Canvas {
 }
 
 export default class DrawingManager {
+  color: string
+  sphereRadius: number
+  drawObject: string
+  is3dMode: boolean
+
   private MAX_POINTS: number
-  private selectedColor: string
-  private linewidth: number
-  private isDrawing: boolean
+  private isDrawing: boolean = false
   private field: Group
   private activeCamera: Camera
   private canvas: Canvas
@@ -37,12 +47,12 @@ export default class DrawingManager {
   private activeLinePointIndex: number
   private drawableMeshes: DrawableMeshes
 
-  private constructor() {
-    // Max points for Line - for filling linepoint position buffer array
+  private constructor({color,sphereRadius,drawObject,is3dMode}: DrawingState = {}) {
+    this.color = color || "ff0000"
+    this.sphereRadius = sphereRadius || 200
+    this.drawObject = drawObject || 'line'
+    this.is3dMode = is3dMode || false
     this.MAX_POINTS = 500
-    this.selectedColor = "#ff0000"
-    this.linewidth = 2
-    this.isDrawing = false
     this.field = SceneManager.getInstance().field.field
     this.activeCamera = CameraManager.getInstance().activeCamera
     this.canvas = this.getCanvas()
@@ -63,7 +73,7 @@ export default class DrawingManager {
   }
 
   setColor = (newColor: string) => {
-    this.selectedColor = newColor
+    this.color = newColor
     const meshMat = this.drawableMeshes.sphere.material as MeshBasicMaterial
     meshMat.color.set(newColor)
     const lineMat = this.drawableMeshes.line.material as LineBasicMaterial
@@ -71,19 +81,13 @@ export default class DrawingManager {
     this.isPaused() && this.refreshFrame()
   }
 
-  setLineWidth = (newLinewidth: number) => {
-    this.linewidth = newLinewidth
-    const lineMat = this.drawableMeshes.line.material as LineBasicMaterial
-    lineMat.setValues({linewidth: newLinewidth})
-  }
-
   private readonly getDrawableMeshes = () => {
-    const sphereGeometry = new SphereBufferGeometry(0.1, 32, 32);
-    const sphereMaterial = new MeshBasicMaterial({ color: this.selectedColor });
+    const sphereGeometry = new SphereBufferGeometry(0.1, 32, 32)
+    const sphereMaterial = new MeshBasicMaterial({ color: this.color })
     const sphere = new Mesh(sphereGeometry, sphereMaterial)
 
     const lineGeometry = new BufferGeometry()
-    const lineMaterial = new LineBasicMaterial({ color: this.selectedColor, linewidth: this.linewidth })
+    const lineMaterial = new LineBasicMaterial({ color: this.color })
     const positions = new Float32Array(this.MAX_POINTS * 3)
     lineGeometry.setAttribute('position', new BufferAttribute(positions, 3))
     const line = new Line(lineGeometry, lineMaterial)
@@ -101,21 +105,13 @@ export default class DrawingManager {
   }
 
   private readonly onMouseDown = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
-    if (altKey) {
-      this.drawSpheres3D(offsetX, offsetY)
-    } else {
-      ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.drawLine(offsetX, offsetY)
-    }
+    this.handleDrawing(offsetX, offsetY)
     this.isDrawing = true
   }
 
   private readonly onMouseMove = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
     if (this.isDrawing) {
-      if (altKey) {
-        this.drawSpheres3D(offsetX, offsetY)
-      } else {
-        ctrlKey ? this.drawSpheres2D(offsetX, offsetY) : this.drawLine(offsetX, offsetY)
-      }
+      this.handleDrawing(offsetX, offsetY)
     }
   }
 
@@ -123,19 +119,37 @@ export default class DrawingManager {
     this.isDrawing = false
   }
 
+  private handleDrawing(offsetX: number, offsetY: number) {
+    switch (this.drawObject) {
+      case 'line':
+        this.drawLine(offsetX, offsetY)
+        break
+      case 'sphere':
+        this.drawSpheres(offsetX, offsetY)
+        break
+    }
+  }
+
   private readonly getMouseVector = (offsetX: number, offsetY: number) => {
     const cam = this.activeCamera
-    const mouse3D = new Vector3(offsetX / this.canvas.width * 2 - 1, -offsetY / this.canvas.height * 2 + 1, 0.1).unproject(cam)
-    mouse3D.sub(cam.position)
-    mouse3D.normalize()
     const scale = this.canvas.width / 2
-    const rayCaster = new Raycaster(cam.position, mouse3D);
-    const rayDir = new Vector3(rayCaster.ray.direction.x * scale, rayCaster.ray.direction.y * scale, rayCaster.ray.direction.z * scale);
-    const rayVector = new Vector3(cam.position.x + rayDir.x, cam.position.y + rayDir.y, cam.position.z + rayDir.z);
+    const x = (offsetX / this.canvas.width) * 2 - 1
+    const y = -(offsetY / this.canvas.height) * 2 + 1
+    const rayCaster = new Raycaster()
+    rayCaster.setFromCamera({ x, y }, cam)
+    const rayDir = new Vector3(rayCaster.ray.direction.x * scale, rayCaster.ray.direction.y * scale, rayCaster.ray.direction.z * scale)
+    const rayVector = new Vector3(cam.position.x + rayDir.x, cam.position.y + rayDir.y, cam.position.z + rayDir.z)
+    if (this.is3dMode) {
+      const intersections = rayCaster.intersectObjects([this.field], true)
+      return intersections.length ? intersections[0].point : undefined
+    }
+
     return rayVector
   }
 
   private readonly drawLine = (offsetX: number, offsetY: number) => {
+    const mouseVec = this.getMouseVector(offsetX, offsetY)
+    if (!mouseVec) return
     const index = this.isDrawing ? this.activeLinePointIndex : this.activeLinePointIndex = 0
     const activeLine = this.isDrawing ? this.drawableMeshes.line : this.drawableMeshes.line.clone()
     if (!this.isDrawing) {
@@ -148,40 +162,25 @@ export default class DrawingManager {
     const geo = activeLine.geometry as BufferGeometry
     const positionAttribute = geo.attributes.position as BufferAttribute
     const positions = positionAttribute.array as any[]
-    const mouseVec = this.getMouseVector(offsetX, offsetY)
 
     positions[index * 3 + 0] = mouseVec.x
     positions[index * 3 + 1] = mouseVec.y
     positions[index * 3 + 2] = mouseVec.z
 
-    geo.setDrawRange(0, ++this.activeLinePointIndex);
+    geo.setDrawRange(0, ++this.activeLinePointIndex)
     positionAttribute.needsUpdate = true
 
     this.isPaused() && this.refreshFrame()
   }
 
-  private readonly drawSpheres2D = (offsetX: number, offsetY: number) => {
+  private readonly drawSpheres = (offsetX: number, offsetY: number) => {
     const rayVector = this.getMouseVector(offsetX, offsetY)
-    const clone = this.drawableMeshes.sphere.clone()
-    this.cloneArray.push(clone.uuid)
-    clone.position.copy(rayVector)
-    clone.scale.set(10, 10, 10)
-    SceneManager.getInstance().scene.add(clone)
-
-    this.isPaused() && this.refreshFrame()
-  }
-
-  private readonly drawSpheres3D = (offsetX: number, offsetY: number) => {
-    const x = (offsetX / this.canvas.width) * 2 - 1
-    const y = -(offsetY / this.canvas.height) * 2 + 1
-    const rayCaster = new Raycaster()
-    rayCaster.setFromCamera({ x, y }, this.activeCamera)
-    const intersections = rayCaster.intersectObjects([this.field], true);
-    if (intersections.length) {
+    if (rayVector) {
       const clone = this.drawableMeshes.sphere.clone()
       this.cloneArray.push(clone.uuid)
-      clone.position.copy(intersections[0].point)
-      clone.scale.set(200, 200, 200)
+      if (this.is3dMode) rayVector.y += (this.sphereRadius*0.1)
+      clone.position.copy(rayVector)
+      clone.scale.setScalar(this.sphereRadius)
       SceneManager.getInstance().scene.add(clone)
 
       this.isPaused() && this.refreshFrame()
@@ -235,8 +234,8 @@ export default class DrawingManager {
     }
     return DrawingManager.instance
   }
-  static init() {
-    DrawingManager.instance = new DrawingManager()
+  static init(state?: DrawingState) {
+    DrawingManager.instance = new DrawingManager(state)
     return DrawingManager.instance
   }
   static destruct() {
