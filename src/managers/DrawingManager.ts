@@ -1,4 +1,4 @@
-import { Group, Camera, Raycaster, SphereBufferGeometry, MeshBasicMaterial, Mesh, Vector3, BufferGeometry, LineBasicMaterial, Line, BufferAttribute, Material } from "three"
+import { Group, Camera, Raycaster, SphereBufferGeometry, MeshBasicMaterial, Mesh, Vector3, BufferGeometry, LineBasicMaterial, Line, BufferAttribute, Material, BoxBufferGeometry } from "three"
 
 import {
   addCameraChangeListener,
@@ -14,16 +14,17 @@ import SceneManager from "./SceneManager"
 import CameraManager from "./CameraManager"
 import { GameManager } from "./GameManager"
 
+export type DrawableMeshIndex = "box" | "sphere" | "line"
+
 export interface DrawingState {
   color?: string 
-  sphereRadius?: number
-  drawObject?: string
+  meshScale?: number
+  drawObject?: DrawableMeshIndex
   is3dMode?: boolean
 }
 
-interface DrawableMeshes {
-  sphere: Mesh
-  line: Line
+type DrawableMeshes = {
+  [k in DrawableMeshIndex]: Mesh | Line
 }
 
 interface Canvas {
@@ -32,12 +33,13 @@ interface Canvas {
   height: number
 }
 
+
 export default class DrawingManager {
   color: string
-  sphereRadius: number
-  drawObject: string
+  drawObject: DrawableMeshIndex
   is3dMode: boolean
-
+  meshScale: number
+  
   private MAX_POINTS: number
   private isDrawing: boolean = false
   private field: Group
@@ -46,12 +48,12 @@ export default class DrawingManager {
   private cloneArray: Array<string>
   private activeLinePointIndex: number
   private drawableMeshes: DrawableMeshes
-
-  private constructor({color,sphereRadius,drawObject,is3dMode}: DrawingState = {}) {
+  
+  private constructor({color,meshScale,drawObject,is3dMode}: DrawingState = {}) {
     this.color = color || "ff0000"
-    this.sphereRadius = sphereRadius || 200
     this.drawObject = drawObject || 'line'
     this.is3dMode = is3dMode || false
+    this.meshScale = meshScale || 200
     this.MAX_POINTS = 500
     this.field = SceneManager.getInstance().field.field
     this.activeCamera = CameraManager.getInstance().activeCamera
@@ -82,19 +84,22 @@ export default class DrawingManager {
   }
 
   private readonly getDrawableMeshes = () => {
-    const sphereGeometry = new SphereBufferGeometry(0.1, 32, 32)
-    const sphereMaterial = new MeshBasicMaterial({ color: this.color })
-    const sphere = new Mesh(sphereGeometry, sphereMaterial)
+    const basicMaterial = new MeshBasicMaterial({ color: this.color })
+    const boxGeometry = new BoxBufferGeometry(0.2, 0.2, 0.2)
+    const box = new Mesh(boxGeometry, basicMaterial)
 
-    const lineGeometry = new BufferGeometry()
+    const sphereGeometry = new SphereBufferGeometry(0.1, 32, 32)
+    const sphere = new Mesh(sphereGeometry, basicMaterial)
+
     const lineMaterial = new LineBasicMaterial({ color: this.color })
+    const lineGeometry = new BufferGeometry()
     const positions = new Float32Array(this.MAX_POINTS * 3)
     lineGeometry.setAttribute('position', new BufferAttribute(positions, 3))
     const line = new Line(lineGeometry, lineMaterial)
 
-    this.cloneArray.push(sphere.uuid, line.uuid)
+    this.cloneArray.push(sphere.uuid, line.uuid, box.uuid)
 
-    return { sphere, line }
+    return { box, sphere, line }
   }
 
   private readonly getCanvas = () => {
@@ -122,10 +127,10 @@ export default class DrawingManager {
   private handleDrawing(offsetX: number, offsetY: number) {
     switch (this.drawObject) {
       case 'line':
-        this.drawLine(offsetX, offsetY)
+          this.drawLine(offsetX, offsetY)
         break
-      case 'sphere':
-        this.drawSpheres(offsetX, offsetY)
+      default:
+          this.drawMesh(offsetX, offsetY, this.drawObject)
         break
     }
   }
@@ -173,14 +178,14 @@ export default class DrawingManager {
     this.isPaused() && this.refreshFrame()
   }
 
-  private readonly drawSpheres = (offsetX: number, offsetY: number) => {
+  private readonly drawMesh = (offsetX: number, offsetY: number, mesh: keyof DrawableMeshes) => {
     const rayVector = this.getMouseVector(offsetX, offsetY)
     if (rayVector) {
-      const clone = this.drawableMeshes.sphere.clone()
+      const clone = this.drawableMeshes[mesh].clone()
       this.cloneArray.push(clone.uuid)
-      if (this.is3dMode) rayVector.y += (this.sphereRadius*0.1)
+      if (this.is3dMode) rayVector.y += (this.meshScale*0.1)
       clone.position.copy(rayVector)
-      clone.scale.setScalar(this.sphereRadius)
+      clone.scale.setScalar(this.meshScale)
       SceneManager.getInstance().scene.add(clone)
 
       this.isPaused() && this.refreshFrame()

@@ -15,15 +15,16 @@ import LineIcon from "./icons/LineIcon"
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 
-import DrawingManager from "../../managers/DrawingManager"
+import DrawingManager, { DrawableMeshIndex } from "../../managers/DrawingManager"
+import BoxIcon from "./icons/BoxIcon"
 
 interface Props { }
 
 interface State {
   isDrawingMode: boolean
   color: string
-  sphereRadius: number
-  drawObject: string
+  meshScale: number
+  drawObject: DrawableMeshIndex
   is3dMode: boolean
 }
 
@@ -34,7 +35,7 @@ class DrawingControls extends PureComponent<Props, State> {
     this.state = {
       isDrawingMode: false,
       color: "#00ea0c",
-      sphereRadius: 200,
+      meshScale: 200,
       drawObject: "line",
       is3dMode: false,
     }
@@ -69,7 +70,7 @@ class DrawingControls extends PureComponent<Props, State> {
     this.colorPicker.current && this.colorPicker.current.click()
   }
 
-  changeSelectedDrawObject = (object: string) => {
+  changeSelectedDrawObject = (object: DrawableMeshIndex) => {
     if (this.state.drawObject === object) return
     this.setState({
       drawObject: object,
@@ -77,12 +78,12 @@ class DrawingControls extends PureComponent<Props, State> {
     DrawingManager.getInstance().drawObject = object
   }
 
-  changeSphereRadius = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const radius = Number(e.target.value)
+  changeMeshScale = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const scale = Number(e.target.value)
     this.setState({
-      sphereRadius: radius,
+      meshScale: scale,
     })
-    DrawingManager.getInstance().sphereRadius = radius
+    DrawingManager.getInstance().meshScale = scale
   }
 
   clearDrawings = () => {
@@ -90,6 +91,12 @@ class DrawingControls extends PureComponent<Props, State> {
   }
 
   renderControlButtons = () => {
+    const drawableMeshes:DrawableMeshIndex[] = ['box','sphere','line']
+    const meshButtons = {
+      sphere: SphereIcon,
+      line: LineIcon,
+      box: BoxIcon
+    }
     return (
       <React.Fragment>
         <Grid item>
@@ -110,30 +117,26 @@ class DrawingControls extends PureComponent<Props, State> {
             <Button onClick={this.toggle3dMode} title="3D-Draw on the field object or in front of camera">
               {this.state.is3dMode ? "3D" : "2D"}
             </Button>
-            <Button
-              variant={this.state.drawObject == "sphere" ? "contained" : "outlined"}
-              color={this.state.drawObject == "sphere" ? "primary" : "default"}
-              onClick={() => this.changeSelectedDrawObject("sphere")}
-            >
-              <SphereIcon color={this.state.drawObject == "sphere" ? "#ffffff" : "#000000"} />
-            </Button>
-            <Button
-              variant={this.state.drawObject == "line" ? "contained" : "outlined"}
-              color={this.state.drawObject == "line" ? "primary" : "default"}
-              onClick={() => this.changeSelectedDrawObject("line")}
-            >
-              <LineIcon color={this.state.drawObject == "line" ? "#ffffff" : "#000000"} />
-            </Button>
+            {drawableMeshes.map((value, index) => {
+              const IconButton = meshButtons[value];
+              return <Button key={index}
+                  variant={this.state.drawObject == value ? "contained" : "outlined"}
+                  color={this.state.drawObject == value ? "primary" : "default"}
+                  onClick={() => this.changeSelectedDrawObject(value)}
+                >
+                  <IconButton color={this.state.drawObject == value ? "#ffffff" : "#000000"} />
+                </Button>
+            })}
           </ButtonGroup>
         </Grid>
-        {this.state.drawObject == "sphere"
+        {this.state.drawObject == "sphere" || this.state.drawObject == "box"
           ? <Grid item xs={2}>
             <Input
               type="number"
-              placeholder="Sphere radius"
-              defaultValue={this.state.sphereRadius}
-              onChange={this.changeSphereRadius}
-              startAdornment={<InputAdornment position="start">Radius</InputAdornment>}
+              placeholder="Scale"
+              defaultValue={this.state.meshScale}
+              onChange={this.changeMeshScale}
+              startAdornment={<InputAdornment position="start">Scale</InputAdornment>}
             />
           </Grid>
           : null
