@@ -40,7 +40,8 @@ export const loadRlLoadout = async (
     const bodyTask = manager.loadBody(
       player.loadout.car,
       paintConfig,
-      Body.DEFAULT
+      Body.DEFAULT,
+      player.loadout.skin
     )
 
     // TODO use the default wheel for now, there aren't a lot of wheels in rocket-loadout yet,
