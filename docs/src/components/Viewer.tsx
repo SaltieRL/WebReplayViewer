@@ -11,6 +11,7 @@ import {
   PlayerCameraControls,
   ReplayViewer,
   Slider,
+  DrawingControls
 } from "../../../src"
 
 interface Props extends WithStyles {
@@ -63,6 +64,9 @@ class Viewer extends Component<Props, State> {
         </Grid>
         <Grid item>
           <PlayerCameraControls />
+        </Grid>
+        <Grid item>
+          <DrawingControls />
         </Grid>
         <Grid item>
           <Slider />

@@ -67,7 +67,7 @@ export class GameManager {
     return this.renderer.domElement
   }
 
-  private readonly render = () => {
+  render = () => {
     const { scene } = SceneManager.getInstance()
     const { activeCamera } = CameraManager.getInstance()
     this.renderer.render(scene, activeCamera)
