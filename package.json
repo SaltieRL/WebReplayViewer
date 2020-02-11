@@ -16,6 +16,7 @@
     "link": "npm link && cd docs && npm link replay-viewer",
     "submodule": "git submodule update --remote",
     "submodule:init": "git submodule update --init --remote",
+    "publish:lib": "cd lib && npm publish",
     "prepublishOnly": "echo 'Do not publish from root. Publish from lib'; exit 1"
   },
   "repository": {
