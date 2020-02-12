@@ -95,6 +95,7 @@ const defaultSceneBuilder = async (
       toPlayerManager(assetLoader, player, loadingManager)
     )
   )
+  players.forEach(player => scene.add(player.carGroup))
 
   return SceneManager.init({
     scene,
