@@ -1,16 +1,65 @@
 import { RocketAssetManager, RocketConfig, TextureFormat } from "rl-loadout-lib"
-import { Cache, LoadingManager, Scene } from "three"
+import { Cache, Group, LoadingManager, Scene } from "three"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
-import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
-import { loadRlLoadout } from "../loaders/storage/loadRlLoadout"
+import { AssetLoader } from "../loaders/AssetLoader"
+import HighQualityAssetLoader from "../loaders/impl/HighQualityAssetLoader"
+import LowQualityAssetLoader from "../loaders/impl/LowQualityAssetLoader"
+import MediumQualityAssetLoader from "../loaders/impl/MediumQualityAssetLoader"
+import PlayerManager from "../managers/models/PlayerManager"
+import QualityManager, { QualityOptions } from "../managers/QualityManager"
 import SceneManager from "../managers/SceneManager"
 import { ExtendedPlayer } from "../models/ReplayMetadata"
 import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
-import { buildRocketLoadoutGroup } from "./player/buildRocketLoadoutScene"
+import { generateSprite } from "./player/generateSprite"
 import { addLighting } from "./scene/addLighting"
+import { getGroupName } from "./utils/playerNameGetters"
+
+const buildAssetManager = (loadingManager?: LoadingManager) => {
+  const gltfLoader = new GLTFLoader(loadingManager)
+  const dracoLoader = new DRACOLoader()
+  dracoLoader.setDecoderPath("/draco/")
+  gltfLoader.setDRACOLoader(dracoLoader)
+
+  const config = new RocketConfig({
+    gltfLoader,
+    loadingManager,
+    textureFormat: TextureFormat.PNG,
+    useCompressedModels: true,
+  })
+  return new RocketAssetManager(config)
+}
+
+const getAssetLoader = (
+  qualityManager: QualityManager,
+  loadingManager?: LoadingManager
+) => {
+  switch (qualityManager.getQuality()) {
+    case QualityOptions.LOW:
+      return new LowQualityAssetLoader()
+    case QualityOptions.MEDIUM:
+      return new MediumQualityAssetLoader(buildAssetManager(loadingManager))
+    case QualityOptions.HIGH:
+      return new HighQualityAssetLoader(buildAssetManager(loadingManager))
+  }
+}
+
+const toPlayerManager = async (
+  assetLoader: AssetLoader,
+  playerInfo: ExtendedPlayer,
+  loadingManager?: LoadingManager
+): Promise<PlayerManager> => {
+  const car = await assetLoader.loadCar(playerInfo, loadingManager)
+
+  const group = new Group()
+  group.name = getGroupName(playerInfo.name)
+  group.add(car)
+  group.add(generateSprite(playerInfo.name, playerInfo.isOrange))
+
+  return new PlayerManager(playerInfo.name, playerInfo.isOrange, group)
+}
 
 /**
  * @description The sole purpose of this function is to initialize and tie together all of the
@@ -25,41 +74,32 @@ const defaultSceneBuilder = async (
 ): Promise<SceneManager> => {
   const scene = new Scene()
 
+  const qualityManager = QualityManager.init({})
+  const assetLoader = getAssetLoader(qualityManager, loadingManager)
+
   // Enabled caching used by three's loaders
   Cache.enabled = true
 
-  if (loadingManager) {
-    GameFieldAssets.loadingManager = loadingManager
-  }
-
-  const gltfLoader = new GLTFLoader()
-  const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath("/draco/")
-  gltfLoader.setDRACOLoader(dracoLoader)
-
-  const config = new RocketConfig({
-    gltfLoader,
-    loadingManager,
-    textureFormat: TextureFormat.PNG,
-    useCompressedModels: true,
-  })
-  const manager = new RocketAssetManager(config)
-  const bodyPromises = playerInfo.map(player =>
-    loadRlLoadout(manager, player, defaultLoadouts)
-  )
-
-  await GameFieldAssets.load()
-  const bodies = await Promise.all(bodyPromises)
-
   addLighting(scene)
-  const field = buildPlayfield(scene)
-  const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
-  const ball = buildBall(scene)
+
+  const [field, ball] = await Promise.all([
+    assetLoader.loadField(loadingManager),
+    assetLoader.loadBall(loadingManager),
+  ])
+
+  const fieldManager = buildPlayfield(field, scene)
+  const ballManager = buildBall(ball, scene)
+
+  const players = await Promise.all(
+    playerInfo.map(player =>
+      toPlayerManager(assetLoader, player, loadingManager)
+    )
+  )
 
   return SceneManager.init({
     scene,
-    ball,
-    field,
+    ball: ballManager,
+    field: fieldManager,
     players,
   })
 }

@@ -1,10 +1,10 @@
-import { Camera, Group } from "three"
+import { Camera, Object3D } from "three"
 
 class FieldManager {
-  readonly field: Group
+  readonly field: Object3D
   readonly cameras: Camera[]
 
-  constructor(field: Group, cameras: Camera[]) {
+  constructor(field: Object3D, cameras: Camera[]) {
     this.field = field
     this.cameras = cameras
   }

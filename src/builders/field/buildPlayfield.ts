@@ -2,15 +2,15 @@ import {
   DoubleSide,
   Mesh,
   MeshPhongMaterial,
+  Object3D,
   PlaneBufferGeometry,
   Scene,
 } from "three"
 
-import GameFieldAssets from "../../loaders/scenes/GameFieldAssets"
 import FieldManager from "../../managers/models/FieldManager"
 import { addCameras } from "./addCameras"
 
-export const buildPlayfield = (scene: Scene) => {
+export const buildPlayfield = (field: Object3D, scene: Scene) => {
   /**
    * Temporary
    */
@@ -37,10 +37,6 @@ export const buildPlayfield = (scene: Scene) => {
   /**
    * /Temporary
    */
-
-  const { field } = GameFieldAssets.getAssets()
-  field.scale.setScalar(400)
-
   field.children.forEach(child => (child.receiveShadow = true))
   field.receiveShadow = true
   scene.add(field)
