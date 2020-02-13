@@ -1,5 +1,3 @@
-/* tslint:disable */
-
 import React from "react"
 
 const FullscreenExitIcon = () => {
