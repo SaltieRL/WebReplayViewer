@@ -1,5 +1,5 @@
 import { RocketAssetManager, RocketConfig, TextureFormat } from "rl-loadout-lib"
-import { Cache, LoadingManager, Scene } from "three"
+import { Cache, LoadingManager, Scene, WebGLRenderer } from "three"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
@@ -11,6 +11,7 @@ import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
 import { buildRocketLoadoutGroup } from "./player/buildRocketLoadoutScene"
 import { addLighting } from "./scene/addLighting"
+import { addEnvironment } from "./scene/addEnvironment";
 
 /**
  * @description The sole purpose of this function is to initialize and tie together all of the
@@ -20,6 +21,7 @@ import { addLighting } from "./scene/addLighting"
  */
 const defaultSceneBuilder = async (
   playerInfo: ExtendedPlayer[],
+  renderer: WebGLRenderer,
   loadingManager?: LoadingManager,
   defaultLoadouts?: boolean
 ): Promise<SceneManager> => {
@@ -44,17 +46,18 @@ const defaultSceneBuilder = async (
     useCompressedModels: true,
   })
   const manager = new RocketAssetManager(config)
-  const bodyPromises = playerInfo.map(player =>
-    loadRlLoadout(manager, player, defaultLoadouts)
-  )
 
   await GameFieldAssets.load()
-  const bodies = await Promise.all(bodyPromises)
 
   addLighting(scene)
-  const field = buildPlayfield(scene)
+  const envMap = addEnvironment(scene, renderer)
+  const bodyPromises = playerInfo.map(player =>
+    loadRlLoadout(manager, player, envMap, defaultLoadouts)
+  )
+  const bodies = await Promise.all(bodyPromises)
+  const field = buildPlayfield(scene, envMap)
   const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
-  const ball = buildBall(scene)
+  const ball = buildBall(scene, envMap)
 
   return SceneManager.init({
     scene,

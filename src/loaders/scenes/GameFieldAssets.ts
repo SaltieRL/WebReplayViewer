@@ -1,11 +1,13 @@
-import { Group, LoadingManager, Object3D } from "three"
+import { Group, LoadingManager, Object3D, DataTexture } from "three"
 
 import { loadBall } from "../storage/loadBall"
 import { loadField } from "../storage/loadField"
+import { loadEnvironment } from "../storage/loadEnvironment"
 
 interface AvailableAssets {
   ball: Object3D
   field: Group
+  environment: DataTexture
 }
 
 class GameFieldAssets {
@@ -20,11 +22,13 @@ class GameFieldAssets {
     const lm = this.loadingManager
     return Promise.all([
       loadBall(lm),
-      loadField(lm)
-    ]).then(([ball, field]) => {
+      loadField(lm),
+      loadEnvironment(lm)
+    ]).then(([ball, field, environment]) => {
       this.assets = {
         ball,
-        field
+        field,
+        environment
       } as AvailableAssets
     })
   }
