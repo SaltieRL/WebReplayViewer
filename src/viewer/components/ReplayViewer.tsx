@@ -7,8 +7,10 @@ import styled from "styled-components"
 import { dispatchCanvasResizeEvent } from "../../eventbus/events/canvasResize"
 import { dispatchPlayPauseEvent } from "../../eventbus/events/playPause"
 import { GameManager } from "../../managers/GameManager"
+import QualityManager from "../../managers/QualityManager"
 import FullscreenExitIcon from "./icons/FullscreenExitIcon"
 import FullscreenIcon from "./icons/FullscreenIcon"
+import QualitySelector from "./QualitySelector"
 import Scoreboard from "./ScoreBoard"
 
 interface Props {
@@ -76,6 +78,7 @@ class ReplayViewer extends PureComponent<Props, State> {
           <div style={{ width: "100%", height: "100%" }} ref={this.mount} />
           <Scoreboard />
           <FullscreenToggle>
+            <QualitySelector qualityManager={QualityManager.getInstance()} />
             <Button onClick={onClick}>
               <Typography style={{ color: "#fff" }}>
                 {fullScreen ? <FullscreenExitIcon /> : <FullscreenIcon />}

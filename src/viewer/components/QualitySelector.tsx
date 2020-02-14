@@ -26,6 +26,7 @@ const QualitySelector = ({ qualityManager }: Props) => {
   )
   useEffect(() => {
     qualityManager.setQuality(qualitySetting)
+    setDialogOpen(false)
   }, [qualitySetting])
 
   return (

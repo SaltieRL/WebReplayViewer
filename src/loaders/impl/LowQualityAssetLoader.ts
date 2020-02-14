@@ -1,19 +1,17 @@
-import { BodyModel } from "rl-loadout-lib"
 import {
+  BoxGeometry,
   Group,
-  LoadingManager,
   Mesh,
-  MeshPhongMaterial,
+  MeshBasicMaterial,
   MeshStandardMaterial,
   Object3D,
+  PlaneBufferGeometry,
   SphereGeometry,
 } from "three"
 
 import { getCarName } from "../../builders/utils/playerNameGetters"
 import { ReplayPlayer } from "../../models/ReplayPlayer"
 import { AssetLoader } from "../AssetLoader"
-import { loadObject } from "../operators/loadObject"
-import { storageMemoize } from "../storage/storageMemoize"
 
 export default class LowQualityAssetLoader implements AssetLoader {
   async loadBall(): Promise<Object3D> {
@@ -22,71 +20,36 @@ export default class LowQualityAssetLoader implements AssetLoader {
     return new Mesh(sphereGeometry, spherMaterial)
   }
 
-  async loadField(loadingManager?: LoadingManager): Promise<Object3D> {
-    return storageMemoize(async () => {
-      const { default: glb } = await import(
-        // @ts-ignore
-        /* webpackChunkName: "Field" */ "../../assets/models/draco/Field.glb"
-      )
-      const fieldGLTF = await loadObject(glb, loadingManager)
-      const field = new Group()
-      field.name = "Field"
-      field.add(...fieldGLTF.scene.children)
-      return field
-    }, "FIELD")
+  async loadField(): Promise<Object3D> {
+    const geometry = new PlaneBufferGeometry(8192, 10240, 1, 1)
+    const material = new MeshBasicMaterial({ color: "#4CAF50" })
+    const fieldMesh = new Mesh(geometry, material)
+    fieldMesh.rotation.x = -Math.PI / 2
+    return fieldMesh
   }
 
   async loadCar(player: ReplayPlayer): Promise<Object3D> {
-    const body = await this.buildBody(player)
+    const body = this.buildBody(player)
     this.setMaterials(body)
-    body.scene.name = getCarName(player.name)
-    return body.scene
+    body.name = getCarName(player.name)
+    return body
   }
 
-  private async buildBody(player: ReplayPlayer): Promise<BodyModel> {
-    // const paintConfig = createPaintConfig(player.isOrange)
-    // const body = new BodyModel(
-    //   Body.DEFAULT,
-    //   Decal.NONE,
-    //   paintConfig,
-    //   this.manager.config
-    // )
-    // const wheels = new WheelsModel(
-    //   Wheel.DEFAULT,
-    //   paintConfig,
-    //   this.manager.config
-    // )
-    // await body.load()
-    // await wheels.load()
-    // body.addWheelsModel(wheels)
-
-    // return body
-    return null as any
+  private buildBody(player: ReplayPlayer): Object3D {
+    // 0xff9800 is orange, 0x2196f3 is blue
+    const carColor = player.isOrange ? 0xff9800 : 0x2196f3
+    const bodyBox = new BoxGeometry(160, 100, 100)
+    const material = new MeshBasicMaterial({ color: carColor })
+    const carObject = new Mesh(bodyBox, material)
+    carObject.position.y = 50
+    const carGroup = new Group()
+    carGroup.add(carObject)
+    return carGroup
   }
 
-  private setMaterials(body: BodyModel) {
-    body.scene.traverse(object => {
-      // @ts-ignore
-      if (object.isMesh) {
-        const mesh = object as Mesh
-        mesh.receiveShadow = true
-        mesh.castShadow = true
-
-        // Phong material is less physically accurate but has noticably better performance
-        const oldMaterial = mesh.material as MeshStandardMaterial
-        const phongMaterial = new MeshPhongMaterial()
-        phongMaterial.name = oldMaterial.name
-        phongMaterial.map = oldMaterial.map
-        phongMaterial.normalMap = oldMaterial.normalMap
-        phongMaterial.color = oldMaterial.color
-        phongMaterial.shininess = (1 - oldMaterial.roughness) * 100
-        phongMaterial.skinning = oldMaterial.skinning
-
-        mesh.material = phongMaterial
-        mesh.material.needsUpdate = true
-
-        oldMaterial.dispose()
-      }
-    })
+  private setMaterials(body: Object3D) {
+    const mesh = body as Mesh
+    mesh.receiveShadow = true
+    mesh.castShadow = true
   }
 }

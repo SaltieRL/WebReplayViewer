@@ -23,10 +23,14 @@ const defaultGameBuilder = async ({
   replayData,
   replayMetadata,
   loadingManager,
-  defaultLoadouts
+  defaultLoadouts,
 }: GameBuilderOptions) => {
   const players = replayMetadata.players
-  const sceneManager = await defaultSceneBuilder(players, loadingManager, defaultLoadouts)
+  const sceneManager = await defaultSceneBuilder(
+    players,
+    loadingManager,
+    defaultLoadouts
+  )
   defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
   DataManager.init({ replayData, replayMetadata })
   CameraManager.init()
