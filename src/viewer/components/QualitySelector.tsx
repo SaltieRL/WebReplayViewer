@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography"
 import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 
+import { dispatchPlayPauseEvent } from "../../eventbus/events/playPause"
 import QualityManager, { QualityOptions } from "../../managers/QualityManager"
 import QualityIcon from "./icons/QualityIcon"
 
@@ -26,9 +27,15 @@ const QualitySelector = ({ qualityManager }: Props) => {
   )
   useEffect(() => {
     qualityManager.setQuality(qualitySetting)
-    setDialogOpen(false)
+    if (dialogOpen) {
+      setDialogOpen(false)
+      dispatchPlayPauseEvent({
+        paused: true,
+      })
+      location.reload()
+    }
   }, [qualitySetting])
-
+  
   return (
     <>
       <Button onClick={() => setDialogOpen(true)}>
