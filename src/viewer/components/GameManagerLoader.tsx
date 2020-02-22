@@ -5,6 +5,10 @@ import styled from "styled-components"
 import { LoadingManager } from "three/src/loaders/LoadingManager"
 
 import { GameBuilderOptions } from "../../builders/GameBuilder"
+import {
+  addRestartListener,
+  removeRestartListener,
+} from "../../eventbus/events/restart"
 import { GameManager } from "../../managers/GameManager"
 
 interface Props {
@@ -27,22 +31,18 @@ class GameManagerLoader extends Component<Props, State> {
       loadingManager: props.options.loadingManager || new LoadingManager(),
     }
     this.state.loadingManager.onProgress = this.handleProgress
+    this.load = this.load.bind(this)
+    this.restart = this.restart.bind(this)
   }
 
   componentDidMount() {
-    GameManager.builder({
-      ...this.props.options,
-      loadingManager: this.state.loadingManager,
-    }).then(gameManager => {
-      this.props.onLoad(gameManager)
-      this.setState({
-        gameManager,
-      })
-    })
+    this.load()
+    addRestartListener(this.restart)
   }
 
   componentWillUnmount() {
     GameManager.destruct()
+    removeRestartListener(this.restart)
   }
 
   handleProgress = (_: any, loaded: number, total: number) => {
@@ -68,6 +68,23 @@ class GameManagerLoader extends Component<Props, State> {
       )
     }
     return children
+  }
+
+  private restart() {
+    GameManager.destruct()
+    this.setState({ gameManager: undefined }, this.load)
+  }
+
+  private load() {
+    GameManager.builder({
+      ...this.props.options,
+      loadingManager: this.state.loadingManager,
+    }).then(gameManager => {
+      this.props.onLoad(gameManager)
+      this.setState({
+        gameManager,
+      })
+    })
   }
 }
 

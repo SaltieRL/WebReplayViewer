@@ -7,6 +7,7 @@ import React, { useEffect, useState } from "react"
 import styled from "styled-components"
 
 import { dispatchPlayPauseEvent } from "../../eventbus/events/playPause"
+import { dispatchRestartEvent } from "../../eventbus/events/restart"
 import QualityManager, { QualityOptions } from "../../managers/QualityManager"
 import QualityIcon from "./icons/QualityIcon"
 
@@ -32,10 +33,10 @@ const QualitySelector = ({ qualityManager }: Props) => {
       dispatchPlayPauseEvent({
         paused: true,
       })
-      location.reload()
+      dispatchRestartEvent({})
     }
   }, [qualitySetting])
-  
+
   return (
     <>
       <Button onClick={() => setDialogOpen(true)}>
