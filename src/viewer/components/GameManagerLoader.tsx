@@ -37,7 +37,6 @@ class GameManagerLoader extends Component<Props, State> {
 
   componentDidMount() {
     this.load()
-    addRestartListener(this.restart)
   }
 
   componentWillUnmount() {
@@ -71,6 +70,7 @@ class GameManagerLoader extends Component<Props, State> {
   }
 
   private restart() {
+    removeRestartListener(this.restart)
     GameManager.destruct()
     this.setState({ gameManager: undefined }, this.load)
   }
@@ -84,6 +84,7 @@ class GameManagerLoader extends Component<Props, State> {
       this.setState({
         gameManager,
       })
+      addRestartListener(this.restart)
     })
   }
 }
