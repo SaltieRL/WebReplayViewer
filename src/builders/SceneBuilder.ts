@@ -1,4 +1,9 @@
-import { RocketAssetManager, RocketConfig, TextureFormat } from "rl-loadout-lib"
+import {
+  RocketAssetManager,
+  RocketConfig,
+  TextureFormat,
+  TextureQuality,
+} from "rl-loadout-lib"
 import { Cache, Group, LoadingManager, Scene } from "three"
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
@@ -17,7 +22,10 @@ import { generateSprite } from "./player/generateSprite"
 import { addLighting } from "./scene/addLighting"
 import { getGroupName } from "./utils/playerNameGetters"
 
-const buildAssetManager = (loadingManager?: LoadingManager) => {
+const buildAssetManager = (
+  highQuality: boolean,
+  loadingManager?: LoadingManager
+) => {
   const gltfLoader = new GLTFLoader(loadingManager)
   const dracoLoader = new DRACOLoader()
   dracoLoader.setDecoderPath("/draco/")
@@ -26,6 +34,7 @@ const buildAssetManager = (loadingManager?: LoadingManager) => {
   const config = new RocketConfig({
     gltfLoader,
     loadingManager,
+    textureQuality: highQuality ? TextureQuality.HIGH : TextureQuality.LOW,
     textureFormat: TextureFormat.PNG,
     useCompressedModels: true,
   })
@@ -40,9 +49,11 @@ const getAssetLoader = (
     case QualityOptions.LOW:
       return new LowQualityAssetLoader()
     case QualityOptions.MEDIUM:
-      return new MediumQualityAssetLoader(buildAssetManager(loadingManager))
+      return new MediumQualityAssetLoader(
+        buildAssetManager(false, loadingManager)
+      )
     case QualityOptions.HIGH:
-      return new HighQualityAssetLoader(buildAssetManager(loadingManager))
+      return new HighQualityAssetLoader(buildAssetManager(true, loadingManager))
   }
 }
 
