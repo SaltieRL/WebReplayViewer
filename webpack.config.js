@@ -3,7 +3,7 @@ const path = require("path")
 const PATHS = {
   entry: path.resolve(__dirname, "src/index.ts"),
   bundles: path.resolve(__dirname, "lib"),
-  assets: "assets/models",
+  assets: "assets/models/draco",
 }
 
 module.exports = {
