@@ -38,10 +38,10 @@
   },
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
   "peerDependencies": {
-    "@material-ui/core": "^4.6.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "three": "^0.110.0"
+    "@material-ui/core": "^4.9.7",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "three": "^0.114.0"
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
