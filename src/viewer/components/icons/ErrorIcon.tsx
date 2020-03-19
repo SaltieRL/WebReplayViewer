@@ -5,7 +5,7 @@ type Props = {
   color?: string
 }
 
-const ErrorIcon = ({ color = "#000000" }: Props) => {
+const ErrorIcon = ({ color }: Props) => {
   return (
     <SvgIcon color="error">
       <path
