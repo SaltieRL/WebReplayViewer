@@ -37,8 +37,8 @@ export const loadRlLoadout = async (
   const bodyId = defaultLoadout ? OCTANE_BODY_ID : player.loadout.car
   const wheelId = defaultLoadout ? OEM_WHEEL_ID : player.loadout.wheels
 
-  const body = await manager.loadBody(bodyId, paintConfig)
-  const wheels = await manager.loadWheel(wheelId, paintConfig)
+  const body = await manager.loadBody(bodyId, paintConfig, Body.DEFAULT)
+  const wheels = await manager.loadWheel(wheelId, paintConfig, Wheel.DEFAULT)
 
   // Add the wheels to the body.
   // It will automatically create 4 wheels with the correct position and scale
