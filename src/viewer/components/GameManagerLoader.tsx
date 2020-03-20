@@ -6,6 +6,7 @@ import { LoadingManager } from "three/src/loaders/LoadingManager"
 
 import { GameBuilderOptions } from "../../builders/GameBuilder"
 import { GameManager } from "../../managers/GameManager"
+import ErrorIcon from "./icons/ErrorIcon"
 
 interface Props {
   options: GameBuilderOptions
@@ -16,6 +17,7 @@ interface State {
   loadingManager: LoadingManager
   percentLoaded: number
   gameManager?: GameManager
+  error?: string
 }
 
 class GameManagerLoader extends Component<Props, State> {
@@ -27,6 +29,9 @@ class GameManagerLoader extends Component<Props, State> {
       loadingManager: props.options.loadingManager || new LoadingManager(),
     }
     this.state.loadingManager.onProgress = this.handleProgress
+    if (!this.state.loadingManager.onError) {
+      this.state.loadingManager.onError = this.handleError
+    }
   }
 
   componentDidMount() {
@@ -54,20 +59,46 @@ class GameManagerLoader extends Component<Props, State> {
     })
   }
 
+  handleError = (message: string) => {
+    this.setState({
+      error: `An error occurred while loading: ${message}`,
+    })
+  }
+
   render() {
     const { children } = this.props
-    const { gameManager, percentLoaded } = this.state
+    const { gameManager } = this.state
     if (!gameManager) {
       return (
         <LoadingContainer>
           <CircularProgressContainer>
-            <CircularProgress />
+            {this.renderIcon()}
           </CircularProgressContainer>
-          <Type variant="caption">{`Importing assets: ${percentLoaded}%`}</Type>
+          <Type variant="caption">{this.getHintText()}</Type>
         </LoadingContainer>
       )
     }
     return children
+  }
+
+  private renderIcon(): JSX.Element {
+    const { error, percentLoaded } = this.state
+    if (error) {
+      return <ErrorIcon />
+    }
+    const variant = percentLoaded === 100 ? "indeterminate" : "static"
+    return <CircularProgress variant={variant} value={percentLoaded} />
+  }
+
+  private getHintText(): string {
+    const { percentLoaded, error } = this.state
+    if (error) {
+      return error
+    } else if (percentLoaded === 100) {
+      return "Building scene..."
+    } else {
+      return `Importing assets: ${percentLoaded}%`
+    }
   }
 }
 
@@ -78,6 +109,10 @@ const LoadingContainer = styled.div`
 `
 const CircularProgressContainer = styled.div`
   width: 100%;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 const Type = styled(Typography)`
   width: 100%;

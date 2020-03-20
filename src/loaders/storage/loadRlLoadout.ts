@@ -2,30 +2,27 @@ import {
   Body,
   BodyModel,
   createPaintConfig,
-  Decal,
+  PaintConfig,
   RocketAssetManager,
   Wheel,
-  WheelsModel,
 } from "rl-loadout-lib"
-import { Mesh, MeshPhongMaterial, MeshStandardMaterial } from "three"
+import { Mesh } from "three"
 
 import { ExtendedPlayer } from "../../models/ReplayMetadata"
+
+const OCTANE_BODY_ID = Body.DEFAULT.id
+const OEM_WHEEL_ID = Wheel.DEFAULT.id
 
 export const loadRlLoadout = async (
   manager: RocketAssetManager,
   player: ExtendedPlayer,
   defaultLoadout?: boolean
 ): Promise<{ body: BodyModel; player: ExtendedPlayer }> => {
-  let body: BodyModel
-  let wheels: WheelsModel
-
+  let paintConfig: PaintConfig
   if (defaultLoadout) {
-    const paintConfig = createPaintConfig(player.isOrange)
-    body = new BodyModel(Body.DEFAULT, Decal.NONE, paintConfig, manager.config)
-    wheels = new WheelsModel(Wheel.DEFAULT, paintConfig, manager.config)
-    await Promise.all([body.load(), wheels.load()])
+    paintConfig = new PaintConfig()
   } else {
-    const paintConfig = createPaintConfig(
+    paintConfig = createPaintConfig(
       player.isOrange,
       player.loadout.primaryColor,
       player.loadout.accentColor,
@@ -35,22 +32,16 @@ export const loadRlLoadout = async (
       player.loadout.topperPaint,
       player.loadout.antennaPaint
     )
-
-    const bodyTask = manager.loadBody(
-      player.loadout.car,
-      paintConfig,
-      Body.DEFAULT,
-      player.loadout.skin
-    )
-
-    // TODO use the default wheel for now, there aren't a lot of wheels in rocket-loadout yet,
-    // and not yet fully supported
-    wheels = new WheelsModel(Wheel.DEFAULT, paintConfig, manager.config)
-
-    await wheels.load()
-    body = await bodyTask
   }
 
+  const bodyId = defaultLoadout ? OCTANE_BODY_ID : player.loadout.car
+  const wheelId = defaultLoadout ? OEM_WHEEL_ID : player.loadout.wheels
+
+  const body = await manager.loadBody(bodyId, paintConfig, Body.DEFAULT)
+  const wheels = await manager.loadWheel(wheelId, paintConfig, Wheel.DEFAULT)
+
+  // Add the wheels to the body.
+  // It will automatically create 4 wheels with the correct position and scale
   body.addWheelsModel(wheels)
 
   body.scene.traverse(object => {
@@ -59,21 +50,6 @@ export const loadRlLoadout = async (
       const mesh = object as Mesh
       mesh.receiveShadow = true
       mesh.castShadow = true
-
-      // Phong material is less physically accurate but has noticably better performance
-      const oldMaterial = mesh.material as MeshStandardMaterial
-      const phongMaterial = new MeshPhongMaterial()
-      phongMaterial.name = oldMaterial.name
-      phongMaterial.map = oldMaterial.map
-      phongMaterial.normalMap = oldMaterial.normalMap
-      phongMaterial.color = oldMaterial.color
-      phongMaterial.shininess = (1 - oldMaterial.roughness) * 100
-      phongMaterial.skinning = oldMaterial.skinning
-
-      mesh.material = phongMaterial
-      mesh.material.needsUpdate = true
-
-      oldMaterial.dispose()
     }
   })
 
