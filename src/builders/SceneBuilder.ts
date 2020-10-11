@@ -1,16 +1,37 @@
-import { RocketAssetManager, RocketConfig, TextureFormat } from "rl-loadout-lib"
 import { Cache, LoadingManager, Scene } from "three"
-import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader"
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 
 import GameFieldAssets from "../loaders/scenes/GameFieldAssets"
-import { loadRlLoadout } from "../loaders/storage/loadRlLoadout"
+import PlayerManager from "../managers/models/PlayerManager"
 import SceneManager from "../managers/SceneManager"
 import { ExtendedPlayer } from "../models/ReplayMetadata"
 import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
-import { buildRocketLoadoutGroup } from "./player/buildRocketLoadoutScene"
+import BasicPlayerBuilder from "./player/BasicPlayerBuilder"
+import RLLoadoutPlayerBuilder from "./player/RLLoadoutPlayerBuilder"
 import { addLighting } from "./scene/addLighting"
+
+const getPlayersAndScene = async (
+  playerInfo: ExtendedPlayer[],
+  loadingManager?: LoadingManager,
+  defaultLoadouts?: boolean
+): Promise<[PlayerManager[], Scene]> => {
+  try {
+    const rlPlayerBuilder = new RLLoadoutPlayerBuilder(
+      loadingManager,
+      defaultLoadouts
+    )
+    const scene = new Scene()
+    const players = await rlPlayerBuilder.buildPlayers(scene, playerInfo)
+    return [players, scene]
+  } catch (err) {
+    console.error(err)
+    console.log("Falling back to basic player builder")
+    const basicBuilder = new BasicPlayerBuilder(loadingManager)
+    const scene = new Scene()
+    const players = await basicBuilder.buildPlayers(scene, playerInfo)
+    return [players, scene]
+  }
+}
 
 /**
  * @description The sole purpose of this function is to initialize and tie together all of the
@@ -23,37 +44,22 @@ const defaultSceneBuilder = async (
   loadingManager?: LoadingManager,
   defaultLoadouts?: boolean
 ): Promise<SceneManager> => {
-  const scene = new Scene()
-
   // Enabled caching used by three's loaders
   Cache.enabled = true
 
   if (loadingManager) {
     GameFieldAssets.loadingManager = loadingManager
   }
-
-  const gltfLoader = new GLTFLoader()
-  const dracoLoader = new DRACOLoader()
-  dracoLoader.setDecoderPath("/draco/")
-  gltfLoader.setDRACOLoader(dracoLoader)
-
-  const config = new RocketConfig({
-    gltfLoader,
-    loadingManager,
-    textureFormat: TextureFormat.PNG,
-    useCompressedModels: true,
-  })
-  const manager = new RocketAssetManager(config)
-  const bodyPromises = playerInfo.map(player =>
-    loadRlLoadout(manager, player, defaultLoadouts)
-  )
-
   await GameFieldAssets.load()
-  const bodies = await Promise.all(bodyPromises)
+
+  const [players, scene] = await getPlayersAndScene(
+    playerInfo,
+    loadingManager,
+    defaultLoadouts
+  )
 
   addLighting(scene)
   const field = buildPlayfield(scene)
-  const players = bodies.map(value => buildRocketLoadoutGroup(scene, value))
   const ball = buildBall(scene)
 
   return SceneManager.init({
@@ -63,4 +69,5 @@ const defaultSceneBuilder = async (
     players,
   })
 }
+
 export default defaultSceneBuilder
