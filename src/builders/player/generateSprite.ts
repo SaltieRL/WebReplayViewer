@@ -8,7 +8,7 @@ import {
 
 import { SPRITE } from "../../constants/gameObjectNames"
 
-export const SPRITE_SCALAR = 800
+export const SPRITE_ORTHO_SCALE = 2400
 
 export const generateSprite = (playerName: string, orangeTeam: boolean) => {
   const name = playerName.toUpperCase()
@@ -45,12 +45,15 @@ export const generateSprite = (playerName: string, orangeTeam: boolean) => {
   }
 
   if (context) {
+    const tagYOffset = 70
+    const tagY = (canvas.height / 2) - (fontSize + border * 2) - tagYOffset
     context.font = `bold ${fontSize}px Arial`
+    context.textBaseline = "middle"
     context.fillStyle = orangeTeam ? "#ff9800" : "#2196f3"
     roundRect(
       context,
       border,
-      border,
+      tagY,
       canvasSize,
       fontSize + border * 2,
       fontSize * 2
@@ -60,7 +63,7 @@ export const generateSprite = (playerName: string, orangeTeam: boolean) => {
     roundRect(
       context,
       border,
-      border,
+      tagY,
       canvasSize,
       fontSize + border * 2,
       fontSize * 2
@@ -71,7 +74,7 @@ export const generateSprite = (playerName: string, orangeTeam: boolean) => {
     const maxWidth = canvasSize - padding * 2
     const width = maxWidth > measure.width ? measure.width : maxWidth
     const x = canvasSize / 2 + border / 2 - width / 2
-    context.fillText(name, x, fontSize + border, maxWidth)
+    context.fillText(name, x, canvas.height / 2 - fontSize / 2 - border - tagYOffset, maxWidth)
   }
 
   const texture = new Texture(canvas)
@@ -82,8 +85,8 @@ export const generateSprite = (playerName: string, orangeTeam: boolean) => {
     map: texture,
   })
   const sprite = new Sprite(spriteMaterial)
+  sprite.position.setY(40)
   sprite.name = SPRITE
-  sprite.scale.setScalar(SPRITE_SCALAR)
 
   return sprite
 }

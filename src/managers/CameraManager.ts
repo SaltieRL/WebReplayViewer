@@ -66,6 +66,7 @@ class CameraManager {
       ballPosition: position,
       ballCam: this.ballCam,
       isUsingBoost: false,
+      activeCamera: this.activeCamera
     })
 
     if (!isOrthographicCamera(this.activeCamera)) {
