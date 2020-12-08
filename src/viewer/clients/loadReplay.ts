@@ -15,12 +15,21 @@ const cache: { [key: string]: [ReplayData, ReplayMetadata] } = {}
 export const loadReplay = async (
   replayId: string,
   cached?: boolean,
-  local?: boolean
+  local?: boolean,
+  usecgg: boolean=true
 ): Promise<[ReplayData, ReplayMetadata]> => {
-  const url = local ? "../examples/" : "https://calculated.gg/api/replay/"
+
+  var remoteAddress
+  if (usecgg) {
+    remoteAddress = "https://calculated.gg/api"
+  } else {
+    remoteAddress = location.protocol + '//' + location.host
+  }
+
+  const url = local ? "../examples/" : remoteAddress + "/replay/"
   const fetch = () =>
     Promise.all([
-      fetchByURL(`${url+replayId}/positions${local && '.json'}`, local),
+      fetchByURL(`${url+replayId}/positions${local? '.json':''}`, local),
       fetchByURL(`${url+replayId}${local ? "/metadata.json" : "?key=1"}`, local),
     ])
   if (cached) {
