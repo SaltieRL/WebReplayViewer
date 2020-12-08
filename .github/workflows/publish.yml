@@ -16,7 +16,7 @@ jobs:
       - name: Build the project
         run: npm run build
       - name: Publish to NPM
-        uses: npm run publish:lib
+        run: npm run publish:lib
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
