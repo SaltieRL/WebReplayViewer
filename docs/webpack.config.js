@@ -6,7 +6,6 @@ module.exports = {
 
   entry: {
     app: [path.resolve(__dirname, "src/index.tsx")],
-    vendor: ["@material-ui/core", "react", "react-dom", "three"],
   },
 
   output: {
@@ -37,7 +36,15 @@ module.exports = {
     removeAvailableModules: false,
     removeEmptyChunks: false,
     minimize: false,
-    splitChunks: false,
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: "vendors",
+          chunks: "all",
+        },
+      },
+    },
   },
 
   resolve: {
