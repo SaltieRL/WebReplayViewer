@@ -12,19 +12,12 @@ interface Props {
   autoplay?: boolean
 }
 
-interface State {
-  fullScreen: boolean
-}
-
-class ReplayViewer extends PureComponent<Props, State> {
+class ReplayViewer extends PureComponent<Props> {
   private readonly mount: RefObject<HTMLDivElement>
 
   constructor(props: Props) {
     super(props)
     this.mount = createRef()
-    this.state = {
-      fullScreen: false,
-    }
   }
 
   componentDidMount() {
@@ -50,7 +43,9 @@ class ReplayViewer extends PureComponent<Props, State> {
   }
 
   handleResize = () => {
-    const { clientWidth: width, clientHeight: height } = this.mount.current!
+    const { current } = this.mount
+    if (!current) return
+    const { clientWidth: width, clientHeight: height } = current
     dispatchCanvasResizeEvent({ width, height })
   }
 

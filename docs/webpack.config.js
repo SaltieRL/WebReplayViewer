@@ -57,18 +57,17 @@ module.exports = {
 
   stats: {
     assetsSort: "chunks",
-    entrypoints: false,
-    excludeAssets: /\.map$/,
-    colors: true,
-    version: false,
-    hash: false,
-    timings: false,
     cached: false,
     cachedAssets: false,
-    chunkModules: false,
     chunks: false,
+    chunkModules: false,
+    colors: true,
     entrypoints: false,
+    excludeAssets: /\.map$/,
+    hash: false,
     modules: false,
+    timings: false,
+    version: false,
   },
 
   module: {
