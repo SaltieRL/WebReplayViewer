@@ -5,7 +5,8 @@
   "main": "src/index.tsx",
   "private": true,
   "scripts": {
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "draco-update": "node draco-update.js --mode wasm --variation gltf"
   },
   "repository": {
     "type": "git",
@@ -19,8 +20,16 @@
   ],
   "author": "Saltie",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "@material-ui/core": "^4.9.7",
+    "react": "^16.13.0",
+    "react-dom": "^16.13.0",
+    "three": "^0.114.0"
+  },
   "devDependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-typescript": "^7.12.16",
     "@types/react-dom": "^16.9.11",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.1.0",
@@ -35,5 +44,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "engines": {
+    "node": "12.x"
+  }
 }

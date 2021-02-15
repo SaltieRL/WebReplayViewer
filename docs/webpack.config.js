@@ -6,23 +6,16 @@ module.exports = {
 
   entry: {
     app: [path.resolve(__dirname, "src/index.tsx")],
-    vendor: ["react", "react-dom"],
+    vendor: ["@material-ui/core", "react", "react-dom", "three"],
   },
 
   output: {
-    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
-    publicPath: "/",
-  },
-
-  resolve: {
-    extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
-  },
-
-  optimization: {
-    removeAvailableModules: false,
-    removeEmptyChunks: false,
-    splitChunks: false,
+    pathinfo: true,
+    filename: "static/js/[name].js",
+    sourceMapFilename: "static/maps/[file].map[query]",
+    chunkFilename: "static/js/[name].chunk.js",
+    globalObject: "this",
   },
 
   devServer: {
@@ -35,12 +28,48 @@ module.exports = {
     publicPath: "/",
   },
 
+  watchOptions: {
+    poll: true,
+    ignored: /node_modules/,
+  },
+
+  optimization: {
+    removeAvailableModules: false,
+    removeEmptyChunks: false,
+    minimize: false,
+    splitChunks: false,
+  },
+
+  resolve: {
+    extensions: [".ts", ".tsx", ".js"],
+    modules: [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname, "..", "node_modules"),
+    ],
+  },
+
+  stats: {
+    assetsSort: "chunks",
+    entrypoints: false,
+    excludeAssets: /\.map$/,
+    colors: true,
+    version: false,
+    hash: false,
+    timings: false,
+    cached: false,
+    cachedAssets: false,
+    chunkModules: false,
+    chunks: false,
+    entrypoints: false,
+    modules: false,
+  },
+
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
-        use: ["ts-loader"],
+        use: ["babel-loader", "ts-loader"],
       },
       {
         test: /\.(glb|mtl|png|jpe?g|gif)$/,
@@ -59,5 +88,6 @@ module.exports = {
       template: path.resolve(__dirname, "src/index.html"),
     }),
   ],
+
   devtool: "source-map",
 }
