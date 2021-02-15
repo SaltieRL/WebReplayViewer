@@ -37,6 +37,9 @@
     "url": "https://github.com/SaltieRL/WebReplayViewer/issues"
   },
   "homepage": "https://github.com/SaltieRL/WebReplayViewer#readme",
+  "engines": {
+    "node": "12.x"
+  },
   "peerDependencies": {
     "@material-ui/core": "^4.9.7",
     "react": "^16.13.0",
@@ -45,34 +48,33 @@
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
-    "moment": "^2.24.0",
-    "pngjs": "^3.4.0",
-    "react-full-screen": "^0.2.4",
+    "pngjs": "^6.0.0",
+    "react-full-screen": "^1.0.1",
     "rl-loadout-lib": "^0.6.0",
-    "styled-components": "^4.4.1"
+    "styled-components": "^5.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.7",
-    "@babel/plugin-proposal-class-properties": "^7.8.3",
-    "@babel/preset-env": "^7.12.7",
-    "@babel/preset-react": "^7.8.3",
-    "@babel/preset-typescript": "^7.8.3",
+    "@babel/core": "^7.12.16",
+    "@babel/plugin-proposal-class-properties": "^7.12.13",
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/preset-typescript": "^7.12.16",
     "@material-ui/core": "^4.9.7",
     "@types/lodash.debounce": "^4.0.6",
-    "@types/node": "^13.9.2",
-    "@types/react": "^16.9.23",
-    "@types/styled-components": "^5.0.1",
-    "babel-loader": "^8.0.6",
+    "@types/node": "^14.14.28",
+    "@types/react": "^16.13.0",
+    "@types/styled-components": "^5.1.7",
+    "babel-loader": "^8.2.2",
     "babel-plugin-dynamic-import-webpack": "^1.1.0",
-    "file-loader": "^6.0.0",
-    "fs-extra": "^9.0.0",
+    "file-loader": "^6.2.0",
+    "fs-extra": "^9.1.0",
     "lodash.camelcase": "^4.3.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "rimraf": "^3.0.2",
     "three": "^0.114.0",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
-    "webpack-cli": "^3.3.11"
+    "typescript": "^4.1.5",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0"
   }
 }
