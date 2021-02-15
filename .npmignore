@@ -2,10 +2,8 @@
 **/tsconfig.json
 **/webpack.config.js
 node_modules
-src
-examples
+src/assets
 copy.js
 docs
 types
-rollup.config.ts
 **/archive
