@@ -1,31 +1,46 @@
-const path = require("path"),
-  webpack = require("webpack"),
-  HtmlWebpackPlugin = require("html-webpack-plugin"),
-  AutoDllPlugin = require("autodll-webpack-plugin")
+const HtmlWebpackPlugin = require("html-webpack-plugin")
+const path = require("path")
 
 module.exports = {
+  mode: "development",
+
   entry: {
     app: [path.resolve(__dirname, "src/index.tsx")],
     vendor: ["react", "react-dom"],
   },
+
   output: {
     filename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist"),
     publicPath: "/",
   },
+
   resolve: {
     extensions: [".js", ".jsx", ".json", ".ts", ".tsx"],
   },
+
   optimization: {
     removeAvailableModules: false,
     removeEmptyChunks: false,
     splitChunks: false,
   },
+
+  devServer: {
+    clientLogLevel: "debug",
+    contentBase: path.join(__dirname, "public"),
+    hot: true,
+    inline: true,
+    port: 4000,
+    progress: true,
+    publicPath: "/",
+  },
+
   module: {
     rules: [
       {
-        test: /\.(ts|tsx)$/,
-        loader: "awesome-typescript-loader",
+        test: /\.tsx?$/,
+        exclude: /node_modules/,
+        use: ["ts-loader"],
       },
       {
         test: /\.(glb|mtl|png|jpe?g|gif)$/,
@@ -38,18 +53,11 @@ module.exports = {
       },
     ],
   },
+
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundle to index.html
-      filename: "[name].dll.js",
-      entry: {
-        vendor: ["react", "react-dom"],
-      },
-    }),
   ],
-  devtool: "source-map"
+  devtool: "source-map",
 }

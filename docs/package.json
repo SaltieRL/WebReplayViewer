@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "description": "Examples for the web replay viewer",
   "main": "src/index.tsx",
+  "private": true,
   "scripts": {
-    "start": "npx webpack-dev-server --inline --progress --mode development --port 4000 --debug --output-pathinfo"
+    "start": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SaltieRL/WebReplayViewer.git"
   },
   "keywords": [
     "Examples",
@@ -16,14 +21,14 @@
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "@types/react-dom": "^16.9.5",
-    "autodll-webpack-plugin": "^0.4.2",
-    "awesome-typescript-loader": "^5.2.1",
-    "file-loader": "^6.0.0",
-    "html-webpack-plugin": "^3.2.0",
-    "typescript": "^3.8.3",
-    "webpack": "^4.42.0",
-    "webpack-dev-server": "^3.10.3"
+    "@types/react-dom": "^16.9.11",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.1.0",
+    "ts-loader": "^8.0.17",
+    "typescript": "^4.1.5",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
   },
   "browserslist": [
     ">0.2%",
