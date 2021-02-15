@@ -38,7 +38,7 @@ class GameManagerLoader extends Component<Props, State> {
     GameManager.builder({
       ...this.props.options,
       loadingManager: this.state.loadingManager,
-    }).then(gameManager => {
+    }).then((gameManager) => {
       this.props.onLoad(gameManager)
       this.setState({
         gameManager,

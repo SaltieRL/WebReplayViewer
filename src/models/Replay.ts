@@ -4,7 +4,7 @@ import { ReplayPlayer } from "./ReplayPlayer"
 interface Replay {
   id: string
   name: string
-  date: import("moment").Moment
+  date: any
   map: string
   gameMode: GameMode
   gameScore: GameScore

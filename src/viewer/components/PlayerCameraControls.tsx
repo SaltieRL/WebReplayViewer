@@ -42,10 +42,10 @@ class PlayerCameraControls extends PureComponent<Props> {
     return (
       <Grid container spacing={3} justify="space-between">
         <Grid item>
-          {renderTeam(players.filter(player => player.isOrangeTeam))}
+          {renderTeam(players.filter((player) => player.isOrangeTeam))}
         </Grid>
         <Grid item>
-          {renderTeam(players.filter(player => !player.isOrangeTeam))}
+          {renderTeam(players.filter((player) => !player.isOrangeTeam))}
         </Grid>
       </Grid>
     )

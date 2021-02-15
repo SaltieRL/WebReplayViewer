@@ -8,7 +8,6 @@ import { storageMemoize } from "./storageMemoize"
 export const loadWheel = (loadingManager?: LoadingManager) =>
   storageMemoize(async () => {
     const { default: glb } = await import(
-      // @ts-ignore
       /* webpackChunkName: "Wheel" */ "../../assets/models/draco/Wheel.glb"
     )
     const wheelGLTF = await loadObject(glb, loadingManager)
@@ -21,7 +20,6 @@ export const loadWheel = (loadingManager?: LoadingManager) =>
 export const loadOrangeCar = (loadingManager?: LoadingManager) =>
   storageMemoize(async () => {
     const { default: glb } = await import(
-      // @ts-ignore
       /* webpackChunkName: "Octane_ZXR_Orange" */ "../../assets/models/draco/Octane_ZXR_Orange.glb"
     )
     const carGLTF = await loadObject(glb, loadingManager)
@@ -35,7 +33,6 @@ export const loadOrangeCar = (loadingManager?: LoadingManager) =>
 export const loadBlueCar = (loadingManager?: LoadingManager) =>
   storageMemoize(async () => {
     const { default: glb } = await import(
-      // @ts-ignore
       /* webpackChunkName: "Octane_ZXR_Blue" */ "../../assets/models/draco/Octane_ZXR_Blue.glb"
     )
     const carGLTF = await loadObject(glb, loadingManager)

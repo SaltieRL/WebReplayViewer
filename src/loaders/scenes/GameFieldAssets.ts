@@ -18,13 +18,10 @@ class GameFieldAssets {
 
   async load() {
     const lm = this.loadingManager
-    return Promise.all([
-      loadBall(lm),
-      loadField(lm)
-    ]).then(([ball, field]) => {
+    return Promise.all([loadBall(lm), loadField(lm)]).then(([ball, field]) => {
       this.assets = {
         ball,
-        field
+        field,
       } as AvailableAssets
     })
   }

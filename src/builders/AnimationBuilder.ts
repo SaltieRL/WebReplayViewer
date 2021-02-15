@@ -178,7 +178,9 @@ const defaultAnimationBuilder = (
   return AnimationManager.init({
     playerClips,
     ballClip,
-    playerMixers: playerModels.map(model => new AnimationMixer(model.carGroup)),
+    playerMixers: playerModels.map(
+      (model) => new AnimationMixer(model.carGroup)
+    ),
     ballMixer: new AnimationMixer(ballModel.ball),
   })
 }

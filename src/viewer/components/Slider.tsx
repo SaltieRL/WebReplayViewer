@@ -10,7 +10,7 @@ import {
 import DataManager from "../../managers/DataManager"
 import { GameManager } from "../../managers/GameManager"
 
-interface Props extends Partial<SliderProps> {}
+type Props = Partial<SliderProps>
 
 interface State {
   frame: number

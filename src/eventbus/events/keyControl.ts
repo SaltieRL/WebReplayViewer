@@ -25,7 +25,7 @@ export const applyDirections = (
   multiplier: number
 ) => {
   const newVector = new Vector3()
-  directions.forEach(direction => {
+  directions.forEach((direction) => {
     const localCameraDirection = new Vector3()
     localCameraDirection.copy(cameraDirection)
     switch (direction) {

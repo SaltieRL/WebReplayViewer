@@ -66,7 +66,7 @@ class CameraManager {
       ballPosition: position,
       ballCam: this.ballCam,
       isUsingBoost: false,
-      activeCamera: this.activeCamera
+      activeCamera: this.activeCamera,
     })
 
     if (!isOrthographicCamera(this.activeCamera)) {
@@ -77,7 +77,7 @@ class CameraManager {
   setCameraLocation({ playerName, fieldLocation }: CameraLocationOptions) {
     const { players, field } = SceneManager.getInstance()
     if (playerName) {
-      const player = players.find(p => p.playerName === playerName)
+      const player = players.find((p) => p.playerName === playerName)
       if (player) {
         this.setActiveCamera(player.camera)
       }

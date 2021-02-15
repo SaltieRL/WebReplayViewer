@@ -7,7 +7,7 @@ export const storageMemoize = async <T>(
   if (STORAGE[objectName]) {
     return Promise.resolve<T>(STORAGE[objectName])
   }
-  return loaderFunction().then(value => {
+  return loaderFunction().then((value) => {
     STORAGE[objectName] = value
     return value
   })

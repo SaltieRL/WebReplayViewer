@@ -11,11 +11,8 @@ const DropDownIcon = () => {
         height="24"
         viewBox="0 0 24 24"
       >
-        <path 
-          d="M7,10L12,15L17,10H7Z"
-          fill="#000000"
-        />
-        </svg>
+        <path d="M7,10L12,15L17,10H7Z" fill="#000000" />
+      </svg>
     </div>
   )
 }

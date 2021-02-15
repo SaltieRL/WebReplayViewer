@@ -6,7 +6,6 @@ import { storageMemoize } from "./storageMemoize"
 export const loadField = (loadingManager?: LoadingManager) =>
   storageMemoize(async () => {
     const { default: glb } = await import(
-      // @ts-ignore
       /* webpackChunkName: "Field" */ "../../assets/models/draco/Field.glb"
     )
     const fieldGLTF = await loadObject(glb, loadingManager)

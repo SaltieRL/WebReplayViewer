@@ -44,9 +44,8 @@ export const loadRlLoadout = async (
   // It will automatically create 4 wheels with the correct position and scale
   body.addWheelsModel(wheels)
 
-  body.scene.traverse(object => {
-    // @ts-ignore
-    if (object.isMesh) {
+  body.scene.traverse((object) => {
+    if ((object as Mesh).isMesh) {
       const mesh = object as Mesh
       mesh.receiveShadow = true
       mesh.castShadow = true
