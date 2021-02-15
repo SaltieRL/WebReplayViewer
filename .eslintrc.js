@@ -4,7 +4,7 @@ module.exports = {
     browser: true,
     node: true,
   },
-  ignorePatterns: [".eslintrc.js"],
+  ignorePatterns: [".eslintrc.js", "copy.js", "webpack.config.js"],
   extends: [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
