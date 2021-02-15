@@ -4,6 +4,7 @@ module.exports = {
     browser: true,
     node: true,
   },
+  ignorePatterns: [".eslintrc.js"],
   extends: [
     "plugin:react/recommended",
     "plugin:@typescript-eslint/recommended",
@@ -24,5 +25,6 @@ module.exports = {
   plugins: ["@typescript-eslint"],
   rules: {
     "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-empty-interface": "warn",
   },
 }

@@ -54,7 +54,7 @@ export default class DrawingManager {
   meshScale: number
 
   private MAX_POINTS: number
-  private isDrawing: boolean = false
+  private isDrawing = false
   private field: Group
   private activeCamera: Camera
   private canvas: Canvas

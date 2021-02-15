@@ -15,10 +15,12 @@ import LineIcon from "./icons/LineIcon"
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 
-import DrawingManager, { DrawableMeshIndex } from "../../managers/DrawingManager"
+import DrawingManager, {
+  DrawableMeshIndex,
+} from "../../managers/DrawingManager"
 import BoxIcon from "./icons/BoxIcon"
 
-interface Props { }
+interface Props {}
 
 interface State {
   isDrawingMode: boolean
@@ -53,7 +55,7 @@ class DrawingControls extends PureComponent<Props, State> {
   toggle3dMode = () => {
     const is3dMode = !this.state.is3dMode
     this.setState({
-      is3dMode: is3dMode
+      is3dMode: is3dMode,
     })
     DrawingManager.getInstance().is3dMode = is3dMode
   }
@@ -91,11 +93,11 @@ class DrawingControls extends PureComponent<Props, State> {
   }
 
   renderControlButtons = () => {
-    const drawableMeshes:DrawableMeshIndex[] = ['box','sphere','line']
+    const drawableMeshes: DrawableMeshIndex[] = ["box", "sphere", "line"]
     const meshButtons = {
       sphere: SphereIcon,
       line: LineIcon,
-      box: BoxIcon
+      box: BoxIcon,
     }
     return (
       <React.Fragment>
@@ -114,33 +116,46 @@ class DrawingControls extends PureComponent<Props, State> {
             <Button onClick={this.clearDrawings}>
               <DeleteIcon />
             </Button>
-            <Button onClick={this.toggle3dMode} title="3D-Draw on the field object or in front of camera">
+            <Button
+              onClick={this.toggle3dMode}
+              title="3D-Draw on the field object or in front of camera"
+            >
               {this.state.is3dMode ? "3D" : "2D"}
             </Button>
             {drawableMeshes.map((value, index) => {
-              const IconButton = meshButtons[value];
-              return <Button key={index}
-                  variant={this.state.drawObject == value ? "contained" : "outlined"}
+              const IconButton = meshButtons[value]
+              return (
+                <Button
+                  key={index}
+                  variant={
+                    this.state.drawObject == value ? "contained" : "outlined"
+                  }
                   color={this.state.drawObject == value ? "primary" : "default"}
                   onClick={() => this.changeSelectedDrawObject(value)}
                 >
-                  <IconButton color={this.state.drawObject == value ? "#ffffff" : "#000000"} />
+                  <IconButton
+                    color={
+                      this.state.drawObject == value ? "#ffffff" : "#000000"
+                    }
+                  />
                 </Button>
+              )
             })}
           </ButtonGroup>
         </Grid>
-        {this.state.drawObject == "sphere" || this.state.drawObject == "box"
-          ? <Grid item xs={2}>
+        {this.state.drawObject == "sphere" || this.state.drawObject == "box" ? (
+          <Grid item xs={2}>
             <Input
               type="number"
               placeholder="Scale"
               defaultValue={this.state.meshScale}
               onChange={this.changeMeshScale}
-              startAdornment={<InputAdornment position="start">Scale</InputAdornment>}
+              startAdornment={
+                <InputAdornment position="start">Scale</InputAdornment>
+              }
             />
           </Grid>
-          : null
-        }
+        ) : null}
       </React.Fragment>
     )
   }
@@ -149,7 +164,13 @@ class DrawingControls extends PureComponent<Props, State> {
     return (
       <Grid container spacing={3} alignItems="center">
         <Grid item>
-          <Button onClick={this.toggleDrawingMode} variant="outlined" startIcon={this.state.isDrawingMode ? <PencilOffIcon /> : <PencilIcon />}>
+          <Button
+            onClick={this.toggleDrawingMode}
+            variant="outlined"
+            startIcon={
+              this.state.isDrawingMode ? <PencilOffIcon /> : <PencilIcon />
+            }
+          >
             Drawing Mode
           </Button>
         </Grid>

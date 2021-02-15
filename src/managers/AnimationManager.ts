@@ -49,13 +49,13 @@ export default class AnimationManager {
 
   public playAnimationClips() {
     const { players, ball } = this.actions
-    players.forEach(action => action.play())
+    players.forEach((action) => action.play())
     ball.play()
   }
 
   public updateAnimationClips(delta: number) {
     const { players, ball } = this.mixers
-    players.forEach(player => player.update(delta))
+    players.forEach((player) => player.update(delta))
     ball.update(delta)
   }
 

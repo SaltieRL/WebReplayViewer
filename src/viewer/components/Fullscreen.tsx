@@ -7,7 +7,7 @@ import styled from "styled-components"
 import FullscreenExitIcon from "./icons/FullscreenExitIcon"
 import FullscreenIcon from "./icons/FullscreenIcon"
 
-interface Props extends PropsWithChildren<{}> {}
+type Props = PropsWithChildren<unknown>
 
 const Fullscreen = ({ children }: Props) => {
   const handle = useFullScreenHandle()

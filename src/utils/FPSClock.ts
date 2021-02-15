@@ -137,7 +137,7 @@ export default class FPSClock {
     }
   }
 
-  private timeout(enable: boolean = true) {
+  private timeout(enable = true) {
     if (enable) {
       this.animation = setInterval(this.update, 1000 / 60) as any
     } else if (this.animation) {

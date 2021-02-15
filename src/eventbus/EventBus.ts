@@ -51,7 +51,7 @@ class EventBus {
     if (!this.listeners[type]) {
       return
     }
-    this.listeners[type].forEach(listener => {
+    this.listeners[type].forEach((listener) => {
       if (type === listener.type) {
         listener.callback.call(listener.scope || null, arg)
       }
@@ -59,7 +59,7 @@ class EventBus {
   }
 
   reset() {
-    Object.keys(this.listeners).forEach(key => {
+    Object.keys(this.listeners).forEach((key) => {
       delete this.listeners[key]
     })
   }

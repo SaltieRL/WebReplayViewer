@@ -70,7 +70,7 @@ class FieldCameraControls extends PureComponent<Props, State> {
   }
 
   renderFieldButtons() {
-    return options.map(option => {
+    return options.map((option) => {
       return (
         <FieldButton
           key={option}
@@ -87,7 +87,7 @@ class FieldCameraControls extends PureComponent<Props, State> {
     return (
       <Dialog open={this.state.dialogOpen} onClose={this.toggleDialog}>
         <List>
-          {orthographicOptions.map(option => {
+          {orthographicOptions.map((option) => {
             return (
               <ListItem
                 key={option}

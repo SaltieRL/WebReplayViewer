@@ -10,7 +10,7 @@ class FieldManager {
   }
 
   getCamera(cameraName: string) {
-    return this.cameras.find(camera => camera.name === cameraName)
+    return this.cameras.find((camera) => camera.name === cameraName)
   }
 }
 

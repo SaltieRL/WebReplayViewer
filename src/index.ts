@@ -7,19 +7,11 @@ export { loadBuilderFromReplay } from "./viewer/clients/loadBuilderFromReplay"
 
 // Components
 export { default as ReplayViewer } from "./viewer/components/ReplayViewer"
-export {
-  default as GameManagerLoader,
-} from "./viewer/components/GameManagerLoader"
-export {
-  default as CompactPlayControls,
-} from "./viewer/components/CompactPlayControls"
+export { default as GameManagerLoader } from "./viewer/components/GameManagerLoader"
+export { default as CompactPlayControls } from "./viewer/components/CompactPlayControls"
 export { default as PlayControls } from "./viewer/components/PlayControls"
-export {
-  default as PlayerCameraControls,
-} from "./viewer/components/PlayerCameraControls"
-export {
-  default as FieldCameraControls,
-} from "./viewer/components/FieldCameraControls"
+export { default as PlayerCameraControls } from "./viewer/components/PlayerCameraControls"
+export { default as FieldCameraControls } from "./viewer/components/FieldCameraControls"
 export { default as Slider } from "./viewer/components/Slider"
 export { default as DrawingControls } from "./viewer/components/DrawingControls"
 

@@ -25,7 +25,7 @@ import PlayIcon from "./icons/PlayIcon"
 import PlayerCameraControls from "./PlayerCameraControls"
 import Slider from "./Slider"
 
-interface Props extends WithStyles {}
+type Props = WithStyles
 
 interface State {
   paused: boolean

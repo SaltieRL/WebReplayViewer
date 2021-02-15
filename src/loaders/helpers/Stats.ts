@@ -22,7 +22,7 @@ export class Stats {
       "position:absolute;top:-48px;left:0;cursor:pointer;opacity:0.9;z-index:10000"
     scope.dom.addEventListener(
       "click",
-      event => {
+      (event) => {
         event.preventDefault()
         scope.showPanel(++scope.mode % scope.dom.children.length)
       },

@@ -53,7 +53,7 @@ class KeyManager {
   }
 
   private readonly onKeyUpEvent = ({ keyCode }: KeyboardEvent) => {
-    this.keysPressed = this.keysPressed.filter(code => keyCode !== code)
+    this.keysPressed = this.keysPressed.filter((code) => keyCode !== code)
   }
 
   private readonly onKeyDownEvent = ({ keyCode }: KeyboardEvent) => {
@@ -85,7 +85,7 @@ class KeyManager {
     if (this.keysPressed.length) {
       const directions: KeyControlEvent["directions"] = []
       let speed = true
-      this.keysPressed.forEach(keyCode => {
+      this.keysPressed.forEach((keyCode) => {
         switch (keyCode) {
           case 70: // F
             speed = false

@@ -8,6 +8,8 @@
     "postinstall": "npm run submodule:init && cd docs && npm install",
     "clean": "rimraf lib",
     "lint": "eslint src/**/*.ts{,x}",
+    "eslint:fix": "eslint --fix \"*.config.js\" \"src/**/*.{ts,tsx}\"",
+    "prettier:write": "prettier --write \".eslintrc.js\" \"*.config.js\" \"tsconfig.json\" \"src/**/*.{ts,tsx,css}\"",
     "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
     "build:tsc": "tsc",
     "build:bundle": "webpack --progress",

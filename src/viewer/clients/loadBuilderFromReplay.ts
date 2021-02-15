@@ -4,7 +4,7 @@ import { loadReplay } from "./loadReplay"
 
 export const loadBuilderFromReplay = async (
   replayId: string,
-  defaultLoadouts: boolean = false
+  defaultLoadouts = false
 ) => {
   return loadReplay(replayId).then(([replayData, replayMetadata]) => {
     return GameManager.builder({

@@ -1,6 +1,7 @@
 import {
   Camera,
-  Group, OrthographicCamera,
+  Group,
+  OrthographicCamera,
   PerspectiveCamera,
   Sprite,
   Vector3,
@@ -15,7 +16,7 @@ import {
   addCameraFrameUpdateListener,
   CameraFrameUpdateEvent,
 } from "../../eventbus/events/cameraFrameUpdate"
-import { SPRITE_ORTHO_SCALE } from "../../builders/player/generateSprite";
+import { SPRITE_ORTHO_SCALE } from "../../builders/player/generateSprite"
 
 const CAMERA_ABOVE_PLAYER = 200
 
@@ -35,7 +36,7 @@ export default class PlayerManager {
     this.isOrangeTeam = isOrangeTeam
 
     this.sprite = this.carGroup.children.find(
-      child => child.name === SPRITE
+      (child) => child.name === SPRITE
     ) as Sprite
 
     this.camera = new PerspectiveCamera(80, 2, 0.1, 20000)
@@ -53,7 +54,10 @@ export default class PlayerManager {
     this.updateSprite(camera)
   }
 
-  onCameraFrameUpdate = ({ ballPosition, activeCamera }: CameraFrameUpdateEvent) => {
+  onCameraFrameUpdate = ({
+    ballPosition,
+    activeCamera,
+  }: CameraFrameUpdateEvent) => {
     // Ignore frame updates if we aren't the active camera
     if (!this.activeCamera) {
       this.updateSprite(activeCamera)
