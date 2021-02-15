@@ -1,4 +1,18 @@
-import { Group, Camera, Raycaster, SphereBufferGeometry, MeshBasicMaterial, Mesh, Vector3, BufferGeometry, LineBasicMaterial, Line, BufferAttribute, Material, BoxBufferGeometry } from "three"
+import {
+  Group,
+  Camera,
+  Raycaster,
+  SphereBufferGeometry,
+  MeshBasicMaterial,
+  Mesh,
+  Vector3,
+  BufferGeometry,
+  LineBasicMaterial,
+  Line,
+  BufferAttribute,
+  Material,
+  BoxBufferGeometry,
+} from "three"
 
 import {
   addCameraChangeListener,
@@ -17,7 +31,7 @@ import { GameManager } from "./GameManager"
 export type DrawableMeshIndex = "box" | "sphere" | "line"
 
 export interface DrawingState {
-  color?: string 
+  color?: string
   meshScale?: number
   drawObject?: DrawableMeshIndex
   is3dMode?: boolean
@@ -33,13 +47,12 @@ interface Canvas {
   height: number
 }
 
-
 export default class DrawingManager {
   color: string
   drawObject: DrawableMeshIndex
   is3dMode: boolean
   meshScale: number
-  
+
   private MAX_POINTS: number
   private isDrawing: boolean = false
   private field: Group
@@ -48,10 +61,15 @@ export default class DrawingManager {
   private cloneArray: Array<string>
   private activeLinePointIndex: number
   private drawableMeshes: DrawableMeshes
-  
-  private constructor({color,meshScale,drawObject,is3dMode}: DrawingState = {}) {
+
+  private constructor({
+    color,
+    meshScale,
+    drawObject,
+    is3dMode,
+  }: DrawingState = {}) {
     this.color = color || "ff0000"
-    this.drawObject = drawObject || 'line'
+    this.drawObject = drawObject || "line"
     this.is3dMode = is3dMode || false
     this.meshScale = meshScale || 200
     this.MAX_POINTS = 500
@@ -94,7 +112,7 @@ export default class DrawingManager {
     const lineMaterial = new LineBasicMaterial({ color: this.color })
     const lineGeometry = new BufferGeometry()
     const positions = new Float32Array(this.MAX_POINTS * 3)
-    lineGeometry.setAttribute('position', new BufferAttribute(positions, 3))
+    lineGeometry.setAttribute("position", new BufferAttribute(positions, 3))
     const line = new Line(lineGeometry, lineMaterial)
 
     this.cloneArray.push(sphere.uuid, line.uuid, box.uuid)
@@ -109,28 +127,43 @@ export default class DrawingManager {
     return { domNode, width, height }
   }
 
-  private readonly onMouseDown = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
+  private readonly onMouseDown = ({
+    offsetX,
+    offsetY,
+    ctrlKey,
+    altKey,
+  }: MouseEvent) => {
     this.handleDrawing(offsetX, offsetY)
     this.isDrawing = true
   }
 
-  private readonly onMouseMove = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
+  private readonly onMouseMove = ({
+    offsetX,
+    offsetY,
+    ctrlKey,
+    altKey,
+  }: MouseEvent) => {
     if (this.isDrawing) {
       this.handleDrawing(offsetX, offsetY)
     }
   }
 
-  private readonly onMouseUp = ({ offsetX, offsetY, ctrlKey, altKey }: MouseEvent) => {
+  private readonly onMouseUp = ({
+    offsetX,
+    offsetY,
+    ctrlKey,
+    altKey,
+  }: MouseEvent) => {
     this.isDrawing = false
   }
 
   private handleDrawing(offsetX: number, offsetY: number) {
     switch (this.drawObject) {
-      case 'line':
-          this.drawLine(offsetX, offsetY)
+      case "line":
+        this.drawLine(offsetX, offsetY)
         break
       default:
-          this.drawMesh(offsetX, offsetY, this.drawObject)
+        this.drawMesh(offsetX, offsetY, this.drawObject)
         break
     }
   }
@@ -142,8 +175,16 @@ export default class DrawingManager {
     const y = -(offsetY / this.canvas.height) * 2 + 1
     const rayCaster = new Raycaster()
     rayCaster.setFromCamera({ x, y }, cam)
-    const rayDir = new Vector3(rayCaster.ray.direction.x * scale, rayCaster.ray.direction.y * scale, rayCaster.ray.direction.z * scale)
-    const rayVector = new Vector3(cam.position.x + rayDir.x, cam.position.y + rayDir.y, cam.position.z + rayDir.z)
+    const rayDir = new Vector3(
+      rayCaster.ray.direction.x * scale,
+      rayCaster.ray.direction.y * scale,
+      rayCaster.ray.direction.z * scale
+    )
+    const rayVector = new Vector3(
+      cam.position.x + rayDir.x,
+      cam.position.y + rayDir.y,
+      cam.position.z + rayDir.z
+    )
     if (this.is3dMode) {
       const intersections = rayCaster.intersectObjects([this.field], true)
       return intersections.length ? intersections[0].point : undefined
@@ -155,8 +196,12 @@ export default class DrawingManager {
   private readonly drawLine = (offsetX: number, offsetY: number) => {
     const mouseVec = this.getMouseVector(offsetX, offsetY)
     if (!mouseVec) return
-    const index = this.isDrawing ? this.activeLinePointIndex : this.activeLinePointIndex = 0
-    const activeLine = this.isDrawing ? this.drawableMeshes.line : this.drawableMeshes.line.clone()
+    const index = this.isDrawing
+      ? this.activeLinePointIndex
+      : (this.activeLinePointIndex = 0)
+    const activeLine: Line = this.isDrawing
+      ? (this.drawableMeshes.line as Line)
+      : (this.drawableMeshes.line.clone() as Line)
     if (!this.isDrawing) {
       activeLine.geometry = this.drawableMeshes.line.geometry.clone()
       this.cloneArray.push(activeLine.uuid)
@@ -178,12 +223,16 @@ export default class DrawingManager {
     this.isPaused() && this.refreshFrame()
   }
 
-  private readonly drawMesh = (offsetX: number, offsetY: number, mesh: keyof DrawableMeshes) => {
+  private readonly drawMesh = (
+    offsetX: number,
+    offsetY: number,
+    mesh: keyof DrawableMeshes
+  ) => {
     const rayVector = this.getMouseVector(offsetX, offsetY)
     if (rayVector) {
       const clone = this.drawableMeshes[mesh].clone()
       this.cloneArray.push(clone.uuid)
-      if (this.is3dMode) rayVector.y += (this.meshScale*0.1)
+      if (this.is3dMode) rayVector.y += this.meshScale * 0.1
       clone.position.copy(rayVector)
       clone.scale.setScalar(this.meshScale)
       SceneManager.getInstance().scene.add(clone)
@@ -195,10 +244,10 @@ export default class DrawingManager {
   private readonly removeClones = () => {
     const scene = SceneManager.getInstance().scene
     this.cloneArray.map((i: string) => {
-      const clone = scene.getObjectByProperty('uuid', i) as Mesh
+      const clone = scene.getObjectByProperty("uuid", i) as Mesh
       if (clone) {
-        (clone.geometry as BufferGeometry).dispose(),
-          (clone.material as Material).dispose()
+        ;(clone.geometry as BufferGeometry).dispose()
+        ;(clone.material as Material).dispose()
         scene.remove(clone)
       }
     })
@@ -249,8 +298,14 @@ export default class DrawingManager {
       removeCameraChangeListener(instance.onCameraChange)
       removeCanvasResizeListener(instance.updateSize)
       instance.removeClones()
-      instance.canvas.domNode.removeEventListener("mousedown", instance.onMouseDown)
-      instance.canvas.domNode.removeEventListener("mousemove", instance.onMouseMove)
+      instance.canvas.domNode.removeEventListener(
+        "mousedown",
+        instance.onMouseDown
+      )
+      instance.canvas.domNode.removeEventListener(
+        "mousemove",
+        instance.onMouseMove
+      )
       instance.canvas.domNode.removeEventListener("mouseup", instance.onMouseUp)
       DrawingManager.instance = undefined
     }
