@@ -23,14 +23,12 @@ const defaultGameBuilder = async ({
   replayData,
   replayMetadata,
   loadingManager,
-  defaultLoadouts,
 }: GameBuilderOptions) => {
   const players = replayMetadata.players
   try {
     const sceneManager = await defaultSceneBuilder(
       players,
       loadingManager,
-      defaultLoadouts
     )
     defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
     DataManager.init({ replayData, replayMetadata })
@@ -40,8 +38,8 @@ const defaultGameBuilder = async ({
     return GameManager.init({
       clock,
     })
-  } catch (e) {
-    loadingManager?.onError && loadingManager?.onError(e.message)
+  } catch (e: any) {
+    loadingManager?.onError && loadingManager?.onError(e.toString())
     throw e
   }
 }

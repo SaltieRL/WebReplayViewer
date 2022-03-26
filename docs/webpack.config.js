@@ -1,7 +1,5 @@
 const path = require("path"),
-  webpack = require("webpack"),
-  HtmlWebpackPlugin = require("html-webpack-plugin"),
-  AutoDllPlugin = require("autodll-webpack-plugin")
+  HtmlWebpackPlugin = require("html-webpack-plugin")
 
 module.exports = {
   entry: {
@@ -25,7 +23,7 @@ module.exports = {
     rules: [
       {
         test: /\.(ts|tsx)$/,
-        loader: "awesome-typescript-loader",
+        loader: "ts-loader",
       },
       {
         test: /\.(glb|mtl|png|jpe?g|gif)$/,
@@ -42,14 +40,13 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, "src/index.html"),
     }),
-    new webpack.HotModuleReplacementPlugin(),
-    new AutoDllPlugin({
-      inject: true, // will inject the DLL bundle to index.html
-      filename: "[name].dll.js",
-      entry: {
-        vendor: ["react", "react-dom"],
-      },
-    }),
   ],
-  devtool: "source-map"
+  devtool: "source-map",
+  devServer: {
+    static: {
+      directory: __dirname,
+    },
+    compress: true,
+    port: 4000,
+  },
 }
