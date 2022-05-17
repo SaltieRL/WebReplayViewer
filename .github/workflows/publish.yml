@@ -15,6 +15,12 @@ jobs:
         run: npm ci
       - name: Build the project
         run: npm run build
+      - name: Add _auth to .npmrc
+        run: echo _auth=$NPM_AUTH_TOKEN >> lib/.npmrc
+      - name: Add email
+        run: echo email=<youremail> >> lib/.npmrc
+      - name: Add always-auth
+        run: echo always-auth=true >> lib/.npmrc
       - name: Publish to NPM
         run: npm run publish:lib
         env:
