@@ -16,11 +16,7 @@ jobs:
       - name: Build the project
         run: npm run build
       - name: Add _auth to .npmrc
-        run: echo _auth=$NPM_AUTH_TOKEN >> lib/.npmrc
-      - name: Add email
-        run: echo email=saltie.calculated.gg@gmail.com >> lib/.npmrc
-      - name: Add always-auth
-        run: echo always-auth=true >> lib/.npmrc
+        run: npm config set //registry.npmjs.org/:_authToken=$NPM_AUTH_TOKEN
       - name: Publish to NPM
         run: npm run publish:lib
         env:
