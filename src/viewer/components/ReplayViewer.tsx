@@ -48,7 +48,7 @@ const ReplayViewer = (props: Props): JSX.Element => {
         <div style={{ width: "100%", height: "100%" }} ref={mount} />
         <Scoreboard />
         <FullscreenToggle>
-          <Button onClick={handle.enter}>
+          <Button onClick={handle.active ? handle.exit : handle.enter}>
             <Typography style={{ color: "#fff" }}>
               {handle.active ? <FullscreenExitIcon /> : <FullscreenIcon />}
             </Typography>
