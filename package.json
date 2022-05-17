@@ -5,6 +5,7 @@
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
   "scripts": {
+    "postinstall": "npm run submodule:init && cd docs && npm install",
     "clean": "rimraf _bundles lib",
     "lint": "tslint src/**/*.ts{,x} -p tsconfig.json",
     "build": "npm run clean && npm run build:tsc && npm run build:bundle && npm run build:copy",
