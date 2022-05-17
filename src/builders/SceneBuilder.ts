@@ -7,30 +7,16 @@ import { ExtendedPlayer } from "../models/ReplayMetadata"
 import { buildBall } from "./ball/buildBall"
 import { buildPlayfield } from "./field/buildPlayfield"
 import BasicPlayerBuilder from "./player/BasicPlayerBuilder"
-import RLLoadoutPlayerBuilder from "./player/RLLoadoutPlayerBuilder"
 import { addLighting } from "./scene/addLighting"
 
 const getPlayersAndScene = async (
   playerInfo: ExtendedPlayer[],
   loadingManager?: LoadingManager,
-  defaultLoadouts?: boolean
 ): Promise<[PlayerManager[], Scene]> => {
-  try {
-    const rlPlayerBuilder = new RLLoadoutPlayerBuilder(
-      loadingManager,
-      defaultLoadouts
-    )
-    const scene = new Scene()
-    const players = await rlPlayerBuilder.buildPlayers(scene, playerInfo)
-    return [players, scene]
-  } catch (err) {
-    console.error(err)
-    console.log("Falling back to basic player builder")
-    const basicBuilder = new BasicPlayerBuilder(loadingManager)
-    const scene = new Scene()
-    const players = await basicBuilder.buildPlayers(scene, playerInfo)
-    return [players, scene]
-  }
+  const basicBuilder = new BasicPlayerBuilder(loadingManager)
+  const scene = new Scene()
+  const players = await basicBuilder.buildPlayers(scene, playerInfo)
+  return [players, scene]
 }
 
 /**
@@ -42,7 +28,6 @@ const getPlayersAndScene = async (
 const defaultSceneBuilder = async (
   playerInfo: ExtendedPlayer[],
   loadingManager?: LoadingManager,
-  defaultLoadouts?: boolean
 ): Promise<SceneManager> => {
   // Enabled caching used by three's loaders
   Cache.enabled = true
@@ -55,7 +40,6 @@ const defaultSceneBuilder = async (
   const [players, scene] = await getPlayersAndScene(
     playerInfo,
     loadingManager,
-    defaultLoadouts
   )
 
   addLighting(scene)

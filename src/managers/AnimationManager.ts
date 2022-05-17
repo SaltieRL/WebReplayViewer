@@ -39,12 +39,10 @@ export default class AnimationManager {
     for (let player = 0; player < playerClips.length; player++) {
       const clip = playerClips[player]
       const mixer = this.mixers.players[player]
-      const action = mixer.clipAction(clip)
-      this.actions.players[player] = action
+      this.actions.players[player] = mixer.clipAction(clip)
     }
     // Build the ball action
-    const ballAction = this.mixers.ball.clipAction(ballClip)
-    this.actions.ball = ballAction
+    this.actions.ball = this.mixers.ball.clipAction(ballClip)
   }
 
   public playAnimationClips() {

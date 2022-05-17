@@ -37,7 +37,8 @@ interface KeyframeData {
 const defaultAnimationBuilder = (
   replayData: ReplayData,
   playerModels: PlayerManager[],
-  ballModel: BallManager
+  ballModel: BallManager,
+  useBallRotation: boolean = true,
 ): AnimationManager => {
   /**
    * Replay data is of this form:
@@ -172,9 +173,8 @@ const defaultAnimationBuilder = (
   const ballClip = new AnimationClip(
     getActionClipName(BALL),
     ballKeyframeData.duration,
-    [ballPosKeyframes, ballRotKeyframes]
+    useBallRotation ? [ballPosKeyframes, ballRotKeyframes] : [ballPosKeyframes],
   )
-
   return AnimationManager.init({
     playerClips,
     ballClip,

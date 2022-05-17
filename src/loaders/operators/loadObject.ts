@@ -10,7 +10,7 @@ export const loadObject = (path: string, loadingManager?: LoadingManager) => {
     ) => {
       const gltfLoader = new GLTFLoader(loadingManager)
       const dracoLoader = new DRACOLoader()
-      dracoLoader.setDecoderPath("/draco/")
+      dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.4.1/")
       gltfLoader.setDRACOLoader(dracoLoader)
       gltfLoader.load(
         path,

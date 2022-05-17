@@ -86,7 +86,7 @@ class GameManagerLoader extends Component<Props, State> {
     if (error) {
       return <ErrorIcon />
     }
-    const variant = percentLoaded === 100 ? "indeterminate" : "static"
+    const variant = percentLoaded === 100 ? "indeterminate" : "determinate"
     return <CircularProgress variant={variant} value={percentLoaded} />
   }
 

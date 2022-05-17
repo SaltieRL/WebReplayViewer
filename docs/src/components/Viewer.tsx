@@ -41,7 +41,7 @@ class Viewer extends Component<Props, State> {
         container
         className={root}
         direction="column"
-        justify="center"
+        justifyContent="center"
         spacing={3}
       >
         <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
@@ -50,7 +50,7 @@ class Viewer extends Component<Props, State> {
         <Grid item>
           <Grid
             container
-            justify="space-between"
+            justifyContent="space-between"
             alignItems="center"
             spacing={3}
           >

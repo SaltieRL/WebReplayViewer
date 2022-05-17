@@ -31,7 +31,7 @@ class CompactViewer extends Component<Props, State> {
     }
 
     return (
-      <Grid container direction="column" justify="center" spacing={3}>
+      <Grid container direction="column" justifyContent="center" spacing={3}>
         <Grid item style={{ minHeight: 0, maxWidth: 900, width: "100%" }}>
           <ReplayViewer gameManager={gameManager}>
             <CompactPlayControls />
