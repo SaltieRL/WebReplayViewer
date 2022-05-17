@@ -29,7 +29,8 @@ class Main extends Component<Props, State> {
           replayData,
           replayMetadata,
           clock: FPSClock.convertReplayToClock(replayData),
-          defaultLoadouts: false
+          defaultLoadouts: false,
+          useBallRotation: false,
         },
       })
     })

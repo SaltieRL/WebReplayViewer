@@ -16,6 +16,7 @@ export interface GameBuilderOptions {
   clock: FPSClock
   loadingManager?: LoadingManager
   defaultLoadouts: boolean
+  useBallRotation?: boolean
 }
 
 const defaultGameBuilder = async ({
@@ -23,6 +24,7 @@ const defaultGameBuilder = async ({
   replayData,
   replayMetadata,
   loadingManager,
+  useBallRotation = true,
 }: GameBuilderOptions) => {
   const players = replayMetadata.players
   try {
@@ -30,7 +32,7 @@ const defaultGameBuilder = async ({
       players,
       loadingManager,
     )
-    defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball)
+    defaultAnimationBuilder(replayData, sceneManager.players, sceneManager.ball, useBallRotation)
     DataManager.init({ replayData, replayMetadata })
     CameraManager.init()
     KeyManager.init()
