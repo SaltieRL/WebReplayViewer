@@ -1,8 +1,8 @@
-import Button from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
-import ButtonGroup from "@material-ui/core/ButtonGroup"
-import Input from "@material-ui/core/Input"
-import InputAdornment from "@material-ui/core/InputAdornment"
+import Button from "@mui/material/Button"
+import Grid from "@mui/material/Grid"
+import ButtonGroup from "@mui/material/ButtonGroup"
+import Input from "@mui/material/Input"
+import InputAdornment from "@mui/material/InputAdornment"
 
 import ColorIcon from "./icons/ColorIcon"
 import DropDownIcon from "./icons/DropDownIcon"
@@ -121,7 +121,7 @@ class DrawingControls extends PureComponent<Props, State> {
               const IconButton = meshButtons[value];
               return <Button key={index}
                   variant={this.state.drawObject == value ? "contained" : "outlined"}
-                  color={this.state.drawObject == value ? "primary" : "default"}
+                  color={this.state.drawObject == value ? "primary" : "info"}
                   onClick={() => this.changeSelectedDrawObject(value)}
                 >
                   <IconButton color={this.state.drawObject == value ? "#ffffff" : "#000000"} />

@@ -1,8 +1,8 @@
-import Button, { ButtonProps } from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import List from "@material-ui/core/List"
-import ListItem from "@material-ui/core/ListItem"
-import Typography from "@material-ui/core/Typography"
+import Button, { ButtonProps } from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import List from "@mui/material/List"
+import ListItem from "@mui/material/ListItem"
+import Typography from "@mui/material/Typography"
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 

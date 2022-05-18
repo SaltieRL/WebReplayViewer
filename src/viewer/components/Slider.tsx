@@ -1,4 +1,4 @@
-import MUISlider, { SliderProps } from "@material-ui/core/Slider"
+import MUISlider, { SliderProps } from "@mui/material/Slider"
 import debounce from "lodash.debounce"
 import React, { Component } from "react"
 

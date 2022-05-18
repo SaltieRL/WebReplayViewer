@@ -1,10 +1,9 @@
-import Button from "@material-ui/core/Button"
-import Dialog from "@material-ui/core/Dialog"
-import DialogContent from "@material-ui/core/DialogContent"
-import DialogTitle from "@material-ui/core/DialogTitle"
-import Grid from "@material-ui/core/Grid"
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
-import Typography from "@material-ui/core/Typography"
+import Button from "@mui/material/Button"
+import Dialog from "@mui/material/Dialog"
+import DialogContent from "@mui/material/DialogContent"
+import DialogTitle from "@mui/material/DialogTitle"
+import Grid from "@mui/material/Grid"
+import Typography from "@mui/material/Typography"
 import React, { Component } from "react"
 import styled from "styled-components"
 
@@ -25,14 +24,15 @@ import PlayIcon from "./icons/PlayIcon"
 import PlayerCameraControls from "./PlayerCameraControls"
 import Slider from "./Slider"
 
-interface Props extends WithStyles {}
+interface Props {
+}
 
 interface State {
   paused: boolean
   cameraControlsShowing: boolean
 }
 
-class CompactPlayControls extends Component<Props, State> {
+export default class CompactPlayControls extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -76,7 +76,6 @@ class CompactPlayControls extends Component<Props, State> {
 
   render() {
     const { paused, cameraControlsShowing } = this.state
-    const { thumb, track } = this.props.classes
     return (
       <ControlsWrapper>
         <Grid container spacing={3} alignItems="center">
@@ -87,9 +86,11 @@ class CompactPlayControls extends Component<Props, State> {
           </Grid>
           <Grid item zeroMinWidth xs>
             <Slider
-              classes={{
-                thumb,
-                track,
+              sx={{
+                backgroundColor: "#fff",
+                "&:focus,&:hover,&$active": {
+                  boxShadow: "inherit",
+                },
               }}
             />
           </Grid>
@@ -119,15 +120,3 @@ const ControlsWrapper = styled.div`
   left: 12px;
   right: 60px;
 `
-
-export default withStyles({
-  track: {
-    backgroundColor: "#fff",
-  },
-  thumb: {
-    backgroundColor: "#fff",
-    "&:focus,&:hover,&$active": {
-      boxShadow: "inherit",
-    },
-  },
-})(CompactPlayControls)

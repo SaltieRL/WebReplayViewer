@@ -1,5 +1,5 @@
-import Button, { ButtonProps } from "@material-ui/core/Button"
-import Grid from "@material-ui/core/Grid"
+import Button, { ButtonProps } from "@mui/material/Button"
+import Grid from "@mui/material/Grid"
 import React, { PureComponent } from "react"
 import styled from "styled-components"
 

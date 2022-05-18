@@ -1,5 +1,5 @@
-import CircularProgress from "@material-ui/core/CircularProgress"
-import Typography, { TypographyProps } from "@material-ui/core/Typography"
+import CircularProgress from "@mui/material/CircularProgress"
+import Typography, { TypographyProps } from "@mui/material/Typography"
 import React, { Component } from "react"
 import styled from "styled-components"
 import { LoadingManager } from "three/src/loaders/LoadingManager"

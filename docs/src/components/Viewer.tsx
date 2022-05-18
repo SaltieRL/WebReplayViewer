@@ -1,8 +1,8 @@
-import Grid from "@material-ui/core/Grid"
-import withStyles, { WithStyles } from "@material-ui/core/styles/withStyles"
+import Grid from "@mui/material/Grid"
 import React, { Component } from "react"
 
 import {
+  DrawingControls,
   FieldCameraControls,
   GameBuilderOptions,
   GameManager,
@@ -11,10 +11,9 @@ import {
   PlayerCameraControls,
   ReplayViewer,
   Slider,
-  DrawingControls
 } from "../../../src"
 
-interface Props extends WithStyles {
+interface Props {
   options: GameBuilderOptions
 }
 
@@ -22,7 +21,7 @@ interface State {
   gameManager?: GameManager
 }
 
-class Viewer extends Component<Props, State> {
+export default class Viewer extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {}
@@ -30,7 +29,6 @@ class Viewer extends Component<Props, State> {
 
   renderContent() {
     const { gameManager } = this.state
-    const { root } = this.props.classes
 
     if (!gameManager) {
       return "Food machine broke..."
@@ -39,7 +37,11 @@ class Viewer extends Component<Props, State> {
     return (
       <Grid
         container
-        className={root}
+        sx={{
+          "&& > div:nth-child(even)": {
+            backgroundColor: "rgba(0, 0, 0, 0.05)",
+          },
+        }}
         direction="column"
         justifyContent="center"
         spacing={3}
@@ -86,10 +88,3 @@ class Viewer extends Component<Props, State> {
   }
 }
 
-export default withStyles({
-  root: {
-    "&& > div:nth-child(even)": {
-      backgroundColor: "rgba(0, 0, 0, 0.05)",
-    },
-  },
-})(Viewer)
